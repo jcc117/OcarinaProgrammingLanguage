@@ -1,0 +1,57 @@
+Ocarina Syntax
+
+Welcome to the guide to the Ocarina programming language! Ocarina is being developed with the intent of Java's and C's control over variables while cutting down on its wordiness.
+The clean, easy to understand syntax style and use of white space by Python also heavily influences this project. The goal of Ocarina is to combine these two into something
+where you can get the best of both words: the cleanness of Python with the speed and compilability of Java. This guide is set up as both notes for developing this programming language
+and also as an instruction guide to teach others how to write it.
+
+Keywords:
+
+Boolean expressions:
+if
+rather
+else
+and
+or
+true
+false
+break
+assert
+
+Datatypes:
+int
+double
+char
+byte
+boolean
+null
+void
+long
+this
+class
+short
+constant
+
+Functions:
+main
+void
+return
+private
+do
+while
+for
+in
+try
+catch
+finally
+break
+continue
+switch
+case
+
+Classes, Packages, Exceptions:
+import
+raise
+extends
+
+
