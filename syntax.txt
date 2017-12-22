@@ -7,51 +7,353 @@ and also as an instruction guide to teach others how to write it.
 
 Keywords:
 
-Boolean expressions:
-if
-rather
-else
-and
-or
-true
-false
-break
-assert
+	Boolean expressions:
+		if
+		rather
+		else
+		and
+		or
+		true
+		false
+		break
+		assert
 
-Datatypes:
-int
-double
-char
-byte
-boolean
-null
-void
-long
-this
-class
-short
-constant
+	Datatypes:
+		int
+		double
+		char
+		byte
+		boolean
+		null
+		void
+		long
+		this
+		class
+		short
+		constant
 
-Functions:
-main
-void
-return
-private
-do
-while
-for
-in
-try
-catch
-finally
-break
-continue
-switch
-case
+	Functions:
+		main
+		void
+		return
+		private
+		do
+		while
+		for
+		in
+		try
+		catch
+		finally
+		break
+		continue
+		switch
+		case
 
-Classes, Packages, Exceptions:
-import
-raise
-extends
+	Classes, Packages, Exceptions:
+		import
+		raise
+		extends
 
 
+A simple "Hello world" program:
+
+int main:
+	print("Hello World")
+	return 1
+
+
+Example of more complex code
+
+import Example.rina
+
+int main:
+	int foo = 0
+	int bar = 3
+
+	if(foo == bar):
+		print("hello")
+		print("How are you?")
+	rather(foo != bar):
+		print("bar is " + bar)
+	else:
+		continue
+
+	while()
+
+
+//Lexical
+
+WhiteSpace:
+	Space+
+
+Space:
+	' '
+	\t
+	\v
+	\u000C
+	EndOfLine
+	Comment
+
+EndOfLine:
+	\r
+	\n
+	\r\n
+	EOF
+
+EOF:
+	<physical end of file>
+	\0
+
+Comment:
+	// Character* EndOfLine
+	NestedComment
+
+NestedComment:
+	/* (Character | NestedComment)* */
+
+Token:
+	Identifier
+	Keyword
+	StringLiteral
+	IntLiteral
+	FloatLiteral
+	Symbol
+	EOF
+
+Symbol:
+	+ | += | ++ | - | -= | -- | * | *= | / | /= | % | %=
+	< | <= | <=> | << | <<= | > | >= | >> | >>= 
+	& | &= | '|' | |= | ^ | ^= | = | == 
+	. | ! | != | '(' | ')' | [ | ] | : | \ | '{' | '}' | , 
+
+Identifier:
+	IdentifierStart IdentifierChar*
+
+IndentifierStart:
+	_
+	a..z
+	A..Z
+
+IdentfierChar:
+	IndentifierStart
+	DecimalDigit
+
+Keyword: 
+	if | rather | else | and | or | true | false | break | assert
+	int | float | char | byte | boolean | null | void | long | this
+	class | short | constant | main | return | private | do | while
+	for | in | try | catch | finally | break | continue | switch | case
+	import | raise | isnow
+
+StringLiteral:
+	RegularString
+
+RegularString:
+	" (Character | EscapeSequence | EndOfLine)* "
+
+EscapeSequence:
+	\'
+	\"
+	\\
+	\n
+	\t
+	\r
+	\x HexDigit HexDigit
+	\u HexDigit HexDigit HexDigit HexDigit
+	\U HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit
+	\ DecimalDigit (DecimalDigit DecimalDigit?)?
+
+IntLiteral:
+	Decimal
+	Binary
+	Hexadecimal
+
+Decimal:
+	DecimalDigit (DecimalDigit | _)*
+
+DecimalDigit:
+	0..9
+
+Binary:
+	0 (b | B) (BinaryDigit | _)+
+
+BinaryDigit:
+	0 .. 1
+
+Hexadecimal:
+	0 (x | X) (HexaDigit | _)+
+
+HexaDigit:
+	0 .. 9
+	a .. f
+	A .. F
+
+FloatLiteral:
+	Integer Decimal? Exponent?
+
+Integer:
+	DecimalDigit (DecimalDigit | _)*
+
+Decimal:
+	(Decimal | _)+
+
+Exponent:
+	(e | E) (+ | -)? (DecimalDigit | _)+
+
+
+// Syntax
+
+DottedName:
+	Identifier (. Identifier)*
+
+StatementTerminator:
+	EndOfLine
+
+BlockStatement:
+	(\t Statement)+
+
+Statement:
+	AssertStatement
+	ImportStatement
+	**BlockStatement
+	ExpressionStatement
+	DeclarationStatement
+	FunctionDeclaration
+	IfStatement
+	WhileStatement
+	DoWhileStatement
+	ForStatement
+	ForeachStatement
+	SwitchStatement
+	ContinueStatement
+	BreakStatement
+	ReturnStatement
+	TryCatchStatement
+	ThrowStatement
+	**ScopeActionStatement
+	Assignment
+	Reassignment
+
+AssertStatment:
+	assert '(' Expression (, Expression)? ')' StatementTerminator
+
+ImportStatement:
+	import DottedName StatementTerminator
+
+ExpressionStatement:
+	Expression StatementTerminator
+
+DeclarationStatement:
+	VariableDeclaration StatementTerminator
+
+VariableDeclaration:
+	RegularVariableDeclaration
+	PrivateVariableDeclaration
+	GlobalVaraibleDeclaration
+
+RegularVariableDeclaration:
+	List(Identifier) (=ExpressionList)?
+
+PrivateVariableDeclaration:
+	private List(Identifier) (=ExpressionList)?
+
+GlobalVaraibleDeclaration:
+	global List(Identifier) (=ExpressionList)?
+
+FunctionDeclaration:
+	(private)? SimpleFunctionDeclaration
+
+SimpleFunctionDeclaration:
+	function ReturnType Identifier FunctionBody
+
+ReturnType:
+	List(DataTypes)
+
+FunctionBody:
+	'(' Paramters? ')' (BlockStatement | = Expression) 
+
+Parameters:
+	(Parameter | ThisParam) (, Paramter)* (, VarargParam)?
+	VarargParam
+
+VarargParam:
+	vararg
+	...
+
+ThisParam:
+	this (: Type | Parameter)?
+
+Parameter:
+	Type Identifier
+
+DataTypes:
+	BasicType
+	ClassName
+
+BasicType:
+	null
+	boolean
+	int
+	float
+	long
+	short
+	string
+	dict
+	array
+	function
+	class
+	DottedName
+
+ClassDeclaration:
+	(private | global)? class ClassName (: ClassMember* List(Expression))?
+
+ClassName:
+	Identifier
+
+ClassMember:
+	SimpleFunctionDeclaration
+	this FunctionBody
+	Identifier (= Expression)? StatementTerminator
+
+IfStatment:
+	if '(' (Identifier =)? Expression ')' ': EndofLine' Statement (rather '(' Identifier =)? Expression ')' ': EndOfLine' Statement )* (else ':' EndOfLine Statement)? EndOfLine
+
+WhileStatement:
+	while Identifier? '(' (local Identifier =)? Expression '):' EndofLine Statement
+
+DoWhileStatment:
+	do ':'EndofLine Statement while Identifier? '(' Expression ')' EndofLine
+
+ForStatement:
+
+ForInitializer:
+
+ForIncrement:
+
+ForeachStatement:
+
+SwitchStatement:
+
+CaseStatement:
+
+DefaultStatement:
+
+ContinueStatement:
+
+BreakStatement:
+
+ReturnStatement:
+
+TryCatchStatement:
+
+CatchClauses:
+
+CatchClause:
+
+ThrowStatement:
+
+Assignment:
+
+Reassignment:
+
+Expression:
