@@ -123,7 +123,7 @@ Token:
 Symbol:
 	+ | += | ++ | - | -= | -- | * | *= | / | /= | % | %=
 	< | <= | <=> | << | <<= | > | >= | >> | >>= 
-	& | &= | '|' | |= | ^ | ^= | = | == 
+	& | &= | '|' | |= | ^ | ^= | = | == | ~ | ~=
 	. | ! | != | '(' | ')' | [ | ] | : | \ | '{' | '}' | , 
 
 Identifier:
@@ -325,35 +325,196 @@ DoWhileStatment:
 	do ':'EndofLine Statement while Identifier? '(' Expression ')' EndofLine
 
 ForStatement:
+	for '(' ForInitializer ; Expression? ; ForIncrement? ')' Statement
 
 ForInitializer:
+	ForInitializer, ForInitializer
+	Expression
+	Assignment
+	RegularVariableDeclaration
 
 ForIncrement:
+	ForIncrement, ForIncrement
+	Expression
+	Assignment
 
 ForeachStatement:
 
 SwitchStatement:
+	switch Identifier? '(' Expression '):' EndOfLine List(CaseStatement) DefaultStatement?
 
 CaseStatement:
+	case List(Expression) : Statement*
 
 DefaultStatement:
+	default : Statement*
 
 ContinueStatement:
+	continue StatementTerminator
 
 BreakStatement:
+	break StatementTerminator
 
 ReturnStatement:
+	return (Expression)? StatementTerminator
 
 TryCatchStatement:
+	try Statement CatchClauses
+	try Statement finally Statement
+	try Statement CatchClauses finally Statement
 
 CatchClauses:
+	CatchallClause
+	CatchClause+ CatchallClause?
 
 CatchClause:
+	catch '(' Identifier ' ' DottedName (',' Identifier ' ' DottedName)* ')' Statement StatementTerminator
+
+CatchallClause:
+	catch '(' Identifier ')' Statement StatementTerminator
 
 ThrowStatement:
+	throw Expression Statement
 
 Assignment:
+	AssignmentLHS = Expression
+	AssignmentLHS += Expression
+	AssignmentLHS -= Expression
+	AssignmentLHS *= Expression
+	AssignmentLHS /= Expression
+	AssignmentLHS %= Expression
+	AssignmentLHS <<= Expression
+	AssignmentLHS >>= Expression
+	AssignmentLHS |= Expression
+	AssignmentLHS ^= Expression
+	AssignmentLHS &= Expression
+	AssignmentLHS ~= Expression
+	++ PrimaryExpression
+	-- PrimaryExpression
+	PrimaryExpression ++
+	PrimaryExpression --
 
-Reassignment:
+AssignmentLHS:
+	Identifier
+	PostfixExpression [ ]
+	DotExpression
+	PostfixExpression [ Expression ]
 
 Expression:
+	ConditionalExpression
+
+ConditionalExpression:
+	LogicalConjExpression
+
+LogicalConjExpression:
+	OrOrExpression
+	AndAndExpression
+
+OrOrExpression:
+	OrExpression or OrExpression
+
+AndAndExpression:
+	AndExpression and AndExpression
+
+OrExpression:
+	OrExpression or AndExpression
+
+AndExpression:
+	CompareExpression
+	AndExpression and CompareExpression
+
+CompareExpression:
+	ShiftExpression
+	EqualExpression
+	RelExpression
+
+EqualExpression:
+	ShiftExpression == ShiftExpression
+	ShiftExpression != ShiftExpression
+
+RelExpression:
+	ShiftExpression < ShiftExpression
+	ShiftExpression <= ShiftExpression
+	ShiftExpression > ShiftExpression
+	ShiftExpression >= ShiftExpression
+
+ShiftExpression:
+	AddExpression
+	ShiftExpression << AddExpression
+	ShiftExpression >> AddExpression
+
+AddExpression:
+	AsExpression
+	AddExpression + AsExpression
+	AddExpression - AsExpression
+	AddExpression ~ AsExpression
+
+AsExpression:
+	MulExpression
+
+MulExpression:
+	UnaryExpression
+	MulExpression * UnaryExpression
+	MulExpression / UnaryExpression
+	MulExpression % UnaryExpression
+
+UnaryExpression:
+	PostfixExpression
+	- UnaryExpression
+	! UnaryExpression
+	~ UnaryExpression
+
+PostfixExpression:
+	PrimaryExpression
+	CallExpression
+	PostfixExpression [ ]
+	PostfixExpression [ Expression ]
+	PostfixExpression . super
+	DotExpression
+
+DotExpression:
+	PostfixExpression . (Identifier | '(' Expression ')')
+
+CallExpression:
+	PostfixExpression ArgumentsWith
+	DotExpression ArgumentsWith
+
+ArgumentsWith:
+	'(' Arguments? ')'
+	'(' with Expression (, List(Expression))? ')'
+
+Arguments:
+	List(Expression)
+
+PrimaryExpression:
+	Identifier
+	this 
+	null
+	true
+	false
+	vararg
+	IntLiteral
+	FloatLiteral
+	StringLiteral
+	function Identifier? FunctionBody
+	'(' Expression ')'
+	ArrayLiteral
+	DictLiteral
+
+ArrayLiteral:
+	[ (Expression ,?)* ]
+
+DictLiteral:
+	{ (KVPair ,)*  }
+
+KVPair:
+	Key, Value
+
+Key:
+	Expression
+
+Value:
+	Expression
+
+Reassignment:
+	Identifier isnow Identifier StatementTerminator
