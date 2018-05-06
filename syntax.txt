@@ -13,7 +13,13 @@ mock, endmock, stub, endstub
 void, int, float, boolean, hashmap, string
 
 /********************Control Statements******************/
-if, else, while, do, end 
+if, else, while, endif, endwhile, return
+
+/*******************Boolean Logic**********************/
+and, or, nand, nor, true, false, equals
+
+/***********************Other**********************/
+nil, assert, create, +, -, *, ^, /, [], {}, ., ;,
 
 **Mocks and stubs will be included later
 
@@ -29,11 +35,41 @@ VARDECLIST := (TYPE IDENTIFIER ";")*
 **STUBDEF := stub IDENTIFIER(IDENTIFIER) ":" STATEMENTLIST endstub
 
 ARGLIST := TYPE IDENTIFIER ("," TYPE IDENTIFIER)
-IDENTIFER := (a-zA-Z_)(a-zA-Z0-9_?)*
-TYPE := int | float | boolean | hashmap | IDENTIFIER | TYPE "[]" | string
+TYPE := int | float | boolean | hashmap | IDENTIFIER | TYPE "[]" | TYPE "{}" | string
 RETURNTYPE := TYPE | void
 
-STATEMENT:= if EXPRESSION ":" STATEMENTLIST else STATEMENTLIST end
-	| while EXPRESSION ":" STATEMENTLIST end
-	| do STATEMENTLIST ":" while EXPRESSION ";"
-	|
+STATEMENT := if EXPRESSION ":" STATEMENTLIST else STATEMENTLIST endif
+	| while EXPRESSION ":" STATEMENTLIST endwhile
+	| print EXPRESSION ";"
+	| IDENTIFIER "=" EXPRESSION ";"
+	| IDENTIFIER "{" EXPRESSION "}" "=" EXPRESSION ";"
+	| IDENTIFIER "[" EXPRESSION "]" "=" EXPRESSION ";"
+	| TYPE IDENTIFIER ";"
+	| return EXPRESSION ";"
+	| EXPRESSION ";"
+	| assert EXPRESSION ";"
+
+EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" | "/") EXPRESSION
+	| EXPRESSION "[" EXPRESSION "]"
+	| EXPRESSION "{" EXPRESSION "}"
+	| EXPRESSION "." length
+	| INTLITERAL
+	| FLOATLITERAL
+	| true
+	| false
+	| nil
+	| "(" EXPRESSION ")"
+	| "!" EXPRESSION
+	| IDENTIFIER
+	| create IDENTIFIER "(" PARAMLIST ")"
+	| EXPRESSION "." IDENTIFIER "(" PARAMLIST ")"
+
+PARAMLIST := (EXPRESSION ("," EXPRESSION)* )?
+
+IDENTIFER := (a-zA-Z_)(a-zA-Z0-9_?)*
+INTLITERAL :=
+FLOATLITERAL :=
+
+/*Ignored by lexer, but useful to know*/
+SINGLE_LINE_COMMENT := # text
+MULTIPLE_LINE_COMMENT := ''' text with newlines '''

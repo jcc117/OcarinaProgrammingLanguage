@@ -3,7 +3,8 @@
 # What is Ocarina?
 Ocarina is a programming language heavily influenced by Python, Java, and Ruby. It includes single class inheritance and the ability to create nested
 inner classes. It is an interpretted language that runs on a Java based interpretter (which means we can use the JVM for portability!). The design of
-this language is meant to be simple in order to give first time language learners an easier time learning over something as wordy as Java.
+this language is meant to be simple in order to give first time language learners an easier time learning over something as wordy as Java. It's grammar
+is fairly similar to MiniJava (a common language developed in compiler courses) except it is further developed.
 
 All integers of any size and floats can be referenced by the same keyword. The interpretter shall handle any size fo integer or float that is thrown at
 it. It also incluces a built in hashmap variable type due to the commonality of use of the data structure. 
