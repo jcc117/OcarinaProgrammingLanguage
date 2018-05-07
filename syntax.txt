@@ -66,6 +66,10 @@ EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" 
 	| EXPRESSION "@" IDENTIFIER "(" PARAMLIST ")"
 	| this
 	| EXPRESSION "->" IDENTIFIER
+	| getInt
+	| getFloat
+	| getBoolean
+	| getString
 
 PARAMLIST := (EXPRESSION ("," EXPRESSION)* )?
 

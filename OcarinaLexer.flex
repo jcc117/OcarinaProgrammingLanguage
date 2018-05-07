@@ -69,6 +69,10 @@ WhiteSpace = [\t\n\r]+
 "nil"	{return symbol(NIL);}
 "assert"	{return symbol(ASSERT);}
 "create"	{return symbol(CREATE);}
+"getInt"	{return symbol(GETINT);}
+"getFloat"	{return symbol(GETFLOAT);}
+"getString"	{return symbol(GETSTRING);}
+"getBoolean"	{return symbol(GETBOOLEAN);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
