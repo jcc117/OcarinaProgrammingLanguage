@@ -19,7 +19,7 @@ if, else, while, endif, endwhile, return
 and, or, nand, nor, true, false, equals
 
 /***********************Other**********************/
-nil, assert, create, +, -, *, ^, /, [], {}, ., ;,
+this, nil, assert, create, +, -, *, ^, /, [], {}, ., ;, :, >, <, >=, <=, ->
 
 **Mocks and stubs will be included later
 
@@ -49,7 +49,8 @@ STATEMENT := if EXPRESSION ":" STATEMENTLIST else STATEMENTLIST endif
 	| EXPRESSION ";"
 	| assert EXPRESSION ";"
 
-EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" | "/") EXPRESSION
+EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" | "/"
+	| "<" | ">" | ">=" | "<=") EXPRESSION
 	| EXPRESSION "[" EXPRESSION "]"
 	| EXPRESSION "{" EXPRESSION "}"
 	| EXPRESSION "." length
@@ -62,7 +63,9 @@ EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" 
 	| "!" EXPRESSION
 	| IDENTIFIER
 	| create IDENTIFIER "(" PARAMLIST ")"
-	| EXPRESSION "." IDENTIFIER "(" PARAMLIST ")"
+	| EXPRESSION "@" IDENTIFIER "(" PARAMLIST ")"
+	| this
+	| EXPRESSION "->" IDENTIFIER
 
 PARAMLIST := (EXPRESSION ("," EXPRESSION)* )?
 
