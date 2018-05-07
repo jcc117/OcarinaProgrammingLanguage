@@ -91,6 +91,7 @@ WhiteSpace = [\t\n\r]+
 ";"	{return symbol(SEMICOLON);}
 ":"	{return symbol(COLON);}
 "@"	{return symbol(AT);}
+"," {return symbol(COMMA);}
 
 /*Identifiers and numbers*/
 {Identifier}	{return symbol(IDENTIFIER);}
