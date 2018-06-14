@@ -30,5 +30,14 @@ With the following
 
 *ocarina filename.rina*
 
+# Items under consideration
+*operator overloading*
+*interfaces*
+*full list of commonly used operators*
+*map functions*
+*repl mode*
+*casting*
+*generics*
+
 Progress report:
 Revamp of Sytax development

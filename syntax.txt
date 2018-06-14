@@ -34,7 +34,7 @@ VARDECLIST := (TYPE IDENTIFIER ";")*
 **MOCKDEF := mock IDENTIFIER(IDENTIFIER) ":" DEFLIST endmock
 **STUBDEF := stub IDENTIFIER(IDENTIFIER) ":" STATEMENTLIST endstub
 
-ARGLIST := TYPE IDENTIFIER ("," TYPE IDENTIFIER)
+ARGLIST := TYPE IDENTIFIER ("," TYPE IDENTIFIER)? | epsilon
 TYPE := int | float | boolean | hashmap | IDENTIFIER | TYPE "[]" | TYPE "{}" | string
 RETURNTYPE := TYPE | void
 
@@ -47,7 +47,7 @@ STATEMENT := if EXPRESSION ":" STATEMENTLIST else STATEMENTLIST endif
 	| TYPE IDENTIFIER ";"
 	| return EXPRESSION ";"
 	| EXPRESSION ";"
-	| assert EXPRESSION ";"
+	| assert EXPRESSION ";
 
 EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" | "/"
 	| "<" | ">" | ">=" | "<=") EXPRESSION
