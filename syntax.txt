@@ -48,6 +48,7 @@ STATEMENT := if EXPRESSION ":" STATEMENTLIST else STATEMENTLIST endif
 	| return EXPRESSION ";"
 	| EXPRESSION ";"
 	| assert EXPRESSION ";
+	| exit"(" EXPRESSION ")";
 
 EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" | "/"
 	| "<" | ">" | ">=" | "<=") EXPRESSION
@@ -70,12 +71,16 @@ EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" 
 	| getFloat
 	| getBoolean
 	| getString
+	| array TYPE[EXPRESSION]
+	| hashmap "(" TYPE"," TYPE ")"
+	| STRING
 
 PARAMLIST := (EXPRESSION ("," EXPRESSION)* )?
 
 IDENTIFER := (a-zA-Z_)(a-zA-Z0-9_?)*
 INTLITERAL :=
 FLOATLITERAL :=
+STRING :=
 
 /*Ignored by lexer, but useful to know*/
 SINGLE_LINE_COMMENT := # text
