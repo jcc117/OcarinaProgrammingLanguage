@@ -1,5 +1,6 @@
 import java_cup.runtime;
 import java.util.*;
+import java.math.*;
 import ast.*;
 
 /* Setup */
@@ -33,24 +34,27 @@ terminal PLUS, MINUS, MULT, DIV, POWER;
 terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
 terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal DOT, SEMICOLON, COLON;
-terminal STRINGLITERAL, IDENTIFIER;
-terminal INTLITERAL, FLOATLITERAL;
+terminal String STRINGLITERAL, IDENTIFIER;
+terminal BigInteger INTLITERAL
+terminal BigDecimal FLOATLITERAL;
 
 /* Non Terminals */
-non terminal Program PROGRAM;
-non terminal StatementList STATEMENTLIST;
-non terminal DefList DEFLIST;
-non terminal ClassDef CLASSDEF;
-non terminal MethodDef METHODDEF;
+non terminal Program program;
+non terminal StatementList statementlist;
+non terminal DefList deflist;
+non terminal ClassDef classdef;
+non terminal MethodDef methoddef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
-non terminal VarDeclList VARDECLIST;
-non terminal ArgList ARGLIST;
-non terminal Type TYPE;
-non terminal RetType RETURNTYPE;
-non terminal Statement STATEMENT;
-non terminal Expression EXPRESSION;
-non terminal ParamList PARAMLIST;
+non terminal VarDeclList vardeclist;
+non terminal VarDecl vardec;
+non terminal ArgList arglist;
+non terminal Type type;
+non terminal RetType returntype;
+non terminal Statement statement;
+non terminal Expression expression;
+non terminal ParamList paramlist;
+non terminal Identifer identifier;
 
 /* Precedence */
 precedence left BANG;
@@ -61,15 +65,34 @@ precedence left GTHANE, LTHANE, GTHAN, LTHAN;
 precedence left EQUALS;
 
 /* Productions */
-PROGRAM ::=	;
-STATEMENTLIST ::= ;
-DEFLIST ::= ;
-CLASSDEF ::= ;
-METHODDEF ::= ;
-VARDECLIST ::= ;
-ARGLIST ::= ;
-TYPE ::= ;
-RETURNTYPE ::= ;
-STATEMENT ::= ;
-EXPRESSION ::= ;
-PARAMLIST ::= ;
+program ::=	START statementlist:s END deflist:d;
+
+statemenlist ::= statementlist:l statement:s 
+		| 
+		;
+
+deflist ::= deflist:d classdef:c
+		|
+		deflist:d methoddef:m
+		|
+		;
+
+classdef ::= CLASS identifer:i COLON vardeclist:v deflist:d ENDCLASS
+		|
+		CLASS identifier:i1 EXTENDS identifer:i2 COLON vardeclist:v deflist:d ENDCLASS
+		;
+
+methoddef ::= SUBROUTINE returntype:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l ENDSUBR;
+
+vardeclist ::= vardeclist:l vardec:v 
+		|
+		;
+vardec ::= type:t identifier:i SEMICOLON;
+
+arglist ::= ;
+type ::= ;
+returntype ::= ;
+statement ::= ;
+expression ::= ;
+paramlist ::= ;
+identifier ::= ;

@@ -1,4 +1,5 @@
 import java_cup.runtime.*;
+import java.math.*;
 
 %%
 
@@ -76,7 +77,6 @@ String = \"[.]*\"
 "getBoolean"	{return symbol(GETBOOLEAN);}
 "exit"		{return symbol(EXIT);}
 "array"		{return symbol(ARRAY);}
-"hashmap"	{return symbol(HASHMAP);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
@@ -102,10 +102,10 @@ String = \"[.]*\"
 "," {return symbol(COMMA);}
 
 /*Identifiers and numbers*/
-{String}	{return symbol(STRING);}
-{Identifier}	{return symbol(IDENTIFIER);}
-{IntegerLiteral}	{return symbol(INTLITERAL);}
-{FloatLiteral}	{return symbol(FLOATLITERAL);}
+{String}	{return symbol(STRINGLITERAL, yytext());}
+{Identifier}	{return symbol(IDENTIFIER, yytext());}
+{IntegerLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext()));}
+{FloatLiteral}	{return symbol(FLOATLITERAL, new BigDecimal(yytext()));}
 
 /*To be ignored*/
 {LineComment}	{/*Do nothing*/}
