@@ -31,6 +31,7 @@ Identifier = (a-zA-Z_)(a-zA-Z0-9_?)*
 LineComment = #[^\n]*\n?
 BlockComment = \'\'\'.*\'\'\'
 WhiteSpace = [\t\n\r]+
+String = \"[.]*\"
 
 %%
 
@@ -73,6 +74,9 @@ WhiteSpace = [\t\n\r]+
 "getFloat"	{return symbol(GETFLOAT);}
 "getString"	{return symbol(GETSTRING);}
 "getBoolean"	{return symbol(GETBOOLEAN);}
+"exit"		{return symbol(EXIT);}
+"array"		{return symbol(ARRAY);}
+"hashmap"	{return symbol(HASHMAP);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
@@ -98,6 +102,7 @@ WhiteSpace = [\t\n\r]+
 "," {return symbol(COMMA);}
 
 /*Identifiers and numbers*/
+{String}	{return symbol(STRING);}
 {Identifier}	{return symbol(IDENTIFIER);}
 {IntegerLiteral}	{return symbol(INTLITERAL);}
 {FloatLiteral}	{return symbol(FLOATLITERAL);}
