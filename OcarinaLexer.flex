@@ -71,12 +71,14 @@ String = \"[.]*\"
 "nil"	{return symbol(NIL);}
 "assert"	{return symbol(ASSERT);}
 "create"	{return symbol(CREATE);}
-"getInt"	{return symbol(GETINT);}
-"getFloat"	{return symbol(GETFLOAT);}
-"getString"	{return symbol(GETSTRING);}
-"getBoolean"	{return symbol(GETBOOLEAN);}
+"getInt()"	{return symbol(GETINT);}
+"getFloat()"	{return symbol(GETFLOAT);}
+"getString()"	{return symbol(GETSTRING);}
+"getBoolean()"	{return symbol(GETBOOLEAN);}
 "exit"		{return symbol(EXIT);}
 "array"		{return symbol(ARRAY);}
+"length"	{return symbol(LENGTH);}
+"print" 	{return symbol(PRINT);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
@@ -95,6 +97,8 @@ String = \"[.]*\"
 "]"	{return symbol(RBRACKET);}
 "{"	{return symbol(LBRACE);}
 "}"	{return symbol(RBRACE);}
+"("	{return symbol(LPAREN);}
+")"	{return symbol(RPAREN);}
 "."	{return symbol(DOT);}
 ";"	{return symbol(SEMICOLON);}
 ":"	{return symbol(COLON);}

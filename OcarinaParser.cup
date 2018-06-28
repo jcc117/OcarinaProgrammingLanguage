@@ -27,15 +27,17 @@ terminal TRUE, FALSE;
 terminal THIS, NIL;
 terminal ASSERT, CREATE, EXIT;
 terminal GETINT, GETFLOAT, GETBOOLEAN, GETSTRING;
+terminal LENGTH, PRINT;
 
 /* Terminals - Non Keywords */
 terminal POINTER, AT, COMMA;
 terminal PLUS, MINUS, MULT, DIV, POWER;
 terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
 terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal LPAREN, RPAREN;
 terminal DOT, SEMICOLON, COLON;
 terminal String STRINGLITERAL, IDENTIFIER;
-terminal BigInteger INTLITERAL
+terminal BigInteger INTLITERAL;
 terminal BigDecimal FLOATLITERAL;
 
 /* Non Terminals */
@@ -55,10 +57,12 @@ non terminal Statement statement;
 non terminal Expression expression;
 non terminal ParamList paramlist;
 non terminal Identifer identifier;
+non terminal Param parameter;
 
 /* Precedence */
 precedence left BANG;
-precedence left DIV, MULT;
+precedence left LPAREN, RPAREN, DOT, AT, POINTER, LBRACKET, RBRACKET, LBRACE, RBRACE;
+precedence left DIV, MULT, POWER;
 precedence left MINUS, PLUS;
 precedence left AND, OR, NAND, NOR;
 precedence left GTHANE, LTHANE, GTHAN, LTHAN;
@@ -67,7 +71,7 @@ precedence left EQUALS;
 /* Productions */
 program ::=	START statementlist:s END deflist:d;
 
-statemenlist ::= statementlist:l statement:s 
+statementlist ::= statement:s statementlist:l
 		| 
 		;
 
@@ -77,9 +81,9 @@ deflist ::= deflist:d classdef:c
 		|
 		;
 
-classdef ::= CLASS identifer:i COLON vardeclist:v deflist:d ENDCLASS
+classdef ::= CLASS identifier:i COLON vardeclist:v deflist:d ENDCLASS
 		|
-		CLASS identifier:i1 EXTENDS identifer:i2 COLON vardeclist:v deflist:d ENDCLASS
+		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d ENDCLASS
 		;
 
 methoddef ::= SUBROUTINE returntype:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l ENDSUBR;
@@ -89,10 +93,141 @@ vardeclist ::= vardeclist:l vardec:v
 		;
 vardec ::= type:t identifier:i SEMICOLON;
 
-arglist ::= ;
-type ::= ;
-returntype ::= ;
-statement ::= ;
-expression ::= ;
-paramlist ::= ;
-identifier ::= ;
+arglist ::= arglist:l COMMA parameter:p
+		|
+		parameter:p
+		;
+parameter ::= type:t identifier:i
+		;
+
+type ::= type:t LBRACKET RBRACKET
+		|
+		INT
+		|
+		FLOAT
+		|
+		BOOLEAN
+		|
+		STRING
+		|
+		HASHMAP LBRACE type:t COMMA type:t RBRACE
+		|
+		identifier:i
+		;
+returntype ::= type:t LBRACKET RBRACKET
+		|
+		INT
+		|
+		FLOAT
+		|
+		BOOLEAN
+		|
+		STRING
+		|
+		HASHMAP LBRACE type:t COMMA type:t RBRACE
+		|
+		identifier:i
+		|
+		VOID
+		;
+
+statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
+		|
+		WHILE expression:e COLON statementlist:l ENDWHILE
+		|
+		PRINT LPAREN expression:e RPAREN SEMICOLON
+		|
+		identifier:i EQUAL expression:e SEMICOLON
+		|
+		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2 SEMICOLON
+		|
+		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2 SEMICOLON
+		|
+		vardec:v
+		|
+		RETURN expression:e SEMICOLON
+		|
+		ASSERT LPAREN expression:e RPAREN SEMICOLON
+		|
+		EXIT LPAREN expression:e RPAREN SEMICOLON
+		;
+expression ::= expression:e1 AND expression:e2
+		|
+		expression:e1 OR expression:e2
+		|
+		expression:e1 NAND expression:e2
+		|
+		expression:e1 NOR expression:e2
+		|
+		expression:e1 EQUALS expression:e2
+		|
+		expression:e1 PLUS expression:e2
+		|
+		expression:e1 MINUS expression:e2
+		|
+		expression:e1 MULT expression:e2
+		|
+		expression:e1 POWER expression:e2
+		|
+		expression:e1 DIV expression:e2
+		|
+		expression:e1 GTHANE expression:e2
+		|
+		expression:e1 LTHANE expression:e2
+		|
+		expression:e1 GTHAN expression:e2
+		|
+		expression:e1 LTHAN expression:e2
+		|
+		expression:e1 LBRACKET expression:e2 RBRACKET
+		|
+		expression:e1 LBRACE expression:e2 RBRACE
+		|
+		expression:e POINTER identifier:i
+		|
+		expression:e AT identifier:i LPAREN paramlist:l RPAREN
+		|
+		expression:e DOT LENGTH
+		|
+		INTLITERAL
+		|
+		FLOATLITERAL
+		|
+		TRUE
+		|
+		FALSE
+		|
+		NIL
+		|
+		LPAREN expression:e RPAREN
+		|
+		BANG expression:e
+		|
+		identifier:i
+		|
+		CREATE identifier:i LPAREN paramlist:l RPAREN
+		|
+		THIS
+		|
+		GETINT
+		|
+		GETFLOAT
+		|
+		GETBOOLEAN
+		|
+		GETSTRING
+		|
+		ARRAY type:t LBRACKET expression:e RBRACKET
+		|
+		HASHMAP LBRACE type:t COMMA type:t RBRACE
+		|
+		STRINGLITERAL:s
+		;
+
+paramlist ::= expression:e COMMA paramlist:l
+		|
+		expression:e
+		;
+
+identifier ::= IDENTIFIER:i
+		;
