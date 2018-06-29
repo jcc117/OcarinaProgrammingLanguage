@@ -143,24 +143,34 @@ type ::= type:t LBRACKET RBRACKET
 		;
 
 statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
+		{: RESULT = new If(e, l1, l2); :}
 		|
 		WHILE expression:e COLON statementlist:l ENDWHILE
+		{: RESULT = new While(e, l); :}
 		|
 		PRINT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Print(e); :}
 		|
 		identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new Assignment(e, i); :}
 		|
 		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2 SEMICOLON
+		{: RESULT = new HashmapAssignment(i, e1, e2); :}
 		|
 		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2 SEMICOLON
+		{: RESULT = new ArrayAssignment(i, e1, e2); :}
 		|
 		vardec:v
+		{: RESULT = v; :}
 		|
 		RETURN expression:e SEMICOLON
+		{: RESULT = new Return(e); :}
 		|
 		ASSERT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Assert(e); :}
 		|
 		EXIT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Exit(e); :}
 		;
 expression ::= expression:e1 AND expression:e2
 		{: RESULT = new And(e1, e2); :}
