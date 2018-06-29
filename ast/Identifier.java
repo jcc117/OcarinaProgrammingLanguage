@@ -2,10 +2,8 @@ package ast;
 
 public class Identifier extends Expression{
 	public String i;
-	public Type t;
 
-	public Identifier(String i, Type t){
+	public Identifier(String i){
 		this.i = i;
-		this.t = t;
 	}
 }

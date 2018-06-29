@@ -5,7 +5,11 @@ import java.util.*;
 public class DefList {
 	public ArrayList<Def> l;
 
-	public DefList(ArrayList<Def> l){
-		this.l = l;
+	public DefList(){
+		l = new ArrayList<Def>();
+	}
+
+	public void add(Def d){
+		l.add(d);
 	}
 }

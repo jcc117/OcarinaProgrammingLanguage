@@ -1,9 +1,11 @@
 package ast;
 
 public class ObjectCreate extends Expression{
-	ParamList l;
+	public ParamList l;
+	public Identifier i;
 
-	public ObjectCreate(ParamList l){
+	public ObjectCreate(Identifier i, ParamList l){
 		this.l = l;
+		this.i = i;
 	}
 }

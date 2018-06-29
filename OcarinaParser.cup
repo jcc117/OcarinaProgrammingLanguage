@@ -1,4 +1,4 @@
-import java_cup.runtime;
+import java_cup.runtime.*;
 import java.util.*;
 import java.math.*;
 import ast.*;
@@ -52,11 +52,10 @@ non terminal VarDeclList vardeclist;
 non terminal VarDecl vardec;
 non terminal ArgList arglist;
 non terminal Type type;
-non terminal RetType returntype;
 non terminal Statement statement;
 non terminal Expression expression;
 non terminal ParamList paramlist;
-non terminal Identifer identifier;
+non terminal Identifier identifier;
 non terminal Param parameter;
 
 /* Precedence */
@@ -69,66 +68,78 @@ precedence left GTHANE, LTHANE, GTHAN, LTHAN;
 precedence left EQUALS;
 
 /* Productions */
-program ::=	START statementlist:s END deflist:d;
+program ::=	START statementlist:s END deflist:d
+		{: RESULT = new Program(s, d); :}
+		;
 
 statementlist ::= statement:s statementlist:l
-		| 
+		{: l.add(s); RESULT = l;:}
+		|
+		{: RESULT = new StatementList(); :}
 		;
 
 deflist ::= deflist:d classdef:c
+		{: d.add(c); RESULT = d; :}
 		|
 		deflist:d methoddef:m
+		{: d.add(m); RESULT = d; :}
 		|
+		{: RESULT = new DefList(); :}
 		;
 
 classdef ::= CLASS identifier:i COLON vardeclist:v deflist:d ENDCLASS
+		{: RESULT = new SimpleClassDef(i, d, v); :}
 		|
 		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d ENDCLASS
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v); :}
 		;
 
-methoddef ::= SUBROUTINE returntype:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l ENDSUBR;
+methoddef ::= SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l ENDSUBR
+		{: RESULT = new MethodDef(r, i, a, l); :}
+		;
 
 vardeclist ::= vardeclist:l vardec:v 
+		{: l.add(v); RESULT = l;:}
 		|
+		{: RESULT = new VarDeclList();:}
 		;
-vardec ::= type:t identifier:i SEMICOLON;
+vardec ::= type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i); :}
+		;
 
 arglist ::= arglist:l COMMA parameter:p
+		{: l.add(p); RESULT = l; :}
 		|
 		parameter:p
+		{: ArgList l = new ArgList(); l.add(p); RESULT = l; :}
 		;
 parameter ::= type:t identifier:i
+		{: RESULT = new Param(t, i); :}
 		;
 
 type ::= type:t LBRACKET RBRACKET
+		{: RESULT = new ArrayType(t); :}
 		|
 		INT
+		{: RESULT = new IntType(); :}
 		|
 		FLOAT
+		{: RESULT = new FloatType(); :}
 		|
 		BOOLEAN
+		{: RESULT = new BooleanType(); :}
 		|
 		STRING
+		{: RESULT = new StringType(); :}
 		|
-		HASHMAP LBRACE type:t COMMA type:t RBRACE
-		|
-		identifier:i
-		;
-returntype ::= type:t LBRACKET RBRACKET
-		|
-		INT
-		|
-		FLOAT
-		|
-		BOOLEAN
-		|
-		STRING
-		|
-		HASHMAP LBRACE type:t COMMA type:t RBRACE
+		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
+		{: RESULT = new HashmapType(t1, t2); :}
 		|
 		identifier:i
+		{: RESULT = new IdentifierType(i); :}
 		|
 		VOID
+		{: RESULT = new VoidType(); :}
 		;
 
 statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
@@ -152,82 +163,121 @@ statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
 		EXIT LPAREN expression:e RPAREN SEMICOLON
 		;
 expression ::= expression:e1 AND expression:e2
+		{: RESULT = new And(e1, e2); :}
 		|
 		expression:e1 OR expression:e2
+		{: RESULT = new Or(e1, e2); :}
 		|
 		expression:e1 NAND expression:e2
+		{: RESULT = new Nand(e1, e2); :}
 		|
 		expression:e1 NOR expression:e2
+		{: RESULT = new Nor(e1, e2); :}
 		|
 		expression:e1 EQUALS expression:e2
+		{: RESULT = new Equals(e1, e2); :}
 		|
 		expression:e1 PLUS expression:e2
+		{: RESULT = new Plus(e1, e2); :}
 		|
 		expression:e1 MINUS expression:e2
+		{: RESULT = new Minus(e1, e2); :}
 		|
 		expression:e1 MULT expression:e2
+		{: RESULT = new Multiply(e1, e2); :}
 		|
 		expression:e1 POWER expression:e2
+		{: RESULT = new Power(e1, e2); :}
 		|
 		expression:e1 DIV expression:e2
+		{: RESULT = new Divide(e1, e2); :}
 		|
 		expression:e1 GTHANE expression:e2
+		{: RESULT = new GreaterThanEqualTo(e1, e2); :}
 		|
 		expression:e1 LTHANE expression:e2
+		{: RESULT = new LessThanEqualTo(e1, e2); :}
 		|
 		expression:e1 GTHAN expression:e2
+		{: RESULT = new GreaterThan(e1, e2); :}
 		|
 		expression:e1 LTHAN expression:e2
+		{: RESULT = new LessThan(e1, e2); :}
 		|
 		expression:e1 LBRACKET expression:e2 RBRACKET
+		{: RESULT = new HashmapExpr(e1, e2); :}
 		|
 		expression:e1 LBRACE expression:e2 RBRACE
+		{: RESULT = new ArrayExpr(e1, e2); :}
 		|
 		expression:e POINTER identifier:i
+		{: RESULT = new ObjectVarAccess(e, i); :}
 		|
 		expression:e AT identifier:i LPAREN paramlist:l RPAREN
+		{: RESULT = new MethodCall(e, i, l); :}
 		|
 		expression:e DOT LENGTH
+		{: RESULT = new ArrayLength(e); :}
 		|
-		INTLITERAL
+		INTLITERAL:i
+		{: RESULT = new IntLiteral(i); :}
 		|
-		FLOATLITERAL
+		FLOATLITERAL:f
+		{: RESULT = new FloatLiteral(f); :}
 		|
 		TRUE
+		{: RESULT = new True(); :}
 		|
 		FALSE
+		{: RESULT = new False(); :}
 		|
 		NIL
+		{: RESULT = new Nil(); :}
 		|
 		LPAREN expression:e RPAREN
+		{: RESULT = new ParentExpr(e); :}
 		|
 		BANG expression:e
+		{: RESULT = new Not(e); :}
 		|
 		identifier:i
+		{: RESULT = new IdentifierExpr(i); :}
 		|
 		CREATE identifier:i LPAREN paramlist:l RPAREN
+		{: RESULT = new ObjectCreate(i, l); :}
 		|
 		THIS
+		{: RESULT = new This(); :}
 		|
 		GETINT
+		{: RESULT = new GetInt(); :}
 		|
 		GETFLOAT
+		{: RESULT = new GetFloat(); :}
 		|
 		GETBOOLEAN
+		{: RESULT = new GetBoolean(); :}
 		|
 		GETSTRING
+		{: RESULT = new GetString(); :}
 		|
 		ARRAY type:t LBRACKET expression:e RBRACKET
+		{: RESULT = new ArrayCreate(t, e); :}
 		|
-		HASHMAP LBRACE type:t COMMA type:t RBRACE
+		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
+		{: RESULT = new HashmapCreate(t1, t2); :}
 		|
 		STRINGLITERAL:s
+		{: RESULT = new StringLiteral(s); :}
 		;
 
 paramlist ::= expression:e COMMA paramlist:l
+		{: l.add(e); RESULT = l; :}
 		|
 		expression:e
+		{: ParamList p  = new ParamList(); p.add(e); RESULT = p; :}
 		;
 
 identifier ::= IDENTIFIER:i
+		{: RESULT = new Identifier(i); :}
 		;
