@@ -20,7 +20,7 @@ For examples, please navigate to the 'examples' folder.
 # How do I compile an Ocarina file?
 With the following command:
 
-*ocarinac filename.oca*
+*ocarinac filename.ocar*
 
 This shall produce a file called filename.rina, which runs on the Ocarina interpretter.
 
