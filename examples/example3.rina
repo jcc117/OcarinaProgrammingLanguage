@@ -1,0 +1,37 @@
+# A simple progarm
+start
+	boolean x;
+	boolean y;
+
+	x = true;
+	y = false;
+
+	if x and y:
+		print("Unreachable statement");
+	else
+		print("Reachable statement");
+	endif
+
+	if !(x or y):
+		print("I've been coding all day and wanna go to bed.");
+	else
+		print("I guess I'll keep on coding.");
+	endif
+
+	# Loop through an array
+
+	int[] t = array int[10];
+
+	int a = 0;
+
+	while a < t.length:
+		print(a);
+		t[a] = a;
+		a = a + 1;
+	endwhile
+
+	# Demonstrate hashmap functionality
+	hashmap{string, float} map = hashmap{string, float};
+	map{"Hello"} = 7.5;
+	print(map{"Hello"});
+end

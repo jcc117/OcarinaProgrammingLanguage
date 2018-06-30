@@ -1,0 +1,4 @@
+# A very simple example program
+start
+	print("Hello, Hyrule");
+end

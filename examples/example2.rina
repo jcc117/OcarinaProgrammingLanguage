@@ -1,0 +1,16 @@
+# Something a bit more complicated
+start
+	int a = 4;
+	int b = 5;
+	print(b - a * 7 + 4^2);
+
+	# Some variables. Declaring, but not doing anything
+	string x;
+	hashmap{int, float} y;
+	float[] z;
+end
+
+'''
+Lets throw a multi-line
+comment in here
+'''
