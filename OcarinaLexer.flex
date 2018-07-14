@@ -54,11 +54,11 @@ String = \"[.]*\"
 "boolean"	{return symbol(BOOLEAN);}
 "hashmap"	{return symbol(HASHMAP);}
 "string"	{return symbol(STRING);}
+"begin"	{return symbol(BEGIN);}
 "if"	{return symbol(IF);}
+"rather"	{return symbol(RATHER);}
 "else"	{return symbol(ELSE);}
-"endif"	{return symbol(ENDIF);}
 "while"	{return symbol(WHILE);}
-"endwhile"	{return symbol(ENDWHILE);}
 "return"	{return symbol(RETURN);}
 "and"	{return symbol(AND);}
 "or"	{return symbol(OR);}

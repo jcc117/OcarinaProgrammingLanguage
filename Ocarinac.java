@@ -23,7 +23,10 @@ public class Ocarinac{
 			else if(args.length == 3){
 				// Tokenizer mode
 				if(args[1].equals("-t")){
-
+					String filename = args[2];
+					FileInputStream stream = new FileInputStream(filename);
+					InputStreamReader reader = new InputStreamReader(stream);
+					
 				}
 				// Error
 				else{

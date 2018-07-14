@@ -19,8 +19,8 @@ terminal SUBROUTINE, ENDSUBR;
 /* terminal MOCK, ENDMOCK; */
 /* terminal STUB, ENDSTUB; */
 terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, ARRAY;
-terminal IF, ELSE, ENDIF;
-terminal WHILE, ENDWHILE;
+terminal IF, ELSE, BEGIN, RATHER;
+terminal WHILE;
 terminal RETURN;
 terminal AND, OR, NAND, NOR, EQUALS;
 terminal TRUE, FALSE;
@@ -57,6 +57,8 @@ non terminal Expression expression;
 non terminal ParamList paramlist;
 non terminal Identifier identifier;
 non terminal Param parameter;
+non terminal RatherList ratherlist;
+non terminal Statement else;
 
 /* Precedence */
 precedence left BANG;
@@ -142,10 +144,15 @@ type ::= type:t LBRACKET RBRACKET
 		{: RESULT = new VoidType(); :}
 		;
 
-statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
-		{: RESULT = new If(e, l1, l2); :}
+statement ::= BEGIN statementlist:l END
+		{: RESULT = new Block(l); :}
+		IF expression:e COLON statement:s1 ratherlist:l else:s2 END
+		{: RESULT = new If(e, s1, l, s2); :}
 		|
-		WHILE expression:e COLON statementlist:l ENDWHILE
+		IF expression:e COLON statement:s ratherlist:l END
+		{: RESULT = new If(e, s, l, null); :}
+		|
+		WHILE expression:e COLON statement:l
 		{: RESULT = new While(e, l); :}
 		|
 		PRINT LPAREN expression:e RPAREN SEMICOLON
@@ -172,6 +179,16 @@ statement ::= IF expression:e COLON statementlist:l1 ELSE statementlist:l2 ENDIF
 		EXIT LPAREN expression:e RPAREN SEMICOLON
 		{: RESULT = new Exit(e); :}
 		;
+
+ratherlist ::= ratherlist:l RATHER expression:e COLON statement:s
+		{:l.add(new Rather(e, s)); RESULT = l;:}
+		|
+		{:RESULT = new RatherList(); :}
+		;
+else ::= ELSE statement:s
+		{: RESULT = s; :}
+		;
+
 expression ::= expression:e1 AND expression:e2
 		{: RESULT = new And(e1, e2); :}
 		|
