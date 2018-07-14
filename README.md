@@ -11,6 +11,7 @@ it. It also incluces a built in hashmap variable type due to the commonality of 
 
 This language is also unique in that it takes into account some programming aspects for software development. This language shall eventually include built in
 mocks and stubs in order to more easily facilitate program testing enviroments so third party libraries do not have to be developed.
+Ocarina also has a built-in debugger within its interpretter.
 
 Ocarina is compiled with a JFlex lexer and JavaCUP parser. Source code is compiled to an intermediate representation that is then run on the Ocarina 
 interpretter in a similar way to Java class files and the JVM.
@@ -44,5 +45,12 @@ To be determined.
 *casting*
 *generics*
 
+# Features for Ocarina
+*Built-in Debugger*
+*Built-in Mocks and Stubs*
+*Handling of Integers and Floats of Any Size*
+*Heavy use of keywords to promote readability*
+*Strictly Typed*
+
 # Progress report
-Parser and Lexer Development
+Parser and Lexer Development, along with new features being added

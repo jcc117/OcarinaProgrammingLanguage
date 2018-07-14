@@ -28,10 +28,11 @@ terminal THIS, NIL;
 terminal ASSERT, CREATE, EXIT;
 terminal GETINT, GETFLOAT, GETBOOLEAN, GETSTRING;
 terminal LENGTH, PRINT;
+terminal DEBUG, BREAK, CONTINUE;
 
 /* Terminals - Non Keywords */
 terminal POINTER, AT, COMMA;
-terminal PLUS, MINUS, MULT, DIV, POWER;
+terminal PLUS, MINUS, MULT, DIV, POWER, MOD;
 terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
 terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal LPAREN, RPAREN;
@@ -59,11 +60,12 @@ non terminal Identifier identifier;
 non terminal Param parameter;
 non terminal RatherList ratherlist;
 non terminal Statement else;
+non terminal Statement simple_statement;
 
 /* Precedence */
 precedence left BANG;
 precedence left LPAREN, RPAREN, DOT, AT, POINTER, LBRACKET, RBRACKET, LBRACE, RBRACE;
-precedence left DIV, MULT, POWER;
+precedence left DIV, MULT, POWER, MOD;
 precedence left MINUS, PLUS;
 precedence left AND, OR, NAND, NOR;
 precedence left GTHANE, LTHANE, GTHAN, LTHAN;
@@ -71,7 +73,10 @@ precedence left EQUALS;
 
 /* Productions */
 program ::=	START statementlist:s END deflist:d
-		{: RESULT = new Program(s, d); :}
+		{: RESULT = new Program(s, d, false); :}
+		|
+		DEBUG START statementlist:s END deflist:d
+		{: RESULT = new Program(s, d, true); :}
 		;
 
 statementlist ::= statement:s statementlist:l
@@ -144,7 +149,14 @@ type ::= type:t LBRACKET RBRACKET
 		{: RESULT = new VoidType(); :}
 		;
 
-statement ::= BEGIN statementlist:l END
+statement ::= simple_statement:s
+		{: RESULT = s; :}
+		|
+		AT simple_statement:s
+		{: s.breakPoint = true; RESULT = s;:}
+		;
+
+simple_statement ::= BEGIN statementlist:l END
 		{: RESULT = new Block(l); :}
 		IF expression:e COLON statement:s1 ratherlist:l else:s2 END
 		{: RESULT = new If(e, s1, l, s2); :}
@@ -178,6 +190,12 @@ statement ::= BEGIN statementlist:l END
 		|
 		EXIT LPAREN expression:e RPAREN SEMICOLON
 		{: RESULT = new Exit(e); :}
+		|
+		CONTINUE SEMICOLON
+		{: RESULT = new Continue(); :}
+		|
+		BREAK SEMICOLON
+		{: RESULT = new Break(); :}
 		;
 
 ratherlist ::= ratherlist:l RATHER expression:e COLON statement:s
@@ -219,6 +237,8 @@ expression ::= expression:e1 AND expression:e2
 		expression:e1 DIV expression:e2
 		{: RESULT = new Divide(e1, e2); :}
 		|
+		expression:e1 MOD expression:e2
+		{: RESULT = new Modulo(e1, e2); :}
 		expression:e1 GTHANE expression:e2
 		{: RESULT = new GreaterThanEqualTo(e1, e2); :}
 		|
@@ -240,7 +260,7 @@ expression ::= expression:e1 AND expression:e2
 		expression:e POINTER identifier:i
 		{: RESULT = new ObjectVarAccess(e, i); :}
 		|
-		expression:e AT identifier:i LPAREN paramlist:l RPAREN
+		expression:e DOT identifier:i LPAREN paramlist:l RPAREN
 		{: RESULT = new MethodCall(e, i, l); :}
 		|
 		expression:e DOT LENGTH

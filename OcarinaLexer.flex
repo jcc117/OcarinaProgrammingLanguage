@@ -79,6 +79,9 @@ String = \"[.]*\"
 "array"		{return symbol(ARRAY);}
 "length"	{return symbol(LENGTH);}
 "print" 	{return symbol(PRINT);}
+"debug" 	{return symbol(DEBUG);}
+"break"		{return symbol(BREAK);}
+"continue"	{return symbol(CONTINUE);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
@@ -104,6 +107,7 @@ String = \"[.]*\"
 ":"	{return symbol(COLON);}
 "@"	{return symbol(AT);}
 "," {return symbol(COMMA);}
+"%" {return symbol(MOD);}
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

@@ -1,4 +1,5 @@
 # A very simple example program
+debug
 start
-	print("Hello, Hyrule");
+	print( "Hello, Hyrule");
 end
