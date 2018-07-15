@@ -1,9 +1,10 @@
 // Ocarina compiler driver
 
 import java.util.*;
+import java.io.*;
 
 public class Ocarinac{
-	public static void main(String args[]){
+	public static void main(String args[]) throws IOException{
 		// No args: Print options
 		if(args.length == 0){
 			System.out.println("Ocarina compiler options");

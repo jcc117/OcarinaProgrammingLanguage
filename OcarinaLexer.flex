@@ -85,6 +85,7 @@ String = \"[.]*\"
 "public"	{return symbol(PUBLIC); }
 "private"	{return symbol(PRIVATE); }
 "protected" {return symbol(PROTECTED);}
+"constructor" {return symbol(CONSTRUCTOR); }
 
 /*Operators*/
 "++"	{return symbol(INCREMENT);}
