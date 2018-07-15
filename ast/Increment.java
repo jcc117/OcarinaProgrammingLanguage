@@ -1,8 +1,7 @@
 package ast;
 
-public class Increment implements Statement{
+public class Increment extends Statement{
 	public Identifier i;
-	public boolean breakPoint;
 
 	public Increment(Identifier i){
 		this.i = i;

@@ -1,9 +1,8 @@
 package ast;
 
-public class DoWhile implements Statement{
+public class DoWhile extends Statement{
 	public Expression e;
 	public StatementList s;
-	public boolean breakPoint;
 
 	public DoWhile(Expression e, StatementList s){
 		this.e = e;

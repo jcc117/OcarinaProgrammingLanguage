@@ -1,8 +1,7 @@
 package ast;
 
-public class Assert implements Statement{
+public class Assert extends Statement{
 	public Expression e;
-	public boolean breakPoint;
 
 	public Assert(Expression e){
 		this.e = e;

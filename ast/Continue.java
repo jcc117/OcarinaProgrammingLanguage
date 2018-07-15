@@ -1,7 +1,6 @@
 package ast;
 
-public class Continue implements Statement{
-	public boolean breakPoint;
+public class Continue extends Statement{
 
 	public Continue(){
 		breakPoint = false;

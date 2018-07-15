@@ -1,9 +1,8 @@
 package ast;
 
-public class Assignment implements Statement{
+public class Assignment extends Statement{
 	public Expression e;
 	public Identifier i;
-	public boolean breakPoint;
 
 	public Assignment(Expression e, Identifier i){
 		this.e = e;

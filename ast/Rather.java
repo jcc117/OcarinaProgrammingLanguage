@@ -1,6 +1,6 @@
 package ast;
 
-public class Rather implements Statement{
+public class Rather {
 	Expression e;
 	StatementList s;
 

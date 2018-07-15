@@ -1,11 +1,10 @@
 package ast;
 
-public class If implements Statement{
+public class If extends Statement{
 	public Expression e;
 	public StatementList s1;
 	public RatherList r;
 	public StatementList s2;
-	public boolean breakPoint;
 
 	public If(Expression e, StatementList s1, RatherList r, StatementList s2){
 		this.e = e;

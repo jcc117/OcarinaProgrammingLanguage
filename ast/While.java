@@ -1,9 +1,8 @@
 package ast;
 
-public class While implements Statement{
+public class While extends Statement{
 	public Expression e;
 	public StatementList s;
-	public boolean breakPoint;
 
 	public While(Expression e, StatementList s){
 		this.e = e;

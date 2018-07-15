@@ -1,11 +1,10 @@
 package ast;
 
-public class For implements Statement{
+public class For extends Statement{
 	public Expression e;
 	public Statement s1;
 	public Statement s2;
 	public StatementList s3;
-	public boolean breakPoint;
 
 	public For(Expression e, Statement s1, Statement s2, StatementList s3){
 		this.e = e;

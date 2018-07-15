@@ -1,5 +1,5 @@
 package ast;
 
-public interface Statement{
-	
+public abstract class Statement{
+	public boolean breakPoint;
 }

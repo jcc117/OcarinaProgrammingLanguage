@@ -1,10 +1,9 @@
 package ast;
 
-public class ArrayAssignment implements Statement{
+public class ArrayAssignment extends Statement{
 	public Identifier i;
 	public Expression e1;
 	public Expression e2;
-	public boolean breakPoint;
 
 	public ArrayAssignment(Identifier i, Expression e1, Expression e2){
 		this.i = i;

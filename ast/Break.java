@@ -1,7 +1,6 @@
 package ast;
 
-public class Break implements Statement{
-	public boolean breakPoint;
+public class Break extends Statement{
 
 	public Break(){
 		breakPoint = false;

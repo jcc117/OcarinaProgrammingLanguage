@@ -1,8 +1,7 @@
 package ast;
 
-public class Return implements Statement{
+public class Return extends Statement{
 	public Expression e;
-	public boolean breakPoint;
 
 	public Return(Expression e){
 		this.e = e;

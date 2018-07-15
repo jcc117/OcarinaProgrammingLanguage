@@ -1,10 +1,9 @@
 package ast;
 
-public class VarDecAssignment implements Statement{
+public class VarDecAssignment extends Statement{
 	public Expression e;
 	public Identifier i;
 	public Type t;
-	public boolean breakPoint;
 	public int protection;
 
 	public VarDecAssignment(Expression e, Identifier i, Type t, int protection){
