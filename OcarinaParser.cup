@@ -13,7 +13,7 @@ parser code {: @Override
 
 /* Terminals - Keywords*/
 
-terminal START, END, SAGE;
+terminal START, END, SAGE, USING, PUBLIC, PRIVATE, PROTECTED;
 terminal CLASS, EXTENDS;
 terminal SUBROUTINE;
 /* terminal MOCK; */
@@ -32,7 +32,7 @@ terminal DEBUG, BREAK, CONTINUE;
 
 /* Terminals - Non Keywords */
 terminal POINTER, AT, COMMA;
-terminal PLUS, MINUS, MULT, DIV, POWER, MOD;
+terminal PLUS, MINUS, MULT, DIV, POWER, MOD, INCREMENT, DECREMENT;
 terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
 terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal LPAREN, RPAREN;
@@ -43,6 +43,7 @@ terminal BigDecimal FLOATLITERAL;
 
 /* Non Terminals */
 non terminal Sage sage;
+non terminal UsingList usinglist;
 non terminal Program program;
 non terminal StatementList statementlist;
 non terminal DefList deflist;
@@ -73,11 +74,22 @@ precedence left GTHANE, LTHANE, GTHAN, LTHAN;
 precedence left EQUALS;
 
 /* Productions */
-sage ::= SAGE identifier:i SEMICOLON program:p
-		{: RESULT = new Sage(i, p); :}
+/* Note on protection levels
+	0 = private
+	1 = stays within the defined block(only applies to variables) 
+	2 = protected(stays within the sage)
+	3 = public
+*/
+sage ::= SAGE identifier:i SEMICOLON usinglist:u program:p
+		{: RESULT = new Sage(i, p, u); :}
 		|
-		SAGE identifier:i SEMICOLON deflist:d
-		{: RESULT = new Sage(i, d); :}
+		SAGE identifier:i SEMICOLON usinglist:u deflist:d
+		{: RESULT = new Sage(i, d, u); :}
+		;
+usinglist ::= usinglist:u USING identifier:i SEMICOLON
+		{: u.add(new Using(i); ); RESULT = u; :}
+		|
+		{: RESULT = new UsingList(); :}
 		;
 program ::=	START statementlist:s END deflist:d
 		{: RESULT = new Program(s, d, false); :}
@@ -101,21 +113,39 @@ deflist ::= deflist:d classdef:c
 		{: RESULT = new DefList(); :}
 		;
 
-classdef ::= CLASS identifier:i COLON vardeclist:v deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v); :}
+classdef ::= PUBLIC CLASS identifier:i COLON vardeclist:v deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 3); :}
+		|
+		PUBLIC CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3); :}
+		|
+		PRIVATE CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0); :}
+		|
+		PRIVATE CLASS identifier:i COLON vardeclist:v deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 0); :}
 		|
 		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v); :}
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2); :}
+		|
+		CLASS identifier:i COLON vardeclist:v deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 2); :}
 		;
 
-methoddef ::= SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l); :}
+methoddef ::= PUBLIC SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 3); :}
+		|
+		PRIVATE SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 0); :}
+		|
+		SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 
 vardeclist ::= vardeclist:l vardec:v 
 		{: l.add(v); RESULT = l;:}
 		|
-		{: RESULT = new VarDeclList();:}
+		{: RESULT = new VarDeclList(); :}
 		;
 vardec ::= type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i); :}
@@ -183,6 +213,18 @@ simple_statement ::= BEGIN statementlist:l END
 		PRINT LPAREN expression:e RPAREN SEMICOLON
 		{: RESULT = new Print(e); :}
 		|
+		type:t identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new VarDecAssignment(e, i, t, 1); :}
+		|
+		PRIVATE type:t identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new VarDecAssignment(e, i, t, 0); :}
+		|
+		PROTECTED type:t identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new VarDecAssignment(e, i, t, 2); :}
+		|
+		PUBLIC type:t identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new VarDecAssignment(e, i, t, 3); :}
+		|
 		identifier:i EQUAL expression:e SEMICOLON
 		{: RESULT = new Assignment(e, i); :}
 		|
@@ -209,6 +251,12 @@ simple_statement ::= BEGIN statementlist:l END
 		|
 		BREAK SEMICOLON
 		{: RESULT = new Break(); :}
+		|
+		identifier:i INCREMENT SEMICOLON
+		{: RESULT = new Increment(i); :}
+		|
+		identifier:i DECREMENT SEMICOLON
+		{: RESULT = new Decrement(i); :}
 		;
 
 ratherlist ::= ratherlist:l RATHER expression:e COLON statement:s

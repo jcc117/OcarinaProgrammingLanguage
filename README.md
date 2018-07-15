@@ -1,10 +1,9 @@
 # Ocarina - An Esoteric Programming Language
 
 # What is Ocarina?
-Ocarina is a programming language heavily influenced by Python, Java, and Ruby. It includes single class inheritance and the ability to create nested
+Ocarina is a programming language heavily influenced by Python, Java, C#, and Ruby. It includes single class inheritance and the ability to create nested
 inner classes. It is an interpretted language that runs on a Java based interpretter (which means we can use the JVM for portability!). The design of
-this language is meant to be simple in order to give first time language learners an easier time learning over something as wordy as Java. Its grammar
-is fairly similar to MiniJava (a common language developed in university compiler courses) except that it is further developed with different syntax.
+this language is meant to be simple in order to give first time language learners an easier time learning over something as wordy as Java.
 
 All integers of any size and floats can be referenced by the same keyword. The interpretter shall handle any size of integer or float that is thrown at
 it. It also incluces a built in hashmap variable type due to the commonality of use of the data structure. 
@@ -31,26 +30,29 @@ In later versions yes. For the initial release, no.
 # How do I run an Ocarina file?
 With the following command:
 
-*ocarina filename.rina*
+	*ocarina filename.rina*
 
 # How do I install Ocarina?
 To be determined.
 
 # Items under consideration
-*operator overloading*
-*interfaces*
-*full list of commonly used operators*
-*map functions*
-*repl mode*
-*casting*
-*generics*
+	*operator overloading*
+	*interfaces*
+	*full list of commonly used operators*
+	*map functions*
+	*repl mode*
+	*casting*
+	*generics*
 
 # Features for Ocarina
-*Built-in Debugger*
-*Built-in Mocks and Stubs*
-*Handling of Integers and Floats of Any Size*
-*Heavy use of keywords to promote readability*
-*Strictly Typed*
+	*Built-in Debugger within the Interpreter*
+	*Built-in Mocks and Stubs*
+	*Handling of Integers and Floats of Any Size*
+	*Heavy use of keywords to promote readability*
+	*Strictly Typed*
+	*Public and Private Classes and Subroutines*
 
 # Progress report
-Parser and Lexer Development, along with new features being added
+	Parser and Lexer Development
+	Finalization of Grammar
+	Lexer Testing

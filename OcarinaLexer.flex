@@ -81,8 +81,14 @@ String = \"[.]*\"
 "sage"	{return symbol(SAGE);}
 "for"	{return symbol(FOR);}
 "do"	{return symbol(DO);}
+"using"	{return symbol(USING);}
+"public"	{return symbol(PUBLIC); }
+"private"	{return symbol(PRIVATE); }
+"protected" {return symbol(PROTECTED);}
 
 /*Operators*/
+"++"	{return symbol(INCREMENT);}
+"--"	{return symbol(DECREMENT);}
 "->"	{return symbol(POINTER);}
 "!"	{return symbol(BANG);}
 "+"	{return symbol(PLUS);}

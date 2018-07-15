@@ -1,5 +1,7 @@
-# A very simple example program
+sage water;
 debug
 start
-	print( "Hello, Hyrule");
+	int x = 5;
+	int y = 7;
+	print(x + y);
 end

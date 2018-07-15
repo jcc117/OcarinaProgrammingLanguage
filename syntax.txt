@@ -1,3 +1,8 @@
+THIS FILE IS OUT OF DATE
+IT NO LONGER REFLECTS THE OCARINA GRAMMAR
+PLEASE SEE Ocarina.cup FOR UP TO DATE GRAMMAR
+
+
 Ocarina Syntax and Grammar
 This language allows for inner classes and single inhertance
 
@@ -27,7 +32,7 @@ this, nil, assert, create, +, -, *, ^, /, [], {}, ., ;, :, >, <, >=, <=, ->
 PROGRAM := start STATEMENTLIST end DEFLIST <end of file>
 STATEMENTLIST := STATEMENTLIST STATEMENT | epsilon
 DEFLIST := DEFLIST CLASSDEF | DEFLIST METHODDEF | DEFLIST MOCKDEF | DEFLIST STUBDEF | epsilon
-CLASSDEF := class IDENTIFIER ":" VARDECLIST DEFLIST endclass | class IDENTIFIER extends IDENTIFIER ":" VARDECLISTDEFLIST endclass
+CLASSDEF := class IDENTIFIER ":" VARDECLIST DEFLIST endclass | class IDENTIFIER extends IDENTIFIER ":" VARDECLIST DEFLIST endclass
 METHODDEF := subroutine RETURNTYPE IDENTIFIER "(" ARGLIST ")" ":" STATEMENTLIST endsubr
 VARDECLIST := (TYPE IDENTIFIER ";")*
 
@@ -72,7 +77,7 @@ EXPRESSION := EXPRESSION (and | or | nand | nor | equals |"+" | "-" | "*" | "^" 
 	| getBoolean
 	| getString
 	| array TYPE[EXPRESSION]
-	| hashmap "(" TYPE"," TYPE ")"
+	| hashmap "{" TYPE"," TYPE "}"
 	| STRING
 
 PARAMLIST := (EXPRESSION ("," EXPRESSION)* )?
