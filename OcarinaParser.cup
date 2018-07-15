@@ -13,14 +13,14 @@ parser code {: @Override
 
 /* Terminals - Keywords*/
 
-terminal START, END;
-terminal CLASS, ENDCLASS, EXTENDS;
-terminal SUBROUTINE, ENDSUBR;
-/* terminal MOCK, ENDMOCK; */
-/* terminal STUB, ENDSTUB; */
+terminal START, END, SAGE;
+terminal CLASS, EXTENDS;
+terminal SUBROUTINE;
+/* terminal MOCK; */
+/* terminal STUB; */
 terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, ARRAY;
 terminal IF, ELSE, BEGIN, RATHER;
-terminal WHILE;
+terminal WHILE, FOR, DO;
 terminal RETURN;
 terminal AND, OR, NAND, NOR, EQUALS;
 terminal TRUE, FALSE;
@@ -42,6 +42,7 @@ terminal BigInteger INTLITERAL;
 terminal BigDecimal FLOATLITERAL;
 
 /* Non Terminals */
+non terminal Sage sage;
 non terminal Program program;
 non terminal StatementList statementlist;
 non terminal DefList deflist;
@@ -72,6 +73,12 @@ precedence left GTHANE, LTHANE, GTHAN, LTHAN;
 precedence left EQUALS;
 
 /* Productions */
+sage ::= SAGE identifier:i SEMICOLON program:p
+		{: RESULT = new Sage(i, p); :}
+		|
+		SAGE identifier:i SEMICOLON deflist:d
+		{: RESULT = new Sage(i, d); :}
+		;
 program ::=	START statementlist:s END deflist:d
 		{: RESULT = new Program(s, d, false); :}
 		|
@@ -94,14 +101,14 @@ deflist ::= deflist:d classdef:c
 		{: RESULT = new DefList(); :}
 		;
 
-classdef ::= CLASS identifier:i COLON vardeclist:v deflist:d ENDCLASS
+classdef ::= CLASS identifier:i COLON vardeclist:v deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v); :}
 		|
-		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d ENDCLASS
+		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v); :}
 		;
 
-methoddef ::= SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l ENDSUBR
+methoddef ::= SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l); :}
 		;
 
@@ -166,6 +173,12 @@ simple_statement ::= BEGIN statementlist:l END
 		|
 		WHILE expression:e COLON statement:l
 		{: RESULT = new While(e, l); :}
+		|
+		FOR LPAREN statement:s1 expression:e SEMICOLON statement:s2 RPAREN COLON statement:s3
+		{: RESULT = new For(e, s1, s2, s3); :}
+		|
+		DO statement:s WHILE expression:e SEMICOLON
+		{: RESULT = new DoWhile(e, s); :}
 		|
 		PRINT LPAREN expression:e RPAREN SEMICOLON
 		{: RESULT = new Print(e); :}

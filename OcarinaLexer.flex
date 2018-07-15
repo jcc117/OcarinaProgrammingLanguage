@@ -40,14 +40,10 @@ String = \"[.]*\"
 "start" {return symbol(START);}
 "end"	{return symbol(END);}
 "class"	{return symbol(CLASS);}
-"endclass"	{return symbol(ENDCLASS);}
 "extends"	{return symbol(EXTENDS);}
 "subroutine"	{return sybmol(SUBROUTINE);}
-"endsubr"	{return symbol(ENDSUBR);}
 "mock"	{return symbol(MOCK);}
-"endmock"	{return symbol(ENDMOCK);}
 "stub"	{return symbol(STUB);}
-"endstub"	{return symbol(ENDSTUB);}
 "void"	{return symbol(VOID);}
 "int"	{return symbol(INT);}
 "float"	{return symbol(FLOAT);}
@@ -82,6 +78,9 @@ String = \"[.]*\"
 "debug" 	{return symbol(DEBUG);}
 "break"		{return symbol(BREAK);}
 "continue"	{return symbol(CONTINUE);}
+"sage"	{return symbol(SAGE);}
+"for"	{return symbol(FOR);}
+"do"	{return symbol(DO);}
 
 /*Operators*/
 "->"	{return symbol(POINTER);}
