@@ -3,8 +3,13 @@ import java.math.*;
 
 %%
 
+
 %class OcarinaLexer
 %extends sym
+/*
+%class OcarinaLexerTokenizer
+%implements TokenizerTypes
+*/
 %cup
 %line
 %column
@@ -28,9 +33,9 @@ DecimalLiteral = [1-9][0-9]*
 HexLiteral = 0[Xx][0-9A-Fa-f]*
 OctalLiteral = 0[0-7]*
 FloatLiteral = [+-]?([0-9]*[.])?[0-9]+
-Identifier = (a-zA-Z_)(a-zA-Z0-9_?)*
+Identifier = [a-zA-Z_][a-zA-Z0-9_?]*
 LineComment = #[^\n]*\n?
-BlockComment = \'\'\'.*\'\'\'
+BlockComment = "'''" [^*] ~"'''"
 WhiteSpace = [\t\n\r]+
 String = \"[.]*\"
 
@@ -41,7 +46,7 @@ String = \"[.]*\"
 "end"	{return symbol(END);}
 "class"	{return symbol(CLASS);}
 "extends"	{return symbol(EXTENDS);}
-"subroutine"	{return sybmol(SUBROUTINE);}
+"subroutine"	{return symbol(SUBROUTINE);}
 "mock"	{return symbol(MOCK);}
 "stub"	{return symbol(STUB);}
 "void"	{return symbol(VOID);}
@@ -87,6 +92,12 @@ String = \"[.]*\"
 "protected" {return symbol(PROTECTED);}
 "constructor" {return symbol(CONSTRUCTOR); }
 
+/*Identifiers and numbers*/
+{String}	{return symbol(STRINGLITERAL, yytext());}
+{Identifier}	{return symbol(IDENTIFIER, yytext());}
+{IntegerLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext()));}
+{FloatLiteral}	{return symbol(FLOATLITERAL, new BigDecimal(yytext()));}
+
 /*Operators*/
 "++"	{return symbol(INCREMENT);}
 "--"	{return symbol(DECREMENT);}
@@ -114,12 +125,6 @@ String = \"[.]*\"
 "@"	{return symbol(AT);}
 "," {return symbol(COMMA);}
 "%" {return symbol(MOD);}
-
-/*Identifiers and numbers*/
-{String}	{return symbol(STRINGLITERAL, yytext());}
-{Identifier}	{return symbol(IDENTIFIER, yytext());}
-{IntegerLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext()));}
-{FloatLiteral}	{return symbol(FLOATLITERAL, new BigDecimal(yytext()));}
 
 /*To be ignored*/
 {LineComment}	{/*Do nothing*/}

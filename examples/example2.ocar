@@ -9,7 +9,6 @@ start
 	hashmap{int, float} y;
 	float[] z;
 end
-
 '''
 Lets throw a multi-line
 comment in here

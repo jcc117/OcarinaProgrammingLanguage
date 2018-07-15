@@ -51,6 +51,7 @@ To be determined.
 	*Heavy use of keywords to promote readability*
 	*Strictly Typed*
 	*Public and Private Classes and Subroutines*
+	*Variable Names, Class Names, and MethodNames which can include "?"*
 
 # Progress report
 	Parser and Lexer Development
