@@ -1,13 +1,19 @@
 # Something a bit more complicated
+sage fire;
 start
 	int a = 4;
 	int b = 5;
 	print(b - a * 7 + 4^2);
+	print(this.add(a, b) )
 
 	# Some variables. Declaring, but not doing anything
 	string x;
 	hashmap{int, float} y;
 	float[] z;
+end
+
+public int subroutine add( int a, int b):
+	return a + b;
 end
 '''
 Lets throw a multi-line

@@ -1,4 +1,6 @@
 # A simple progarm
+sage light;
+
 start
 	boolean x;
 	boolean y;
@@ -8,15 +10,17 @@ start
 
 	if x and y:
 		print("Unreachable statement");
+	rather x equals y:
+		print("we are equal");
 	else
 		print("Reachable statement");
-	endif
+	end
 
 	if !(x or y):
 		print("I've been coding all day and wanna go to bed.");
 	else
 		print("I guess I'll keep on coding.");
-	endif
+	end
 
 	# Loop through an array
 
@@ -28,7 +32,7 @@ start
 		print(a);
 		t[a] = a;
 		a = a + 1;
-	endwhile
+	end
 
 	# Demonstrate hashmap functionality
 	hashmap{string, float} map = hashmap{string, float};
