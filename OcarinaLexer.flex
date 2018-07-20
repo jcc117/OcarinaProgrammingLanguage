@@ -20,18 +20,18 @@ import java.math.*;
 
 %{
 	private Symbol symbol(int type) {
-    	return new Symbol(type, yyline + 1, yycolumn + 1);
+    	return new Symbol(type, yyline, yycolumn);
     }
 
 	private Symbol symbol(int type, Object value) {
-		return new Symbol(type, yyline + 1, yycolumn + 1, value);
+		return new Symbol(type, yyline, yycolumn, value);
 	}
 %}
 
 IntegerLiteral = {DecimalLiteral} | {HexLiteral} | {OctalLiteral}
-DecimalLiteral = [1-9][0-9]*
-HexLiteral = 0[Xx][0-9A-Fa-f]*
-OctalLiteral = 0[0-7]*
+DecimalLiteral = [+-]?[1-9][0-9]*
+HexLiteral = 0(x | X)[0-9a-fA-F]+
+OctalLiteral = 0[0-7]+
 FloatLiteral = [+-]?([0-9]*[.])?[0-9]+
 Identifier = [a-zA-Z_][a-zA-Z0-9_?]*
 LineComment = #[^\n]*\n?
@@ -95,7 +95,9 @@ String = \"[.]*\"
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}
 {Identifier}	{return symbol(IDENTIFIER, yytext());}
-{IntegerLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext()));}
+{HexLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext().substring(2), 16));}
+{DecimalLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext()));}
+{OctalLiteral}	{return symbol(INTLITERAL, new BigInteger(yytext(), 8));}
 {FloatLiteral}	{return symbol(FLOATLITERAL, new BigDecimal(yytext()));}
 
 /*Operators*/

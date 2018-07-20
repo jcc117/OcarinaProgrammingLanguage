@@ -284,14 +284,16 @@ public class Tokenizer
 					flag = true;
 					break;														
 			}
-			if(flag)
-				token = null;
-			else
-				token = lexer.next_token();
-			if(value != null && !flag)
-				System.out.println((line+1) + "\t\t" + (column + 1) + "\t\t" + tokString + "\t\t\t" + value);
-			else if(!flag)
-				System.out.println((line+1) + "\t\t" + (column + 1) + "\t\t" + tokString);
+			
+				if(flag)
+					token = null;
+				else
+					token = lexer.next_token();
+				if(value != null && !flag)
+					System.out.println((line+1) + "\t\t" + (column + 1) + "\t\t" + tokString + "\t\t\t" + value);
+				else if(!flag)
+					System.out.println((line+1) + "\t\t" + (column + 1) + "\t\t" + tokString);
+			
 		}//End while
 	}
 }
