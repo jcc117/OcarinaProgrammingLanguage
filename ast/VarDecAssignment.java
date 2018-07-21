@@ -1,4 +1,5 @@
 package ast;
+import symboltable.*;
 
 public class VarDecAssignment extends Statement{
 	public Expression e;
@@ -12,5 +13,13 @@ public class VarDecAssignment extends Statement{
 		this.t = t;
 		breakPoint = false;
 		this.protection = protection;
+	}
+
+	public void accept(VoidVisitor v){
+		v.visit(this);
+	}
+
+	public Sym accept(Visitor v){
+		return v.visit(this);
 	}
 }

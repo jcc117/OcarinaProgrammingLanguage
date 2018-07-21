@@ -1,4 +1,5 @@
 package ast;
+import symboltable.*;
 
 public class SimpleClassDef implements ClassDef{
 	public Identifier i;
@@ -13,5 +14,13 @@ public class SimpleClassDef implements ClassDef{
 		this.v = v;
 		this.protection = protection;
 		this.c = c;
+	}
+
+	public void accept(VoidVisitor v){
+		v.visit(this);
+	}
+
+	public Sym accept(Visitor v){
+		return v.visit(this);
 	}
 }

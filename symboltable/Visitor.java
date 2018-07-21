@@ -82,5 +82,6 @@ public interface Visitor{
 	public Sym visit(HashmapCreate h);
 	public Sym visit(StringLiteral s);
 	public Sym visit(ParamList p);
-	public Sym visit(Identifier i);		
+	public Sym visit(Identifier i);	
+	public Sym visit(IdentifierType i);	
 }

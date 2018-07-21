@@ -82,5 +82,6 @@ public interface VoidVisitor{
 	public void visit(HashmapCreate h);
 	public void visit(StringLiteral s);
 	public void visit(ParamList p);
-	public void visit(Identifier i);	
+	public void visit(Identifier i);
+	public void visit(IdentifierType i);	
 }

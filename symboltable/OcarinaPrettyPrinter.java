@@ -57,15 +57,24 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ConstructorList c){
-
+		for(Constructor o : c.l){
+			o.accept(this);
+		}
 	}
 
 	public void visit(Constructor c){
-
+		System.out.print("constructor ");
+		c.a.accept(this);
+		c.l.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(MethodDef m){
-
+		String prot = get_protection_level(m.protection);
+		System.out.print(prot + m.r.toString() + " subroutine " + m.i.toString());
+		System.out.println(":");
+		m.s.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(VarDeclList l){

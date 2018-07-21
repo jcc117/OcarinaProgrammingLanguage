@@ -1,4 +1,5 @@
 package ast;
+import symboltable.*;
 
 public class ExtendsClassDef implements ClassDef{
 	public Identifier i;
@@ -15,5 +16,13 @@ public class ExtendsClassDef implements ClassDef{
 		this.v = v;
 		this.protection = protection;
 		this.o = o;
+	}
+
+	public void accept(VoidVisitor v){
+		v.visit(this);
+	}
+
+	public Sym accept(Visitor v){
+		return v.visit(this);
 	}
 }

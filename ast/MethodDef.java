@@ -1,4 +1,5 @@
 package ast;
+import symboltable.*;
 
 public class MethodDef implements Def{
 	public Type r;
@@ -13,5 +14,13 @@ public class MethodDef implements Def{
 		this.a = a;
 		this.s = s;
 		this.protection = protection;
+	}
+
+	public void accept(VoidVisitor v){
+		v.visit(this);
+	}
+
+	public Sym accept(Visitor v){
+		return v.visit(this);
 	}
 }

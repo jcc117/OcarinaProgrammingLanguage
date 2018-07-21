@@ -1,4 +1,5 @@
 package ast;
+import symboltable.*;
 
 public class If extends Statement{
 	public Expression e;
@@ -12,5 +13,13 @@ public class If extends Statement{
 		this.r = r;
 		this.s2 = s2;
 		breakPoint = false;
+	}
+
+	public void accept(VoidVisitor v){
+		v.visit(this);
+	}
+
+	public Sym accept(Visitor v){
+		return v.visit(this);
 	}
 }
