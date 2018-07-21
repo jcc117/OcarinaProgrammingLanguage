@@ -52,7 +52,7 @@ non terminal MethodDef methoddef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
 non terminal VarDeclList vardeclist;
-non terminal VarDecl vardec;
+non terminal VarDecl vardec, classvardec;
 non terminal ArgList arglist;
 non terminal Type type;
 non terminal Statement statement;
@@ -153,13 +153,13 @@ methoddef ::= PUBLIC SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLO
 		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 
-vardeclist ::= vardeclist:l vardec:v 
+vardeclist ::= vardeclist:l classvardec:v 
 		{: l.add(v); RESULT = l;:}
 		|
 		{: RESULT = new VarDeclList(); :}
 		;
 
-vardec ::= type:t identifier:i SEMICOLON
+classvardec ::= type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 1); :}
 		|
 		type:t PRIVATE identifier:i SEMICOLON
@@ -170,6 +170,10 @@ vardec ::= type:t identifier:i SEMICOLON
 		|
 		type:t PUBLIC identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 3); :}
+		;
+
+vardec ::= type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 1); :}
 		;
 
 arglist ::= arglist:l COMMA parameter:p
