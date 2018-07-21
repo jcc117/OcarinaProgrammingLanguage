@@ -243,15 +243,6 @@ simple_statement ::= BEGIN statementlist:l END
 		type:t identifier:i EQUAL expression:e SEMICOLON
 		{: RESULT = new VarDecAssignment(e, i, t, 1); :}
 		|
-		type:t PRIVATE identifier:i EQUAL expression:e SEMICOLON
-		{: RESULT = new VarDecAssignment(e, i, t, 0); :}
-		|
-		type:t PROTECTED identifier:i EQUAL expression:e SEMICOLON
-		{: RESULT = new VarDecAssignment(e, i, t, 2); :}
-		|
-		type:t PUBLIC identifier:i EQUAL expression:e SEMICOLON
-		{: RESULT = new VarDecAssignment(e, i, t, 3); :}
-		|
 		identifier:i EQUAL expression:e SEMICOLON
 		{: RESULT = new Assignment(e, i); :}
 		|
