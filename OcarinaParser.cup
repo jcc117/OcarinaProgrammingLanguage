@@ -128,9 +128,15 @@ classdef ::= PUBLIC CLASS identifier:i COLON vardeclist:v constructorlist:c defl
 		{: RESULT = new SimpleClassDef(i, d, v, 0, c); :}
 		|
 		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c); :}
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c); :}
 		|
 		CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 1, c); :}
+		|
+		PROTECTED CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c); :}
+		|
+		PROTECTED CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 2, c); :}
 		;
 
@@ -150,6 +156,9 @@ methoddef ::= PUBLIC SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLO
 		{: RESULT = new MethodDef(r, i, a, l, 0); :}
 		|
 		SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 1); :}
+		|
+		PROTECTED SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 

@@ -56,4 +56,4 @@ To be determined.
 # Progress report
 	Parser and Lexer Development
 	Finalization of Grammar
-	Lexer Testing
+	Development of pretty printer for parser testing

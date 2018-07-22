@@ -2,8 +2,8 @@ package ast;
 import symboltable.*;
 
 public class Rather {
-	Expression e;
-	StatementList s;
+	public Expression e;
+	public StatementList s;
 
 	public Rather(Expression e, StatementList s){
 		this.e = e;

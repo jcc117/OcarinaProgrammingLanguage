@@ -87,23 +87,51 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodDef m){
-		
+		String prot = get_protection_level(m.protection);
+		if(prot.length() != 0)
+			System.out.print(" ");
+		System.out.print("subroutine ");
+		m.r.accept(this);
+		System.out.print(" ");
+		m.i.accept(this);
+		System.out.print("(");
+		m.a.accept(this);
+		System.out.println("):");
+		m.s.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(VarDeclList l){
-
+		for(VarDecl d : l.l){
+			d.accept(this);
+		}
 	}
 
 	public void visit(VarDecl v){
-
+		v.t.accept(this);
+		String prot = get_protection_level(v.protection);
+		if(prot.length() != 0){
+			System.out.print(" " + prot + " ");
+		}
+		else
+		{
+			System.out.print(" ");
+		}
+		v.i.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(ArgList a){
-
+		for(Param p: a.l){
+			p.accept(this);
+			System.out.print(", ");
+		}
 	}
 
 	public void visit(Param p){
-
+		p.t.accept(this);
+		System.out.print(" ");
+		p.i.accept(this);
 	}
 
 	public void visit(ArrayType t){
@@ -163,7 +191,14 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(For f){
-
+		System.out.print("for(");
+		f.s1.accept(this);
+		f.e.accept(this);
+		System.out.print("; ");
+		f.s2.accept(this);
+		System.out.println("):");
+		f.s3.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(DoWhile d){
@@ -182,39 +217,63 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(VarDecAssignment v){
-
+		v.t.accept(this);
+		System.out.print(" ");
+		v.i.accept(this);
+		System.out.print(" = ");
+		v.e.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(Assignment a){
-
+		a.i.accept(this);
+		System.out.print(" = ");
+		a.e.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(HashmapAssignment h){
-
+		h.i.accept(this);
+		System.out.print("{");
+		h.e1.accept(this);
+		System.out.print("} = ");
+		h.e2.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(ArrayAssignment a){
-
+		a.i.accept(this);
+		System.out.print("[");
+		a.e1.accept(this);
+		System.out.print("] = ");
+		a.e2.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(Return r){
-
+		System.out.print("return ");
+		r.e.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(Assert a){
-
+		System.out.print("assert ");
+		a.e.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(Exit e){
-
+		System.out.print("exit(");
+		e.e.accept(this);
+		System.out.println(");");
 	}
 
 	public void visit(Break b){
-
+		System.out.println("break;");
 	}
 
 	public void visit(Continue c){
-
+		System.out.println("continue;");
 	}
 
 	public void visit(Increment i){
@@ -228,11 +287,16 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(RatherList l){
-
+		for(Rather s : l.l){
+			s.accept(this);
+		}
 	}
 
 	public void visit(Rather r){
-
+		System.out.print("rather ");
+		r.e.accept(this);
+		System.out.println(":");
+		r.s.accept(this);
 	}
 
 	public void visit(And a){
@@ -326,19 +390,32 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(HashmapExpr h){
-
+		h.e1.accept(this);
+		System.out.print("{");
+		h.e2.accept(this);
+		System.out.print("}");
 	}
 
 	public void visit(ArrayExpr a){
-
+		a.e1.accept(this);
+		System.out.print("[");
+		a.e2.accept(this);
+		System.out.print("]");
 	}
 
 	public void visit(ObjectVarAccess o){
-
+		o.e.accept(this);
+		System.out.print("->");
+		o.i.accept(this);
 	}
 
 	public void visit(MethodCall m){
-
+		m.e.accept(this);
+		System.out.print(".");
+		m.i.accept(this);
+		System.out.print("(");
+		m.l.accept(this);
+		System.out.print(")");
 	}
 
 	public void visit(ArrayLength l){
@@ -397,7 +474,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(GetFloat f){
-		System.out.print("getFloat");
+		System.out.print("getFloat()");
 	}
 
 	public void visit(GetBoolean t){
@@ -409,19 +486,30 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayCreate a){
-
+		System.out.print("array ");
+		a.t.accept(this);
+		System.out.print("[");
+		a.e.accept(this);
+		System.out.print("]");
 	}
 
 	public void visit(HashmapCreate h){
-
+		System.out.print("hashmap {");
+		h.t1.accept(this);
+		System.out.print(", ");
+		h.t2.accept(this);
+		System.out.print("}");
 	}
 
 	public void visit(StringLiteral s){
-
+		System.out.print(s.s);
 	}
 
 	public void visit(ParamList p){
-
+		for(Expression e : p.l){
+			e.accept(this);
+			System.out.print(", ");
+		}
 	}
 
 	public void visit(Identifier i){
