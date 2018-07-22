@@ -9,6 +9,6 @@ public abstract class Statement{
 	}
 
 	public Sym accept(Visitor v){
-		v.visit(this);
+		return v.visit(this);
 	}
 }

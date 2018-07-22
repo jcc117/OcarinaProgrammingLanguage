@@ -354,6 +354,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(IdentifierType i){
+
+	}
+
+	public void visit(Statement s){
 		
 	}
 
