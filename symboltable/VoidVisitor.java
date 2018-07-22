@@ -84,5 +84,7 @@ public interface VoidVisitor{
 	public void visit(ParamList p);
 	public void visit(Identifier i);
 	public void visit(IdentifierType i);
-	public void visit(Statement s);	
+	public void visit(Statement s);
+	public void visit(Type t);
+	public void visit(Expression e);
 }
