@@ -353,6 +353,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	}
 
+	public void visit(IdentifierType i){
+		
+	}
+
 	private String get_protection_level(int i){
 		String prot = "";
 		switch (i){
