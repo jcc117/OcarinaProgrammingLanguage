@@ -11,7 +11,7 @@ public class StatementList{
 	}
 
 	public void add(Statement s){
-		l.add(s);
+		l.add(0, s);
 	}
 
 	public void accept(VoidVisitor v){

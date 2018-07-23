@@ -11,7 +11,7 @@ public class ParamList extends Expression{
 	}
 
 	public void add(Expression e){
-		l.add(e);
+		l.add(0, e);
 	}
 
 	public void accept(VoidVisitor v){

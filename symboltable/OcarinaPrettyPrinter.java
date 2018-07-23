@@ -3,7 +3,11 @@ package symboltable;
 import ast.*;
 
 public class OcarinaPrettyPrinter implements VoidVisitor{
-	public OcarinaPrettyPrinter(Sage s){
+	public OcarinaPrettyPrinter(){
+		
+	}
+
+	public void print(Sage s){
 		visit(s);
 	}
 
@@ -89,7 +93,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(MethodDef m){
 		String prot = get_protection_level(m.protection);
 		if(prot.length() != 0)
-			System.out.print(" ");
+			System.out.print(prot + " ");
 		System.out.print("subroutine ");
 		m.r.accept(this);
 		System.out.print(" ");
@@ -179,7 +183,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println(":");
 		i.s1.accept(this);
 		i.r.accept(this);
+		System.out.println("else:");
 		i.s2.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(While w){

@@ -4,7 +4,7 @@ start
 	int a = 4;
 	int b = 5;
 	print(b - a * 7 + 4^2);
-	print(this.add(a, b) )
+	print(this.add(a, b) );
 
 	# Some variables. Declaring, but not doing anything
 	string x;
@@ -12,9 +12,10 @@ start
 	float[] z;
 end
 
-public int subroutine add( int a, int b):
+public subroutine int add( int a, int b):
 	return a + b;
 end
+
 '''
 Lets throw a multi-line
 comment in here

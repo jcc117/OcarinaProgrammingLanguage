@@ -149,16 +149,16 @@ constructor ::= CONSTRUCTOR RPAREN arglist:a LPAREN COLON statementlist:s END
 		{: RESULT = new Constructor(a, s); :}
 		;
 
-methoddef ::= PUBLIC SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+methoddef ::= PUBLIC SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 3); :}
 		|
-		PRIVATE SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		PRIVATE SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 0); :}
 		|
-		SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 1); :}
 		|
-		PROTECTED SUBROUTINE type:r identifier:i RPAREN arglist:a LPAREN COLON statementlist:l END
+		PROTECTED SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 
@@ -291,7 +291,7 @@ ratherlist ::= ratherlist:l RATHER expression:e COLON statementlist:s
 		|
 		{:RESULT = new RatherList(); :}
 		;
-else ::= ELSE statementlist:s
+else ::= ELSE COLON statementlist:s
 		{: RESULT = s; :}
 		;
 

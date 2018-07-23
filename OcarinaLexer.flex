@@ -47,8 +47,8 @@ String = \"[^\"]*\"
 "class"	{return symbol(CLASS);}
 "extends"	{return symbol(EXTENDS);}
 "subroutine"	{return symbol(SUBROUTINE);}
-"mock"	{return symbol(MOCK);}
-"stub"	{return symbol(STUB);}
+//"mock"	{return symbol(MOCK);}
+//"stub"	{return symbol(STUB);}
 "void"	{return symbol(VOID);}
 "int"	{return symbol(INT);}
 "float"	{return symbol(FLOAT);}

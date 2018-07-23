@@ -3,6 +3,9 @@
 import java.util.*;
 import java.io.*;
 import symboltable.*;
+import ast.*;
+import java_cup.runtime.*;
+import java.math.*;
 
 public class Ocarinac{
 	public static void main(String args[]) throws IOException{
@@ -14,11 +17,25 @@ public class Ocarinac{
 
 		FileReader sourceReader = new FileReader(new File(args[0]));
     	OcarinaLexer lexer = new OcarinaLexer(sourceReader);
+    	Symbol result = null;
 
-    	parser _parser = new parser(lexer);
-    	Symbol result = _parser.parse();
-
+    	try{
+    		parser _parser = new parser(lexer);
+    		result = _parser.parse();
+    	}
+    	catch(Exception e){
+    		System.out.println("Exited with errors");
+    		System.exit(-1);
+    	}
+    	//For testing purposes only
+    	OcarinaPrettyPrinter pretty_printer = new OcarinaPrettyPrinter();
+    	pretty_printer.print((Sage)result.value);
+    	/*
     	SymbolTableBuilder stb = new SymbolTableBuilder();
     	SymbolTable st = stb.build((Sage)result.value);
+    	ErrorChecker ec = new ErrorChecker();
+    	if(ec.checkForErrors(result, st)){
+    		
+    	}*/
 	}
 }

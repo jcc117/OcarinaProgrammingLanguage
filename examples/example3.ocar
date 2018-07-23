@@ -12,13 +12,13 @@ start
 		print("Unreachable statement");
 	rather x equals y:
 		print("we are equal");
-	else
+	else:
 		print("Reachable statement");
 	end
 
 	if !(x or y):
 		print("I've been coding all day and wanna go to bed.");
-	else
+	else:
 		print("I guess I'll keep on coding.");
 	end
 
@@ -28,7 +28,7 @@ start
 
 	int a = 0;
 
-	while a < t.length:
+	while a < b:
 		print(a);
 		t[a] = a;
 		a = a + 1;
