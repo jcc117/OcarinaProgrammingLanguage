@@ -492,11 +492,19 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayCreate a){
-		System.out.print("array ");
+		System.out.print("create ");
 		a.t.accept(this);
 		System.out.print("[");
 		a.e.accept(this);
 		System.out.print("]");
+	}
+
+	public void visit(ArrayLiteral a){
+		System.out.print("create ");
+		a.t.accept(this);
+		System.out.print("[]{");
+		a.l.accept(this);
+		System.out.print("}");
 	}
 
 	public void visit(HashmapCreate h){

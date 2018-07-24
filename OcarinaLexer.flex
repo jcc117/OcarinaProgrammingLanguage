@@ -77,7 +77,6 @@ String = \"[^\"]*\"
 "getString()"	{return symbol(GETSTRING);}
 "getBoolean()"	{return symbol(GETBOOLEAN);}
 "exit"		{return symbol(EXIT);}
-"array"		{return symbol(ARRAY);}
 "length"	{return symbol(LENGTH);}
 "print" 	{return symbol(PRINT);}
 "debug" 	{return symbol(DEBUG);}

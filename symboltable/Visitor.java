@@ -87,4 +87,5 @@ public interface Visitor{
 	public Sym visit(Statement s);
 	public Sym visit(Type t);
 	public Sym visit(Expression e);
+	public Sym visit(ArrayLiteral a);
 }

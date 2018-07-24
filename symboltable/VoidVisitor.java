@@ -87,4 +87,5 @@ public interface VoidVisitor{
 	public void visit(Statement s);
 	public void visit(Type t);
 	public void visit(Expression e);
+	public void visit(ArrayLiteral a);
 }

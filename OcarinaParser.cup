@@ -18,7 +18,7 @@ terminal CLASS, EXTENDS, CONSTRUCTOR;
 terminal SUBROUTINE;
 /* terminal MOCK; */
 /* terminal STUB; */
-terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, ARRAY;
+terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING;
 terminal IF, ELSE, BEGIN, RATHER;
 terminal WHILE, FOR, DO;
 terminal RETURN;
@@ -382,6 +382,9 @@ expression ::= expression:e1 AND expression:e2
 		CREATE identifier:i LPAREN paramlist:l RPAREN
 		{: RESULT = new ObjectCreate(i, l); :}
 		|
+		CREATE type:t LBRACKET RBRACKET LBRACE paramlist:l RBRACE
+		{: RESULT = new ArrayLiteral(t, l); :}
+		|
 		THIS
 		{: RESULT = new This(); :}
 		|
@@ -397,7 +400,7 @@ expression ::= expression:e1 AND expression:e2
 		GETSTRING
 		{: RESULT = new GetString(); :}
 		|
-		ARRAY type:t LBRACKET expression:e RBRACKET
+		CREATE type:t LBRACKET expression:e RBRACKET
 		{: RESULT = new ArrayCreate(t, e); :}
 		|
 		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
