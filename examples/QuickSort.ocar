@@ -1,0 +1,49 @@
+sage Examples;
+
+#Example quicksort file
+start
+	int[] sorting = array int[5];
+	sorting[0] = 5;
+	sorting[1] = 2;
+	sorting[2] = 1;
+	sorting[3] = 4;
+	sorting[4] = 3;
+	
+	sorting = this.quick_sort(sorting);
+	for(int i = 0; i < sorting; i++;):
+		print(sorting[i]);
+	end
+end
+
+
+public subroutine int[] quick_sort(int[] x, int low, int high):
+	if (low < high):
+		int pi = this.partition(x, low, high);
+		'''
+		Invalid for now.
+		Just to please the broken parser
+		'''
+		this.quick_sort(x, low, pi - 1);
+		this.quick_sort(x, pi + 1, high);
+	end
+end
+
+private subroutine void partition(int[] arr, int low, int high):
+	int pivot = arr[high];
+	int i = low - 1;
+	for(int j = low; j < high; j++;):
+		if arr[j] <= pivot:
+			i++;
+			int temp = arr[j];
+			arr[i] = arr[j];
+			arr[j] = temp;
+		end
+	end
+	
+	int temp = arr[i + 1];
+	arr[i + 1] = arr[high];
+	arr[high] = temp;
+	
+	return i + 1;
+	
+end
