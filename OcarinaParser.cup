@@ -352,6 +352,9 @@ expression ::= expression:e1 AND expression:e2
 		expression:e DOT identifier:i LPAREN paramlist:l RPAREN
 		{: RESULT = new MethodCall(e, i, l); :}
 		|
+		identifier:i LPAREN paramlist:l RPAREN
+		{: RESULT = new MethodCall(null, i, l); :}
+		|
 		expression:e DOT LENGTH
 		{: RESULT = new ArrayLength(e); :}
 		|

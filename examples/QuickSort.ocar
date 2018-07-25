@@ -2,7 +2,7 @@ sage Examples;
 
 #Example quicksort file
 start
-	int[] sorting = array int[5];
+	int[] sorting = create int[5];
 	sorting[0] = 5;
 	sorting[1] = 2;
 	sorting[2] = 1;
@@ -13,18 +13,19 @@ start
 	for(int i = 0; i < sorting; i++;):
 		print(sorting[i]);
 	end
+	
 end
 
 
 public subroutine int[] quick_sort(int[] x, int low, int high):
 	if (low < high):
-		int pi = this.partition(x, low, high);
+		int pi = partition(x, low, high);
 		'''
 		Invalid for now.
 		Just to please the broken parser
 		'''
-		this.quick_sort(x, low, pi - 1);
-		this.quick_sort(x, pi + 1, high);
+		#this.quick_sort(x, low, pi - 1);
+		#this.quick_sort(x, pi + 1, high);
 	end
 end
 

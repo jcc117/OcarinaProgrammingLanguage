@@ -18,7 +18,7 @@ start
 
 	if !(x or y):
 		print("I've been coding all day and wanna go to bed.");
-	else:
+	else :
 		print("I guess I'll keep on coding.");
 	end
 
