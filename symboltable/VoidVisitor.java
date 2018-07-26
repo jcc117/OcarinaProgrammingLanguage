@@ -88,4 +88,6 @@ public interface VoidVisitor{
 	public void visit(Type t);
 	public void visit(Expression e);
 	public void visit(ArrayLiteral a);
+	public void visit(IdChain i);
+	public void visit(MethodCallStatement m);
 }

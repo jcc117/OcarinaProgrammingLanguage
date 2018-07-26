@@ -88,4 +88,6 @@ public interface Visitor{
 	public Sym visit(Type t);
 	public Sym visit(Expression e);
 	public Sym visit(ArrayLiteral a);
+	public Sym visit(IdChain i);
+	public Sym visit(MethodCallStatement m);
 }

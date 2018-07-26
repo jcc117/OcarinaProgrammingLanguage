@@ -90,6 +90,8 @@ String = \"[^\"]*\"
 "private"	{return symbol(PRIVATE); }
 "protected" {return symbol(PROTECTED);}
 "constructor" {return symbol(CONSTRUCTOR); }
+"exec"	{return symbol(EXEC); }
+"with"	{return symbol(WITH); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}
@@ -102,7 +104,6 @@ String = \"[^\"]*\"
 /*Operators*/
 "++"	{return symbol(INCREMENT);}
 "--"	{return symbol(DECREMENT);}
-"->"	{return symbol(POINTER);}
 "!"	{return symbol(BANG);}
 "+"	{return symbol(PLUS);}
 "-"	{return symbol(MINUS);}

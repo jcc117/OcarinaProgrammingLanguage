@@ -418,11 +418,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodCall m){
-		if(m.e != null){
-			m.e.accept(this);
-			System.out.print(".");
-		}
+		System.out.print("exec ");
+		m.e.accept(this);
 		m.i.accept(this);
+		System.out.print(" with ");
 		System.out.print("(");
 		m.l.accept(this);
 		System.out.print(")");
@@ -536,6 +535,18 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(IdentifierType i){
 		i.i.accept(this);
+	}
+
+	public void visit(IdChain i){
+		for(Identifier id : i.chain){
+			System.out.print(".");
+			id.accept(this);
+		}
+	}
+
+	public void visit(MethodCallStatement m){
+		m.method.accept(this);
+		System.out.println(";");
 	}
 
 	public void visit(Statement s){

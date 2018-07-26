@@ -29,9 +29,10 @@ terminal ASSERT, CREATE, EXIT;
 terminal GETINT, GETFLOAT, GETBOOLEAN, GETSTRING;
 terminal LENGTH, PRINT;
 terminal DEBUG, BREAK, CONTINUE;
+terminal EXEC, WITH;
 
 /* Terminals - Non Keywords */
-terminal POINTER, AT, COMMA;
+terminal AT, COMMA;
 terminal PLUS, MINUS, MULT, DIV, POWER, MOD, INCREMENT, DECREMENT;
 terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
 terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
@@ -65,10 +66,12 @@ non terminal StatementList else;
 non terminal Statement simple_statement;
 non terminal Constructor constructor;
 non terminal ConstructorList constructorlist;
+non terminal MethodCall methodcall;
+non terminal IdChain idchain;
 
 /* Precedence */
 precedence left BANG;
-precedence left LPAREN, RPAREN, DOT, AT, POINTER, LBRACKET, RBRACKET, LBRACE, RBRACE;
+precedence left LPAREN, RPAREN, DOT, AT, LBRACKET, RBRACKET, LBRACE, RBRACE;
 precedence left DIV, MULT, POWER, MOD;
 precedence left MINUS, PLUS;
 precedence left AND, OR, NAND, NOR;
@@ -221,6 +224,16 @@ type ::= type:t LBRACKET RBRACKET
 		{: RESULT = new VoidType(); :}
 		;
 
+methodcall ::= EXEC identifier:i1 idchain:i2 WITH LPAREN paramlist:l RPAREN
+		{: RESULT = new MethodCall(i1, i2, l); :}
+		;
+
+idchain ::= DOT identifier:i idchain:c
+		{: c.add(i, 0); RESULT = c; :}
+		|
+		{: RESULT = new IdChain(); :}
+		;
+
 statement ::= simple_statement:s
 		{: RESULT = s; :}
 		|
@@ -284,6 +297,9 @@ simple_statement ::= BEGIN statementlist:l END
 		|
 		vardec:v
 		{: RESULT = v; :}
+		|
+		methodcall:m SEMICOLON
+		{: RESULT = new MethodCallStatement(m); :}
 		;
 
 ratherlist ::= ratherlist:l RATHER expression:e COLON statementlist:s
@@ -346,14 +362,11 @@ expression ::= expression:e1 AND expression:e2
 		expression:e1 LBRACE expression:e2 RBRACE
 		{: RESULT = new ArrayExpr(e1, e2); :}
 		|
-		expression:e POINTER identifier:i
+		expression:e DOT idchain:i
 		{: RESULT = new ObjectVarAccess(e, i); :}
 		|
-		expression:e DOT identifier:i LPAREN paramlist:l RPAREN
-		{: RESULT = new MethodCall(e, i, l); :}
-		|
-		identifier:i LPAREN paramlist:l RPAREN
-		{: RESULT = new MethodCall(null, i, l); :}
+		methodcall:m
+		{: RESULT = m; :}
 		|
 		expression:e DOT LENGTH
 		{: RESULT = new ArrayLength(e); :}
@@ -416,8 +429,7 @@ expression ::= expression:e1 AND expression:e2
 paramlist ::= expression:e COMMA paramlist:l
 		{: l.add(e); RESULT = l; :}
 		|
-		expression:e
-		{: ParamList p  = new ParamList(); p.add(e); RESULT = p; :}
+		{: ParamList p  = new ParamList(); RESULT = p; :}
 		;
 
 identifier ::= IDENTIFIER:i

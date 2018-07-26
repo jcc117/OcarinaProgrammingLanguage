@@ -3,9 +3,9 @@ import symboltable.*;
 
 public class ObjectVarAccess extends Expression{
 	public Expression e;
-	public Identifier i;
+	public IdChain i;
 
-	public ObjectVarAccess(Expression e, Identifier i){
+	public ObjectVarAccess(Expression e, IdChain i){
 		this.e = e;
 		this.i = i;
 	}
