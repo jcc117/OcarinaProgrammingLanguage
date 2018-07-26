@@ -42,29 +42,26 @@ With the following command:
 # How do I install Ocarina?
 To be determined.
 
-# Items Under Consideration For Initial Release
+# Items Under Consideration For Later Release
 	*operator overloading*
-	*full list of commonly used operators*
-	*map functions*
 	*repl mode*
 	*casting*
 	*generics*
-	*unicode*
+	*unicode strings*
 	*lambda functions*
 
-# Items Still Need to Add
+# Items Still Need to Add (last to be added until grammar is finalized)
 	*Singleton classes*
 	*Enums*
 	*Interfaces*
 	*typeof statements*
-	*var*
 
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
 	*Built-in Mocks and Stubs*
 	*Handling of Integers and Floats of Any Size*
 	*Heavy use of keywords to promote readability*
-	*Strictly Typed*
+	*Strictly Typed, but also supports var types (similar to C#)*
 	*Public and Private Classes and Subroutines*
 	*Variable Names, Class Names, and Subroutine Names which can include "?"*
 	*Functions not strictly tied to classes*
