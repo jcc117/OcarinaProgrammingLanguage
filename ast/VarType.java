@@ -1,13 +1,9 @@
 package ast;
 import symboltable.*;
 
-public class Using{
-	public Identifier i;
-	public IdChain chain;
-
-	public Using(Identifier i, IdChain chain){
-		this.i = i;
-		this.chain = chain;
+public class VarType extends Type{
+	public VarType(){
+		
 	}
 
 	public void accept(VoidVisitor v){

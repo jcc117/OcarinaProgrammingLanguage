@@ -1,13 +1,10 @@
 package ast;
 import symboltable.*;
 
-public class Using{
-	public Identifier i;
-	public IdChain chain;
+public class Super extends Statement{
 
-	public Using(Identifier i, IdChain chain){
-		this.i = i;
-		this.chain = chain;
+	public Super(){
+		breakPoint = false;
 	}
 
 	public void accept(VoidVisitor v){

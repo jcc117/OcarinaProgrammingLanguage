@@ -92,6 +92,10 @@ String = \"[^\"]*\"
 "constructor" {return symbol(CONSTRUCTOR); }
 "exec"	{return symbol(EXEC); }
 "with"	{return symbol(WITH); }
+"super" {return symbol(SUPER); }
+"until"	{return symbol(UNTIL); }
+"unless"	{return symbol(UNLESS); }
+"var"	{return symbol(VAR);}
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

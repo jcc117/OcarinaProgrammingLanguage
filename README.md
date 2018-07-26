@@ -17,6 +17,13 @@ interpretter in a similar way to Java class files and the JVM.
 
 For examples, please navigate to the 'examples' folder.
 
+# What are the goals of Ocarina?
+1. A well-rounded, general-purpose programming language
+2. English readable and very easy to understand
+3. Easy to learn for experienced and non-experienced programmers alike
+4. Portable
+5. Provide some necessary built-in tools for modern software engineering practices
+
 # How do I compile an Ocarina file?
 With the following command:
 
@@ -35,14 +42,22 @@ With the following command:
 # How do I install Ocarina?
 To be determined.
 
-# Items under consideration
+# Items Under Consideration For Initial Release
 	*operator overloading*
-	*interfaces*
 	*full list of commonly used operators*
 	*map functions*
 	*repl mode*
 	*casting*
 	*generics*
+	*unicode*
+	*lambda functions*
+
+# Items Still Need to Add
+	*Singleton classes*
+	*Enums*
+	*Interfaces*
+	*typeof statements*
+	*var*
 
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
@@ -51,7 +66,10 @@ To be determined.
 	*Heavy use of keywords to promote readability*
 	*Strictly Typed*
 	*Public and Private Classes and Subroutines*
-	*Variable Names, Class Names, and MethodNames which can include "?"*
+	*Variable Names, Class Names, and Subroutine Names which can include "?"*
+	*Functions not strictly tied to classes*
+	*Nested inner classes to any level desired*
+	*Packages (called Sages in this language)*
 
 # Progress report
 	Parser and Lexer Development

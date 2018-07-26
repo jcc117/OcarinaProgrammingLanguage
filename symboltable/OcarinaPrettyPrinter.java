@@ -27,6 +27,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(Using u){
 		System.out.print("using ");
 		u.i.accept(this);
+		u.chain.accept(this);
 		System.out.println(";");
 	}
 
@@ -63,6 +64,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		s.v.accept(this);
 		s.c.accept(this);
 		s.d.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(ExtendsClassDef e){
@@ -75,6 +77,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		e.v.accept(this);
 		e.o.accept(this);
 		e.d.accept(this);
+		System.out.println("end");
 	}
 
 	public void visit(ConstructorList c){
@@ -286,12 +289,20 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Increment i){
-		i.i.accept(this);
+		if(i.i != null)
+			i.i.accept(this);
+		else
+			i.t.accept(this);
+		i.chain.accept(this);
 		System.out.println("++;");
 	}
 
 	public void visit(Decrement d){
-		d.i.accept(this);
+		if(d.i != null)
+			d.i.accept(this);
+		else
+			d.t.accept(this);
+		d.chain.accept(this);
 		System.out.println("--;");
 	}
 
@@ -552,6 +563,30 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(UnaryMinus u){
 		System.out.print("-");
 		u.e.accept(this);
+	}
+
+	public void visit(Super s){
+		System.out.println("super();");
+	}
+
+	public void visit(Unless u){
+		System.out.print("unless ");
+		u.e.accept(this);
+		System.out.println(":");
+		u.s.accept(this);
+		System.out.println("end");
+	}
+
+	public void visit(Until u){
+		System.out.print("until ");
+		u.e.accept(this);
+		System.out.println(":");
+		u.s.accept(this);
+		System.out.println("end");
+	}
+
+	public void visit(VarType v){
+		System.out.print("var ");
 	}
 
 	public void visit(Statement s){

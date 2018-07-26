@@ -25,6 +25,7 @@ public interface Visitor{
 	public Sym visit(StringType t);
 	public Sym visit(HashmapType t);
 	public Sym visit(VoidType t);
+	public Sym visit(VarType v);
 	public Sym visit(Block b);
 	public Sym visit(If i);
 	public Sym visit(While w);
@@ -91,4 +92,7 @@ public interface Visitor{
 	public Sym visit(IdChain i);
 	public Sym visit(MethodCallStatement m);
 	public Sym visit(UnaryMinus u);
+	public Sym visit(Super s);
+	public Sym visit(Until u);
+	public Sym visit(Unless u);
 }

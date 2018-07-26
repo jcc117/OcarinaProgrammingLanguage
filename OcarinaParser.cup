@@ -14,13 +14,13 @@ parser code {: @Override
 /* Terminals - Keywords*/
 
 terminal START, END, SAGE, USING, PUBLIC, PRIVATE, PROTECTED;
-terminal CLASS, EXTENDS, CONSTRUCTOR;
+terminal CLASS, EXTENDS, CONSTRUCTOR, SUPER;
 terminal SUBROUTINE;
 /* terminal MOCK; */
 /* terminal STUB; */
-terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING;
-terminal IF, ELSE, BEGIN, RATHER;
-terminal WHILE, FOR, DO;
+terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, VAR;
+terminal IF, ELSE, BEGIN, RATHER, UNLESS;
+terminal WHILE, FOR, DO, UNTIL;
 terminal RETURN;
 terminal AND, OR, NAND, NOR, EQUALS;
 terminal TRUE, FALSE;
@@ -91,8 +91,8 @@ sage ::= SAGE identifier:i SEMICOLON usinglist:u program:p
 		SAGE identifier:i SEMICOLON usinglist:u deflist:d
 		{: RESULT = new Sage(i, d, u); :}
 		;
-usinglist ::= usinglist:u USING identifier:i SEMICOLON
-		{: u.add(new Using(i)); RESULT = u; :}
+usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
+		{: u.add(new Using(i, c)); RESULT = u; :}
 		|
 		{: RESULT = new UsingList(); :}
 		;
@@ -222,10 +222,16 @@ type ::= type:t LBRACKET RBRACKET
 		|
 		VOID
 		{: RESULT = new VoidType(); :}
+		|
+		VAR
+		{: RESULT = new VarType(); :}
 		;
 
 methodcall ::= EXEC identifier:i1 idchain:i2 WITH LPAREN paramlist:l RPAREN
 		{: RESULT = new MethodCall(i1, i2, l); :}
+		|
+		EXEC THIS idchain:i2 WITH LPAREN paramlist:l RPAREN
+		{: RESULT = new MethodCall(new This(), i2, l); :}
 		;
 
 idchain ::= DOT identifier:i idchain:c
@@ -250,8 +256,14 @@ simple_statement ::= BEGIN statementlist:l END
 		IF expression:e COLON statementlist:s ratherlist:l END
 		{: RESULT = new If(e, s, l, null); :}
 		|
+		UNLESS expression:e COLON statementlist:s END
+		{: RESULT = new Unless(e, s); :}
+		|
 		WHILE expression:e COLON statementlist:l END
 		{: RESULT = new While(e, l); :}
+		|
+		UNTIL expression:e COLON statementlist:l END
+		{: RESULT = new Until(e, l); :}
 		|
 		FOR LPAREN statement:s1 expression:e SEMICOLON statement:s2 RPAREN COLON statementlist:s3 END
 		{: RESULT = new For(e, s1, s2, s3); :}
@@ -289,17 +301,26 @@ simple_statement ::= BEGIN statementlist:l END
 		BREAK SEMICOLON
 		{: RESULT = new Break(); :}
 		|
-		identifier:i INCREMENT SEMICOLON
-		{: RESULT = new Increment(i); :}
+		identifier:i idchain:c INCREMENT SEMICOLON
+		{: RESULT = new Increment(i, c); :}
 		|
-		identifier:i DECREMENT SEMICOLON
-		{: RESULT = new Decrement(i); :}
+		THIS idchain:c INCREMENT SEMICOLON
+		{: RESULT = new Increment(new This(), c); :}
+		|
+		identifier:i idchain:c DECREMENT SEMICOLON
+		{: RESULT = new Decrement(i, c); :}
+		|
+		THIS idchain:c DECREMENT SEMICOLON
+		{: RESULT = new Decrement(new This(), c); :}
 		|
 		vardec:v
 		{: RESULT = v; :}
 		|
 		methodcall:m SEMICOLON
 		{: RESULT = new MethodCallStatement(m); :}
+		|
+		SUPER LPAREN RPAREN SEMICOLON
+		{: RESULT = new Super();:}
 		;
 
 ratherlist ::= ratherlist:l RATHER expression:e COLON statementlist:s

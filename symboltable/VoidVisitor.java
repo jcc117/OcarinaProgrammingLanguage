@@ -25,6 +25,7 @@ public interface VoidVisitor{
 	public void visit(StringType t);
 	public void visit(HashmapType t);
 	public void visit(VoidType t);
+	public void visit(VarType v);
 	public void visit(Block b);
 	public void visit(If i);
 	public void visit(While w);
@@ -91,4 +92,7 @@ public interface VoidVisitor{
 	public void visit(IdChain i);
 	public void visit(MethodCallStatement m);
 	public void visit(UnaryMinus u);
+	public void visit(Super s);
+	public void visit(Until u);
+	public void visit(Unless u);
 }

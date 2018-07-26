@@ -1,4 +1,6 @@
 sage shadow;
+using fire;
+using fire.wind.water.air?;
 
 public class Example:
 	
@@ -7,6 +9,11 @@ public class Example:
 	
 	constructor(int x):
 	
+	end
+	
+	private class InnerClass:
+		protected class WayInnerClass extends InnerClass:
+		end
 	end
 
 end

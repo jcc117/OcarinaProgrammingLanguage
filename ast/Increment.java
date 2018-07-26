@@ -3,9 +3,20 @@ import symboltable.*;
 
 public class Increment extends Statement{
 	public Identifier i;
+	public IdChain chain;
+	public This t;
 
-	public Increment(Identifier i){
+	public Increment(Identifier i, IdChain chain){
 		this.i = i;
+		this.chain = chain;
+		this.t = null;
+		breakPoint = false;
+	}
+
+	public Increment(This t, IdChain chain){
+		this.t = t;
+		this.chain = chain;
+		this.i  = null;
 		breakPoint = false;
 	}
 
