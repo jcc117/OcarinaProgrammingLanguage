@@ -1,0 +1,12 @@
+sage shadow;
+
+public class Example:
+	
+	int x;
+	hashmap{string, int} w;
+	
+	constructor(int x):
+	
+	end
+
+end

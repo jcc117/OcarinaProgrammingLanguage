@@ -84,8 +84,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Constructor c){
-		System.out.print("constructor ");
+		System.out.print("constructor(");
 		c.a.accept(this);
+		System.out.println("):");
 		c.l.accept(this);
 		System.out.println("end");
 	}

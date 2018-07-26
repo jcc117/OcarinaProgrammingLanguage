@@ -148,7 +148,7 @@ constructorlist ::= constructorlist:l constructor:c
 		|
 		{: RESULT = new ConstructorList(); :}
 		;
-constructor ::= CONSTRUCTOR RPAREN arglist:a LPAREN COLON statementlist:s END
+constructor ::= CONSTRUCTOR LPAREN arglist:a RPAREN COLON statementlist:s END
 		{: RESULT = new Constructor(a, s); :}
 		;
 
