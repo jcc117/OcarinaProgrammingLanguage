@@ -413,7 +413,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(ObjectVarAccess o){
 		o.e.accept(this);
-		System.out.print("->");
 		o.i.accept(this);
 	}
 

@@ -24,10 +24,10 @@ public subroutine int[] quick_sort(int[] x, int low, int high):
 		Invalid for now.
 		Just to please the broken parser
 		'''
-	@	exec bum.qual.carrot.quick_sort with (x, low, pi - 1,);
+		exec bum.qual.carrot.quick_sort with (x, low, pi - 1,);
 		exec wut.quick_sort with (x, pi + 1, high,);
 		
-		pi = prune..water.king;
+		pi = prune.water.king;
 	end
 end
 

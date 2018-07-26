@@ -362,8 +362,8 @@ expression ::= expression:e1 AND expression:e2
 		expression:e1 LBRACE expression:e2 RBRACE
 		{: RESULT = new ArrayExpr(e1, e2); :}
 		|
-		expression:e DOT idchain:i
-		{: RESULT = new ObjectVarAccess(e, i); :}
+		identifier:i idchain:i2
+		{: RESULT = new ObjectVarAccess(i, i2); :}
 		|
 		methodcall:m
 		{: RESULT = m; :}
@@ -391,9 +391,6 @@ expression ::= expression:e1 AND expression:e2
 		|
 		BANG expression:e
 		{: RESULT = new Not(e); :}
-		|
-		identifier:i
-		{: RESULT = new IdentifierExpr(i); :}
 		|
 		CREATE identifier:i LPAREN paramlist:l RPAREN
 		{: RESULT = new ObjectCreate(i, l); :}
