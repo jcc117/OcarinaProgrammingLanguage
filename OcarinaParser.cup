@@ -421,6 +421,9 @@ expression ::= expression:e1 AND expression:e2
 		|
 		STRINGLITERAL:s
 		{: RESULT = new StringLiteral(s); :}
+		|
+		MINUS expression:e
+		{: RESULT = new UnaryMinus(e); :}
 		;
 
 paramlist ::= expression:e COMMA paramlist:l

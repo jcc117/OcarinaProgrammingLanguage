@@ -90,4 +90,5 @@ public interface Visitor{
 	public Sym visit(ArrayLiteral a);
 	public Sym visit(IdChain i);
 	public Sym visit(MethodCallStatement m);
+	public Sym visit(UnaryMinus u);
 }

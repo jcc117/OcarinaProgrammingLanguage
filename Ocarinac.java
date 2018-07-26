@@ -25,6 +25,7 @@ public class Ocarinac{
     	}
     	catch(Exception e){
     		System.out.println("Exited with errors");
+    		System.out.println(e);
     		System.exit(-1);
     	}
     	//For testing purposes only

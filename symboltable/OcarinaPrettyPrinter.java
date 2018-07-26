@@ -548,6 +548,11 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println(";");
 	}
 
+	public void visit(UnaryMinus u){
+		System.out.print("-");
+		u.e.accept(this);
+	}
+
 	public void visit(Statement s){
 
 	}

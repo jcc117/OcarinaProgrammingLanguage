@@ -29,10 +29,10 @@ import java.math.*;
 %}
 
 IntegerLiteral = {DecimalLiteral} | {HexLiteral} | {OctalLiteral}
-DecimalLiteral = [+-]?[1-9][0-9]*
+DecimalLiteral = [1-9][0-9]*
 HexLiteral = 0(x | X)[0-9a-fA-F]+
 OctalLiteral = 0[0-7]+
-FloatLiteral = [+-]?([0-9]*[.])?[0-9]+
+FloatLiteral = ([0-9]*[.])?[0-9]+
 Identifier = [a-zA-Z_][a-zA-Z0-9_?]*
 LineComment = #[^\n]*\n?
 BlockComment = "'''" [^*] ~"'''"
