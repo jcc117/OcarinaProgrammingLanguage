@@ -4,14 +4,17 @@ import symboltable.*;
 import java.util.ArrayList;
 
 public class ArgList{
-	public ArrayList<Param> l;
+	public Param p;
+	public ArgChain chain;
 
-	public ArgList(){
-		this.l = new ArrayList<Param>();
+	public ArgList(Param p, ArgChain chain){
+		this.p = p;
+		this.chain = chain;
 	}
 
-	public void add(Param p){
-		l.add(p);
+	public ArgList(){
+		this.p = null;
+		this.chain = null;
 	}
 
 	public void accept(VoidVisitor v){

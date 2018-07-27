@@ -7,7 +7,17 @@ public class Example:
 	int x;
 	hashmap{string, int} w;
 	
-	constructor(int x):
+	constructor(int x, int y):
+	
+	end
+	
+	constructor():
+		exec daisy with (banana, orange, kiwi);
+		exec peach with ();
+		exec rose with (garden);
+	end
+	
+	constructor(int z):
 	
 	end
 	

@@ -4,16 +4,19 @@ import symboltable.*;
 import java.util.ArrayList;
 
 public class ParamList extends Expression{
-	public ArrayList<Expression> l;
+	public Expression e;
+	public ExprChain chain;
+
+	public ParamList(Expression e, ExprChain chain){
+		this.e = e;
+		this.chain = chain;
+	}
 
 	public ParamList(){
-		this.l = new ArrayList<Expression>();
+		this.e = null;
+		this.chain = null;
 	}
-
-	public void add(Expression e){
-		l.add(0, e);
-	}
-
+	
 	public void accept(VoidVisitor v){
 		v.visit(this);
 	}

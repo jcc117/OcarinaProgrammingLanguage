@@ -3,6 +3,7 @@ import symboltable.*;
 
 public class ArrayType extends Type{
 	public Type t;
+	public boolean constant;
 
 	public ArrayType(Type t, boolean c){
 		this.t = t;

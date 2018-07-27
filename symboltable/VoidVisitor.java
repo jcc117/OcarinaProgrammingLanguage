@@ -99,4 +99,6 @@ public interface VoidVisitor{
 	public void visit(Differs d);
 	public void visit(MethodType m);
 	public void visit(MethodLiteral m);
+	public void visit(ArgChain a);
+	public void visit(ExprChain e);
 }

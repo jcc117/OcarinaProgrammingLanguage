@@ -136,9 +136,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArgList a){
-		for(Param p: a.l){
-			p.accept(this);
-			System.out.print(", ");
+		if(a.p != null){
+			a.p.accept(this);
+			a.chain.accept(this);
 		}
 	}
 
@@ -564,9 +564,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ParamList p){
-		for(Expression e : p.l){
-			e.accept(this);
-			System.out.print(", ");
+		if(p.e != null){
+			p.e.accept(this);
+			p.chain.accept(this);
 		}
 	}
 
@@ -635,6 +635,20 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println(") => {");
 		m.s.accept(this);
 		System.out.print("}");
+	}
+
+	public void visit(ArgChain a){
+		for(Param p : a.l){
+			System.out.print(", ");
+			p.accept(this);
+		}
+	}
+
+	public void visit(ExprChain e){
+		for(Expression ex : e.l){
+			System.out.print(", ");
+			ex.accept(this);
+		}
 	}
 
 	public void visit(Statement s){

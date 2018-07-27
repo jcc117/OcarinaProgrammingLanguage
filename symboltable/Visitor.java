@@ -99,4 +99,6 @@ public interface Visitor{
 	public Sym visit(Differs d);
 	public Sym visit(MethodType m);
 	public Sym visit(MethodLiteral m);
+	public Sym visit(ArgChain a);
+	public Sym visit(ExprChain e);
 }

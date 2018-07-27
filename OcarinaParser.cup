@@ -70,6 +70,8 @@ non terminal ConstructorList constructorlist;
 non terminal MethodCall methodcall;
 non terminal IdChain idchain;
 non terminal Typeof typeof;
+non terminal ExprChain expressionchain;
+non terminal ArgChain argchain;
 
 /* Precedence */
 precedence left BANG;
@@ -174,20 +176,20 @@ constructorlist ::= constructorlist:l constructor:c
 		|
 		{: RESULT = new ConstructorList(); :}
 		;
-constructor ::= CONSTRUCTOR LPAREN arglist:a RPAREN COLON statementlist:s END
+constructor ::= CONSTRUCTOR arglist:a COLON statementlist:s END
 		{: RESULT = new Constructor(a, s); :}
 		;
 
-methoddef ::= PUBLIC SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
+methoddef ::= PUBLIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 3); :}
 		|
-		PRIVATE SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
+		PRIVATE SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 0); :}
 		|
-		SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
+		SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 1); :}
 		|
-		PROTECTED SUBROUTINE type:r identifier:i LPAREN arglist:a RPAREN COLON statementlist:l END
+		PROTECTED SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 
@@ -214,11 +216,17 @@ vardec ::= type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 1); :}
 		;
 
-arglist ::= arglist:l COMMA parameter:p
-		{: l.add(p); RESULT = l; :}
+arglist ::= LPAREN parameter:p argchain:c RPAREN
+		{: RESULT = new ArgList(p, c); :}
 		|
-		parameter:p
-		{: ArgList l = new ArgList(); l.add(p); RESULT = l; :}
+		LPAREN RPAREN
+		{: RESULT = new ArgList(); :}
+		;
+
+argchain ::= COMMA parameter:p argchain:c
+		{: c.add(p); RESULT = c; :}
+		|
+		{: RESULT = new ArgChain(); :}
 		;
 
 parameter ::= type:t identifier:i
@@ -226,7 +234,7 @@ parameter ::= type:t identifier:i
 		;
 
 type ::= type:t LBRACKET RBRACKET
-		{: RESULT = new ArrayType(t); :}
+		{: RESULT = new ArrayType(t, false); :}
 		|
 		INT
 		{: RESULT = new IntType(false); :}
@@ -267,9 +275,6 @@ type ::= type:t LBRACKET RBRACKET
 		CONST STRING
 		{: RESULT = new StringType(true); :}
 		|
-		CONST HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
-		{: RESULT = new HashmapType(t1, t2, true); :}
-		|
 		CONST identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, true); :}
 		|
@@ -281,10 +286,10 @@ typeof ::= identifier:i idchain:c TYPEOF type:t
 		{: RESULT = new Typeof(i, c, t); :}
 		;
 
-methodcall ::= EXEC identifier:i1 idchain:i2 WITH LPAREN paramlist:l RPAREN
+methodcall ::= EXEC identifier:i1 idchain:i2 WITH paramlist:l
 		{: RESULT = new MethodCall(i1, i2, l); :}
 		|
-		EXEC THIS idchain:i2 WITH LPAREN paramlist:l RPAREN
+		EXEC THIS idchain:i2 WITH paramlist:l
 		{: RESULT = new MethodCall(new This(), i2, l); :}
 		;
 
@@ -470,10 +475,10 @@ expression ::= expression:e1 AND expression:e2
 		BANG expression:e
 		{: RESULT = new Not(e); :}
 		|
-		CREATE identifier:i LPAREN paramlist:l RPAREN
+		CREATE identifier:i paramlist:l
 		{: RESULT = new ObjectCreate(i, l); :}
 		|
-		CREATE type:t LBRACKET RBRACKET LBRACE paramlist:l RBRACE
+		CREATE type:t LBRACKET RBRACKET paramlist:l
 		{: RESULT = new ArrayLiteral(t, l); :}
 		|
 		THIS
@@ -506,14 +511,21 @@ expression ::= expression:e1 AND expression:e2
 		typeof:t
 		{: RESULT = t; :}
 		|
-		LPAREN paramlist:p RPAREN POINTER LBRACKET statementlist:l RBRACKET
+		paramlist:p POINTER LBRACKET statementlist:l RBRACKET
 		{: RESULT = new MethodLiteral(p, l); :}
 		;
 
-paramlist ::= expression:e COMMA paramlist:l
-		{: l.add(e); RESULT = l; :}
+paramlist ::= LPAREN expression:e expressionchain:c RPAREN
+		{: RESULT = new ParamList(e, c); :}
 		|
-		{: ParamList p  = new ParamList(); RESULT = p; :}
+		LPAREN RPAREN
+		{: RESULT = new ParamList(); :}
+		;
+
+expressionchain ::= COMMA expression:e expressionchain:c
+		{: c.add(e); RESULT = c; :}
+		|
+		{: RESULT = new ExprChain(); :} 
 		;
 
 identifier ::= IDENTIFIER:i
