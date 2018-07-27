@@ -278,7 +278,7 @@ type ::= type:t LBRACKET RBRACKET
 		CONST identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, true); :}
 		|
-		CONST SUBROUTINE LBRACKET type:t RBRACKET
+		CONST SUBROUTINE LBRACE type:t RBRACE
 		{: RESULT = new MethodType(t, true); :}
 		;
 
@@ -511,7 +511,7 @@ expression ::= expression:e1 AND expression:e2
 		typeof:t
 		{: RESULT = t; :}
 		|
-		paramlist:p POINTER LBRACKET statementlist:l RBRACKET
+		paramlist:p POINTER LBRACE statementlist:l RBRACE
 		{: RESULT = new MethodLiteral(p, l); :}
 		;
 

@@ -4,7 +4,7 @@ using fire.wind.water.air?;
 
 public class Example:
 	
-	int x;
+	const int x;
 	hashmap{string, int} w;
 	
 	constructor(int x, int y):
@@ -15,6 +15,9 @@ public class Example:
 		exec daisy with (banana, orange, kiwi);
 		exec peach with ();
 		exec rose with (garden);
+		
+		const subroutine{const subroutine{boolean}} run;
+		run = () => {return () => {return true;}; };
 	end
 	
 	constructor(int z):
