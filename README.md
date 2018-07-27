@@ -42,14 +42,6 @@ With the following command:
 # How do I install Ocarina?
 To be determined.
 
-# Items Under Consideration For Later Release
-	*operator overloading*
-	*repl mode*
-	*casting*
-	*generics*
-	*unicode strings*
-	*lambda functions*
-
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
 	*Handling of Integers and Floats of Any Size*
@@ -66,3 +58,11 @@ To be determined.
 	Parser and Lexer Development
 	Finalization of Grammar
 	Development of pretty printer for parser testing
+
+# Items Under Consideration For Later Release
+	*operator overloading*
+	*repl mode*
+	*casting*
+	*generics*
+	*unicode strings*
+	*lambda functions*
