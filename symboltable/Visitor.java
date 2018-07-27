@@ -95,4 +95,8 @@ public interface Visitor{
 	public Sym visit(Super s);
 	public Sym visit(Until u);
 	public Sym visit(Unless u);
+	public Sym visit(Typeof t);
+	public Sym visit(Differs d);
+	public Sym visit(MethodType m);
+	public Sym visit(MethodLiteral m);
 }

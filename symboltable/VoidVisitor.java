@@ -95,4 +95,8 @@ public interface VoidVisitor{
 	public void visit(Super s);
 	public void visit(Until u);
 	public void visit(Unless u);
+	public void visit(Typeof t);
+	public void visit(Differs d);
+	public void visit(MethodType m);
+	public void visit(MethodLiteral m);
 }

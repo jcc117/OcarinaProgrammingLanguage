@@ -58,7 +58,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(SimpleClassDef s){
 		String prot = get_protection_level(s.protection);
-		System.out.print(prot + " class ");
+		System.out.print(prot);
+		if(s.singleton)
+			System.out.print(" singleton");
+		System.out.print(" class ");
 		s.i.accept(this);
 		System.out.println(":");
 		s.v.accept(this);
@@ -69,7 +72,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(ExtendsClassDef e){
 		String prot = get_protection_level(e.protection);
-		System.out.print(prot + " class ");
+		System.out.print(prot);
+		if(e.singleton)
+			System.out.print(" singleton");
+		System.out.print(" class ");
 		e.i.accept(this);
 		System.out.print(" extends ");
 		e.c.accept(this); 
@@ -143,31 +149,49 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayType t){
+		if(t.constant)
+			System.out.print("const ");
 		t.t.accept(this);
 		System.out.print("[]");
 	}
 
 	public void visit(IntType t){
+		if(t.constant)
+			System.out.print("const ");
 		System.out.print("int");
 	}
 
 	public void visit(FloatType t){
+		if(t.constant)
+			System.out.print("const ");
 		System.out.print("float");
 	}
 
 	public void visit(BooleanType t){
+		if(t.constant)
+			System.out.print("const ");
 		System.out.print("boolean");
 	}
 
 	public void visit(StringType t){
+		if(t.constant)
+			System.out.print("const ");
 		System.out.print("string");
 	}
 
 	public void visit(HashmapType t){
+		if(t.constant)
+			System.out.print("const ");
 		System.out.print("hashmap{");
 		t.t1.accept(this);
 		System.out.print(", ");
 		t.t2.accept(this);
+		System.out.print("}");
+	}
+
+	public void visit(MethodType m){
+		System.out.print("const subroutine{");
+		m.t.accept(this);
 		System.out.print("}");
 	}
 
@@ -347,6 +371,12 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		e.e1.accept(this);
 		System.out.print(" equals ");
 		e.e2.accept(this);
+	}
+
+	public void visit(Differs d){
+		d.e1.accept(this);
+		System.out.print(" differs ");
+		d.e2.accept(this);
 	}
 
 	public void visit(Plus p){
@@ -546,6 +576,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(IdentifierType i){
 		i.i.accept(this);
+		i.chain.accept(this);
 	}
 
 	public void visit(IdChain i){
@@ -586,7 +617,24 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(VarType v){
+		if(v.constant)
+			System.out.print("const ");
 		System.out.print("var ");
+	}
+
+	public void visit(Typeof t){
+		t.i.accept(this);
+		t.chain.accept(this);
+		System.out.print(" typeof ");
+		t.t.accept(this);
+	}
+
+	public void visit(MethodLiteral m){
+		System.out.print("(");
+		m.p.accept(this);
+		System.out.println(") => {");
+		m.s.accept(this);
+		System.out.print("}");
 	}
 
 	public void visit(Statement s){

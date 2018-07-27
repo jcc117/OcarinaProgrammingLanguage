@@ -2,8 +2,8 @@ package ast;
 import symboltable.*;
 
 public class BooleanType extends Type{
-	public BooleanType(){
-		
+	public BooleanType(boolean c){
+		constant = c;
 	}
 	public void accept(VoidVisitor v){
 		v.visit(this);

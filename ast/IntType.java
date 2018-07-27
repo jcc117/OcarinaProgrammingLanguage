@@ -2,8 +2,8 @@ package ast;
 import symboltable.*;
 
 public class IntType extends Type{
-	public IntType(){
-		
+	public IntType(boolean c){
+		constant = c;
 	}
 
 	public void accept(VoidVisitor v){

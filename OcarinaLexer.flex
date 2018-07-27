@@ -96,6 +96,10 @@ String = \"[^\"]*\"
 "until"	{return symbol(UNTIL); }
 "unless"	{return symbol(UNLESS); }
 "var"	{return symbol(VAR);}
+"singleton"	{return symbol(SINGLETON); }
+"const"	{return symbol(CONST); }
+"typeof"	{return symbol(TYPEOF); }
+"differs"	{return symbol(DIFFERS); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}
@@ -108,6 +112,7 @@ String = \"[^\"]*\"
 /*Operators*/
 "++"	{return symbol(INCREMENT);}
 "--"	{return symbol(DECREMENT);}
+"=>"	{return symbol(POINTER);}
 "!"	{return symbol(BANG);}
 "+"	{return symbol(PLUS);}
 "-"	{return symbol(MINUS);}

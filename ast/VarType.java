@@ -2,8 +2,8 @@ package ast;
 import symboltable.*;
 
 public class VarType extends Type{
-	public VarType(){
-		
+	public VarType(boolean c){
+		constant = c;
 	}
 
 	public void accept(VoidVisitor v){

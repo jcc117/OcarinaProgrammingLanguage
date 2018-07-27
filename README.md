@@ -50,20 +50,14 @@ To be determined.
 	*unicode strings*
 	*lambda functions*
 
-# Items Still Need to Add (last to be added until grammar is finalized)
-	*Singleton classes*
-	*Enums*
-	*Interfaces*
-	*typeof statements*
-
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
-	*Built-in Mocks and Stubs*
 	*Handling of Integers and Floats of Any Size*
 	*Heavy use of keywords to promote readability*
 	*Strictly Typed, but also supports var types (similar to C#)*
 	*Public and Private Classes and Subroutines*
 	*Variable Names, Class Names, and Subroutine Names which can include "?"*
+	*Function-Type variables*
 	*Functions not strictly tied to classes*
 	*Nested inner classes to any level desired*
 	*Packages (called Sages in this language)*

@@ -8,14 +8,16 @@ public class ExtendsClassDef implements ClassDef{
 	public VarDeclList v;
 	public int protection;
 	public ConstructorList o;
+	public boolean singleton;
 
-	public ExtendsClassDef(Identifier i, Identifier c, DefList d, VarDeclList v, int protection, ConstructorList o){
+	public ExtendsClassDef(Identifier i, Identifier c, DefList d, VarDeclList v, int protection, ConstructorList o, boolean singleton){
 		this.i = i;
 		this.c = c;
 		this.d = d;
 		this.v = v;
 		this.protection = protection;
 		this.o = o;
+		this.singleton = singleton;
 	}
 
 	public void accept(VoidVisitor v){

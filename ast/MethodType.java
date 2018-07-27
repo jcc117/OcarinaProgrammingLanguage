@@ -1,9 +1,12 @@
 package ast;
 import symboltable.*;
 
-public class FloatType extends Type{
-	public FloatType(boolean c){
-		constant = c;
+public class MethodType extends Type{
+	public Type t;
+
+	public MethodType(Type t, boolean c){
+		this.t = t;
+		constant = c;		
 	}
 
 	public void accept(VoidVisitor v){

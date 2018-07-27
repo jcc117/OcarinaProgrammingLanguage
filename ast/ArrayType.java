@@ -4,8 +4,9 @@ import symboltable.*;
 public class ArrayType extends Type{
 	public Type t;
 
-	public ArrayType(Type t){
-		this.t = t;		
+	public ArrayType(Type t, boolean c){
+		this.t = t;
+		constant = c;		
 	}
 
 	public void accept(VoidVisitor v){

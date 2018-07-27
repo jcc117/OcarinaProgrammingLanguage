@@ -1,13 +1,16 @@
 package ast;
+
 import symboltable.*;
 
-public class IdentifierType extends Type{
+public class Typeof extends Expression{
 	public Identifier i;
 	public IdChain chain;
+	public Type t;
 
-	public IdentifierType(Identifier i, IdChain  chain){
+	public Typeof(Identifier i, IdChain chain, Type t){
 		this.i = i;
 		this.chain = chain;
+		this.t = t;
 	}
 
 	public void accept(VoidVisitor v){
