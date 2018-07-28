@@ -53,6 +53,7 @@ To be determined.
 	*Functions not strictly tied to classes*
 	*Nested inner classes to any level desired*
 	*Packages (called Sages in this language)*
+	*Exception handling*
 
 # Progress report
 	Parser and Lexer Development

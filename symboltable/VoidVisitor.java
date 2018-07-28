@@ -101,4 +101,9 @@ public interface VoidVisitor{
 	public void visit(MethodLiteral m);
 	public void visit(ArgChain a);
 	public void visit(ExprChain e);
+	public void visit(Throw t);
+	public void visit(TryCatch t);
+	public void visit(Catch c);
+	public void visit(CatchList c);
+	public void visit(ExceptionDef e);
 }

@@ -50,7 +50,28 @@ public class Example:
 		end
 		
 		private subroutine int y(int z, hashmap{string, int} y, bool e_?):
+			throw e;
+			try:
+				throw e;
+				throw e.e.e.e.e.e.e;
+			catch e.e.e.e e:
+				return this;
+			catch r.r.r d:
+			
+			finally:
+				i = 1;
+			end
+			
+			try:
+				print(y);
+			catch t.t.t t:
+			end
 		end
 	end
+	
+	private exception e ("hello");
+	public exception e ("hello");
+	protected exception e ("hello");
+	exception e ("hello");
 
 end

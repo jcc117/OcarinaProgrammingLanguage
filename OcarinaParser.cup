@@ -31,6 +31,8 @@ terminal LENGTH, PRINT;
 terminal DEBUG, BREAK, CONTINUE;
 terminal EXEC, WITH;
 terminal TYPEOF;
+terminal TRY, CATCH, FINALLY;
+terminal THROW, EXCEPTION;
 
 /* Terminals - Non Keywords */
 terminal AT, COMMA, POINTER;
@@ -51,6 +53,7 @@ non terminal StatementList statementlist;
 non terminal DefList deflist;
 non terminal ClassDef classdef;
 non terminal MethodDef methoddef;
+non terminal ExceptionDef exceptiondef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
 non terminal VarDeclList vardeclist;
@@ -72,6 +75,8 @@ non terminal IdChain idchain;
 non terminal Typeof typeof;
 non terminal ExprChain expressionchain;
 non terminal ArgChain argchain;
+non terminal TryCatch trycatch;
+non terminal CatchList catchlist;
 
 /* Precedence */
 precedence left BANG;
@@ -119,8 +124,24 @@ deflist ::= deflist:d classdef:c
 		deflist:d methoddef:m
 		{: d.add(m); RESULT = d; :}
 		|
+		deflist:d exceptiondef:e
+		{: d.add(e); RESULT = d; :}
+		|
 		{: RESULT = new DefList(); :}
 		;
+
+exceptiondef ::= EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 1); :}
+		|
+		PUBLIC EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 3); :}
+		|
+		PRIVATE EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 0); :}
+		|
+		PROTECTED EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 2); :}
+		; 
 
 classdef ::= PUBLIC CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 3, c, false); :}
@@ -380,6 +401,28 @@ simple_statement ::= BEGIN statementlist:l END
 		|
 		SUPER LPAREN RPAREN SEMICOLON
 		{: RESULT = new Super();:}
+		|
+		THROW identifier:i idchain:c SEMICOLON
+		{: RESULT = new Throw(i, c);:}
+		|
+		THROW THIS idchain:c SEMICOLON
+		{: RESULT = new Throw(new This(), c); :}
+		|
+		trycatch:t
+		{: RESULT = t; :}
+		;
+
+trycatch ::= TRY COLON statementlist:s1 catchlist:c END
+		{: RESULT = new TryCatch(s1, c); :}
+		|
+		TRY COLON statementlist:s1 catchlist:c FINALLY COLON statementlist:s2 END
+		{: RESULT = new TryCatch(s1, c, s2); :}
+		;
+
+catchlist ::= CATCH identifier:i idchain:c identifier:i2 COLON statementlist:s catchlist:l
+		{: l.add(new Catch(i, c, i2, s), 0); RESULT = l; :}
+		|
+		{: RESULT = new CatchList(); :}
 		;
 
 ratherlist ::= ratherlist:l RATHER expression:e COLON statementlist:s

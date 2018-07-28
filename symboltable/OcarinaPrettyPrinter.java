@@ -651,6 +651,51 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		}
 	}
 
+	public void visit(ExceptionDef e){
+		String prot = get_protection_level(e.protection);
+		if(prot.length() > 0)
+			System.out.print(prot + " ");
+		System.out.print("exception ");
+		e.i.accept(this);
+		System.out.print("(");
+		e.s.accept(this);
+		System.out.println(");");
+
+	}
+
+	public void visit(TryCatch t){
+		System.out.println("try:");
+		t.l.accept(this);
+		t.c.accept(this);
+		if(t.f.l.size() > 0){
+			System.out.println("finally:");
+			t.f.accept(this);
+		}
+		System.out.println("end");
+	}
+
+	public void visit(Catch c){
+		System.out.print("catch ");
+		c.i.accept(this);
+		c.chain.accept(this);
+		c.i2.accept(this);
+		System.out.println(":");
+		c.s.accept(this);
+	}
+
+	public void visit(CatchList c){
+		for(Catch ca : c.l){
+			ca.accept(this);
+		}
+	}
+
+	public void visit(Throw t){
+		System.out.print("throw ");
+		t.i.accept(this);
+		t.chain.accept(this);
+		System.out.println(";");
+	}
+
 	public void visit(Statement s){
 
 	}

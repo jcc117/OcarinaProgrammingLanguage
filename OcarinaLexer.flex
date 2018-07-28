@@ -100,6 +100,11 @@ String = \"[^\"]*\"
 "const"	{return symbol(CONST); }
 "typeof"	{return symbol(TYPEOF); }
 "differs"	{return symbol(DIFFERS); }
+"try"	{return symbol(TRY); }
+"catch"	{return symbol(CATCH); }
+"finally"	{return symbol(FINALLY); }
+"exception"	{return symbol(EXCEPTION); }
+"throw"	{return symbol(THROW); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

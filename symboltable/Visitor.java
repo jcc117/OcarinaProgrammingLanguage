@@ -101,4 +101,9 @@ public interface Visitor{
 	public Sym visit(MethodLiteral m);
 	public Sym visit(ArgChain a);
 	public Sym visit(ExprChain e);
+	public Sym visit(Throw t);
+	public Sym visit(TryCatch t);
+	public Sym visit(Catch c);
+	public Sym visit(CatchList c);
+	public Sym visit(ExceptionDef e);
 }
