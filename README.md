@@ -59,6 +59,7 @@ To be determined.
 	Parser and Lexer Development
 	Finalization of Grammar
 	Development of pretty printer for parser testing
+	Adding error checking to parser
 
 # Items Under Consideration For Later Release
 	*operator overloading*
