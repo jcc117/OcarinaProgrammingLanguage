@@ -7,6 +7,8 @@ public class Example:
 	const int x;
 	hashmap{string, int} w;
 	
+	wut x;
+	
 	constructor(int x, int y):
 	
 	end
@@ -21,11 +23,33 @@ public class Example:
 	end
 	
 	constructor(int z):
-	
+		#testing conditionals
+		if true and false or !(true nand false) nor (x equals y) and (y differs z):
+			print("some stuff");
+			boolean h = true equals true and false differs true;
+		end
+		#This isn't allowed but for grammars sake i'll test it
+		return 8%7^4;
+		return exec y with (z);
+		return 5 - -5.5;
+		
+		unless ((x >= 7) and (y > 0)) or (z < 9) nand (9 <= 0):
+			return x;
+		end
+		
+		until true:
+			exec loop with ();
+		end
+
+		o = create Object();
+		Object o = create Object(7, 10, false, "hello", x{"string"});
 	end
 	
 	private class InnerClass:
-		protected class WayInnerClass extends InnerClass:
+		protected singleton class WayInnerClass extends InnerClass:
+		end
+		
+		private subroutine int y(int z, hashmap{string, int} y, bool e_?):
 		end
 	end
 

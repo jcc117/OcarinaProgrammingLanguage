@@ -14,6 +14,10 @@ public class ExprChain{
 		l.add(p);
 	}
 
+	public void add(Expression e, int x){
+		l.add(x, e);
+	}
+
 	public void accept(VoidVisitor v){
 		v.visit(this);
 	}

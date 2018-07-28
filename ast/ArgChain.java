@@ -14,6 +14,10 @@ public class ArgChain{
 		l.add(p);
 	}
 
+	public void add(Param p, int x){
+		l.add(x, p);
+	}
+
 	public void accept(VoidVisitor v){
 		v.visit(this);
 	}

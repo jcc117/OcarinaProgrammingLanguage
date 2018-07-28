@@ -224,7 +224,7 @@ arglist ::= LPAREN parameter:p argchain:c RPAREN
 		;
 
 argchain ::= COMMA parameter:p argchain:c
-		{: c.add(p); RESULT = c; :}
+		{: c.add(p, 0); RESULT = c; :}
 		|
 		{: RESULT = new ArgChain(); :}
 		;
@@ -439,10 +439,10 @@ expression ::= expression:e1 AND expression:e2
 		expression:e1 LTHAN expression:e2
 		{: RESULT = new LessThan(e1, e2); :}
 		|
-		expression:e1 LBRACKET expression:e2 RBRACKET
+		expression:e1 LBRACE expression:e2 RBRACE
 		{: RESULT = new HashmapExpr(e1, e2); :}
 		|
-		expression:e1 LBRACE expression:e2 RBRACE
+		expression:e1 LBRACKET expression:e2 RBRACKET
 		{: RESULT = new ArrayExpr(e1, e2); :}
 		|
 		identifier:i idchain:i2
@@ -523,7 +523,7 @@ paramlist ::= LPAREN expression:e expressionchain:c RPAREN
 		;
 
 expressionchain ::= COMMA expression:e expressionchain:c
-		{: c.add(e); RESULT = c; :}
+		{: c.add(e, 0); RESULT = c; :}
 		|
 		{: RESULT = new ExprChain(); :} 
 		;
