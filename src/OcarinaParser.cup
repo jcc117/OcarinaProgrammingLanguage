@@ -1,0 +1,576 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.math.*;
+import ast.*;
+
+/* Setup */
+scan with {: return getScanner().next_token(); :};
+parser code {: @Override
+				public void syntax_error(Symbol token){
+					System.err.format("Parser error at line %d, column %d\n", token.left, token.right);
+				}
+			:}
+
+/* Terminals - Keywords*/
+
+terminal START, END, SAGE, USING, PUBLIC, PRIVATE, PROTECTED;
+terminal CLASS, EXTENDS, CONSTRUCTOR, SUPER, SINGLETON;
+terminal SUBROUTINE;
+/* terminal MOCK; */
+/* terminal STUB; */
+terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, VAR, CONST;
+terminal IF, ELSE, BEGIN, RATHER, UNLESS;
+terminal WHILE, FOR, DO, UNTIL;
+terminal RETURN;
+terminal AND, OR, NAND, NOR, EQUALS, DIFFERS;
+terminal TRUE, FALSE;
+terminal THIS, NIL;
+terminal ASSERT, CREATE, EXIT;
+terminal GETINT, GETFLOAT, GETBOOLEAN, GETSTRING;
+terminal LENGTH, PRINT;
+terminal DEBUG, BREAK, CONTINUE;
+terminal EXEC, WITH;
+terminal TYPEOF;
+terminal TRY, CATCH, FINALLY;
+terminal THROW, EXCEPTION;
+
+/* Terminals - Non Keywords */
+terminal AT, COMMA, POINTER;
+terminal PLUS, MINUS, MULT, DIV, POWER, MOD, INCREMENT, DECREMENT;
+terminal GTHANE, LTHANE, LTHAN, GTHAN, EQUAL, BANG;
+terminal LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal LPAREN, RPAREN;
+terminal DOT, SEMICOLON, COLON;
+terminal String STRINGLITERAL, IDENTIFIER;
+terminal BigInteger INTLITERAL;
+terminal BigDecimal FLOATLITERAL;
+
+/* Non Terminals */
+non terminal Sage sage;
+non terminal UsingList usinglist;
+non terminal Program program;
+non terminal StatementList statementlist;
+non terminal DefList deflist;
+non terminal ClassDef classdef;
+non terminal MethodDef methoddef;
+non terminal ExceptionDef exceptiondef;
+/* non terminal MOCKDEF; */
+/* non terminal STUBDEF; */
+non terminal VarDeclList vardeclist;
+non terminal VarDecl vardec, classvardec;
+non terminal ArgList arglist;
+non terminal Type type;
+non terminal Statement statement;
+non terminal Expression expression;
+non terminal ParamList paramlist;
+non terminal Identifier identifier;
+non terminal Param parameter;
+non terminal RatherList ratherlist;
+non terminal StatementList else;
+non terminal Statement simple_statement;
+non terminal Constructor constructor;
+non terminal ConstructorList constructorlist;
+non terminal MethodCall methodcall;
+non terminal IdChain idchain;
+non terminal Typeof typeof;
+non terminal ExprChain expressionchain;
+non terminal ArgChain argchain;
+non terminal TryCatch trycatch;
+non terminal CatchList catchlist;
+
+/* Precedence */
+precedence left BANG;
+precedence left LPAREN, RPAREN, DOT, AT, LBRACKET, RBRACKET, LBRACE, RBRACE;
+precedence left DIV, MULT, POWER, MOD;
+precedence left MINUS, PLUS;
+precedence left AND, OR, NAND, NOR;
+precedence left GTHANE, LTHANE, GTHAN, LTHAN;
+precedence left EQUALS, DIFFERS;
+
+/* Productions */
+/* Note on protection levels
+	0 = private
+	1 = stays within the defined block(only applies to variables) 
+	2 = protected(stays within the sage)
+	3 = public
+*/
+sage ::= SAGE identifier:i SEMICOLON usinglist:u program:p
+		{: RESULT = new Sage(i, p, u); :}
+		|
+		SAGE identifier:i SEMICOLON usinglist:u deflist:d
+		{: RESULT = new Sage(i, d, u); :}
+		;
+usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
+		{: u.add(new Using(i, c)); RESULT = u; :}
+		|
+		{: RESULT = new UsingList(); :}
+		;
+program ::=	START statementlist:s END deflist:d
+		{: RESULT = new Program(s, d, false); :}
+		|
+		DEBUG START statementlist:s END deflist:d
+		{: RESULT = new Program(s, d, true); :}
+		;
+
+statementlist ::= statement:s statementlist:l
+		{: l.add(s); RESULT = l;:}
+		|
+		{: RESULT = new StatementList(); :}
+		;
+
+deflist ::= deflist:d classdef:c
+		{: d.add(c); RESULT = d; :}
+		|
+		deflist:d methoddef:m
+		{: d.add(m); RESULT = d; :}
+		|
+		deflist:d exceptiondef:e
+		{: d.add(e); RESULT = d; :}
+		|
+		{: RESULT = new DefList(); :}
+		;
+
+exceptiondef ::= EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 1); :}
+		|
+		PUBLIC EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 3); :}
+		|
+		PRIVATE EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 0); :}
+		|
+		PROTECTED EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 2); :}
+		; 
+
+classdef ::= PUBLIC CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 3, c, false); :}
+		|
+		PUBLIC CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, false); :}
+		|
+		PRIVATE CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, false); :}
+		|
+		PRIVATE CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 0, c, false); :}
+		|
+		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, false); :}
+		|
+		CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 1, c, false); :}
+		|
+		PROTECTED CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, false); :}
+		|
+		PROTECTED CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 2, c, false); :}
+		|
+		PUBLIC SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 3, c, true); :}
+		|
+		PUBLIC SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, true); :}
+		|
+		PRIVATE SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, true); :}
+		|
+		PRIVATE SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 0, c, true); :}
+		|
+		SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, true); :}
+		|
+		SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 1, c, true); :}
+		|
+		PROTECTED SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, true); :}
+		|
+		PROTECTED SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, v, 2, c, true); :}
+		;
+
+constructorlist ::= constructorlist:l constructor:c
+		{: l.add(c); RESULT = l; :}
+		|
+		{: RESULT = new ConstructorList(); :}
+		;
+constructor ::= CONSTRUCTOR arglist:a COLON statementlist:s END
+		{: RESULT = new Constructor(a, s); :}
+		;
+
+methoddef ::= PUBLIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 3); :}
+		|
+		PRIVATE SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 0); :}
+		|
+		SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 1); :}
+		|
+		PROTECTED SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 2); :}
+		;
+
+vardeclist ::= vardeclist:l classvardec:v 
+		{: l.add(v); RESULT = l;:}
+		|
+		{: RESULT = new VarDeclList(); :}
+		;
+
+classvardec ::= type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 1); :}
+		|
+		type:t PRIVATE identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 0); :}
+		|
+		type:t PROTECTED identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 2); :}
+		|
+		type:t PUBLIC identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 3); :}
+		;
+
+vardec ::= type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 1); :}
+		;
+
+arglist ::= LPAREN parameter:p argchain:c RPAREN
+		{: RESULT = new ArgList(p, c); :}
+		|
+		LPAREN RPAREN
+		{: RESULT = new ArgList(); :}
+		;
+
+argchain ::= COMMA parameter:p argchain:c
+		{: c.add(p, 0); RESULT = c; :}
+		|
+		{: RESULT = new ArgChain(); :}
+		;
+
+parameter ::= type:t identifier:i
+		{: RESULT = new Param(t, i); :}
+		;
+
+type ::= type:t LBRACKET RBRACKET
+		{: RESULT = new ArrayType(t, false); :}
+		|
+		INT
+		{: RESULT = new IntType(false); :}
+		|
+		FLOAT
+		{: RESULT = new FloatType(false); :}
+		|
+		BOOLEAN
+		{: RESULT = new BooleanType(false); :}
+		|
+		STRING
+		{: RESULT = new StringType(false); :}
+		|
+		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
+		{: RESULT = new HashmapType(t1, t2, false); :}
+		|
+		identifier:i idchain:c
+		{: RESULT = new IdentifierType(i, c, false); :}
+		|
+		VOID
+		{: RESULT = new VoidType(); :}
+		|
+		VAR
+		{: RESULT = new VarType(false); :}
+		|
+		CONST VAR
+		{: RESULT = new VarType(true); :}
+		|
+		CONST INT
+		{: RESULT = new IntType(true); :}
+		|
+		CONST FLOAT
+		{: RESULT = new FloatType(true); :}
+		|
+		CONST BOOLEAN
+		{: RESULT = new BooleanType(true); :}
+		|
+		CONST STRING
+		{: RESULT = new StringType(true); :}
+		|
+		CONST identifier:i idchain:c
+		{: RESULT = new IdentifierType(i, c, true); :}
+		|
+		CONST SUBROUTINE LBRACE type:t RBRACE
+		{: RESULT = new MethodType(t, true); :}
+		;
+
+typeof ::= identifier:i idchain:c TYPEOF type:t
+		{: RESULT = new Typeof(i, c, t); :}
+		;
+
+methodcall ::= EXEC identifier:i1 idchain:i2 WITH paramlist:l
+		{: RESULT = new MethodCall(i1, i2, l); :}
+		|
+		EXEC THIS idchain:i2 WITH paramlist:l
+		{: RESULT = new MethodCall(new This(), i2, l); :}
+		;
+
+idchain ::= DOT identifier:i idchain:c
+		{: c.add(i, 0); RESULT = c; :}
+		|
+		{: RESULT = new IdChain(); :}
+		;
+
+statement ::= simple_statement:s
+		{: RESULT = s; :}
+		|
+		AT simple_statement:s
+		{: s.breakPoint = true; RESULT = s;:}
+		;
+
+simple_statement ::= BEGIN statementlist:l END
+		{: RESULT = new Block(l); :}
+		|
+		IF expression:e COLON statementlist:s1 ratherlist:l else:s2 END
+		{: RESULT = new If(e, s1, l, s2); :}
+		|
+		IF expression:e COLON statementlist:s ratherlist:l END
+		{: RESULT = new If(e, s, l, null); :}
+		|
+		UNLESS expression:e COLON statementlist:s END
+		{: RESULT = new Unless(e, s); :}
+		|
+		WHILE expression:e COLON statementlist:l END
+		{: RESULT = new While(e, l); :}
+		|
+		UNTIL expression:e COLON statementlist:l END
+		{: RESULT = new Until(e, l); :}
+		|
+		FOR LPAREN statement:s1 expression:e SEMICOLON statement:s2 RPAREN COLON statementlist:s3 END
+		{: RESULT = new For(e, s1, s2, s3); :}
+		|
+		DO statementlist:s END WHILE expression:e SEMICOLON
+		{: RESULT = new DoWhile(e, s); :}
+		|
+		PRINT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Print(e); :}
+		|
+		type:t identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new VarDecAssignment(e, i, t, 1); :}
+		|
+		identifier:i EQUAL expression:e SEMICOLON
+		{: RESULT = new Assignment(e, i); :}
+		|
+		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2 SEMICOLON
+		{: RESULT = new HashmapAssignment(i, e1, e2); :}
+		|
+		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2 SEMICOLON
+		{: RESULT = new ArrayAssignment(i, e1, e2); :}
+		|
+		RETURN expression:e SEMICOLON
+		{: RESULT = new Return(e); :}
+		|
+		ASSERT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Assert(e); :}
+		|
+		EXIT LPAREN expression:e RPAREN SEMICOLON
+		{: RESULT = new Exit(e); :}
+		|
+		CONTINUE SEMICOLON
+		{: RESULT = new Continue(); :}
+		|
+		BREAK SEMICOLON
+		{: RESULT = new Break(); :}
+		|
+		identifier:i idchain:c INCREMENT SEMICOLON
+		{: RESULT = new Increment(i, c); :}
+		|
+		THIS idchain:c INCREMENT SEMICOLON
+		{: RESULT = new Increment(new This(), c); :}
+		|
+		identifier:i idchain:c DECREMENT SEMICOLON
+		{: RESULT = new Decrement(i, c); :}
+		|
+		THIS idchain:c DECREMENT SEMICOLON
+		{: RESULT = new Decrement(new This(), c); :}
+		|
+		vardec:v
+		{: RESULT = v; :}
+		|
+		methodcall:m SEMICOLON
+		{: RESULT = new MethodCallStatement(m); :}
+		|
+		SUPER LPAREN RPAREN SEMICOLON
+		{: RESULT = new Super();:}
+		|
+		THROW identifier:i idchain:c SEMICOLON
+		{: RESULT = new Throw(i, c);:}
+		|
+		THROW THIS idchain:c SEMICOLON
+		{: RESULT = new Throw(new This(), c); :}
+		|
+		trycatch:t
+		{: RESULT = t; :}
+		;
+
+trycatch ::= TRY COLON statementlist:s1 catchlist:c END
+		{: RESULT = new TryCatch(s1, c); :}
+		|
+		TRY COLON statementlist:s1 catchlist:c FINALLY COLON statementlist:s2 END
+		{: RESULT = new TryCatch(s1, c, s2); :}
+		;
+
+catchlist ::= CATCH identifier:i idchain:c identifier:i2 COLON statementlist:s catchlist:l
+		{: l.add(new Catch(i, c, i2, s), 0); RESULT = l; :}
+		|
+		{: RESULT = new CatchList(); :}
+		;
+
+ratherlist ::= ratherlist:l RATHER expression:e COLON statementlist:s
+		{:l.add(new Rather(e, s)); RESULT = l;:}
+		|
+		{:RESULT = new RatherList(); :}
+		;
+else ::= ELSE COLON statementlist:s
+		{: RESULT = s; :}
+		;
+
+expression ::= expression:e1 AND expression:e2
+		{: RESULT = new And(e1, e2); :}
+		|
+		expression:e1 OR expression:e2
+		{: RESULT = new Or(e1, e2); :}
+		|
+		expression:e1 NAND expression:e2
+		{: RESULT = new Nand(e1, e2); :}
+		|
+		expression:e1 NOR expression:e2
+		{: RESULT = new Nor(e1, e2); :}
+		|
+		expression:e1 EQUALS expression:e2
+		{: RESULT = new Equals(e1, e2); :}
+		|
+		expression:e1 DIFFERS expression:e2
+		{: RESULT = new Differs(e1, e2); :}
+		|
+		expression:e1 PLUS expression:e2
+		{: RESULT = new Plus(e1, e2); :}
+		|
+		expression:e1 MINUS expression:e2
+		{: RESULT = new Minus(e1, e2); :}
+		|
+		expression:e1 MULT expression:e2
+		{: RESULT = new Multiply(e1, e2); :}
+		|
+		expression:e1 POWER expression:e2
+		{: RESULT = new Power(e1, e2); :}
+		|
+		expression:e1 DIV expression:e2
+		{: RESULT = new Divide(e1, e2); :}
+		|
+		expression:e1 MOD expression:e2
+		{: RESULT = new Modulo(e1, e2); :}
+		|
+		expression:e1 GTHANE expression:e2
+		{: RESULT = new GreaterThanEqualTo(e1, e2); :}
+		|
+		expression:e1 LTHANE expression:e2
+		{: RESULT = new LessThanEqualTo(e1, e2); :}
+		|
+		expression:e1 GTHAN expression:e2
+		{: RESULT = new GreaterThan(e1, e2); :}
+		|
+		expression:e1 LTHAN expression:e2
+		{: RESULT = new LessThan(e1, e2); :}
+		|
+		expression:e1 LBRACE expression:e2 RBRACE
+		{: RESULT = new HashmapExpr(e1, e2); :}
+		|
+		expression:e1 LBRACKET expression:e2 RBRACKET
+		{: RESULT = new ArrayExpr(e1, e2); :}
+		|
+		identifier:i idchain:i2
+		{: RESULT = new ObjectVarAccess(i, i2); :}
+		|
+		methodcall:m
+		{: RESULT = m; :}
+		|
+		expression:e DOT LENGTH
+		{: RESULT = new ArrayLength(e); :}
+		|
+		INTLITERAL:i
+		{: RESULT = new IntLiteral(i); :}
+		|
+		FLOATLITERAL:f
+		{: RESULT = new FloatLiteral(f); :}
+		|
+		TRUE
+		{: RESULT = new True(); :}
+		|
+		FALSE
+		{: RESULT = new False(); :}
+		|
+		NIL
+		{: RESULT = new Nil(); :}
+		|
+		LPAREN expression:e RPAREN
+		{: RESULT = new ParentExpr(e); :}
+		|
+		BANG expression:e
+		{: RESULT = new Not(e); :}
+		|
+		CREATE identifier:i paramlist:l
+		{: RESULT = new ObjectCreate(i, l); :}
+		|
+		CREATE type:t LBRACKET RBRACKET paramlist:l
+		{: RESULT = new ArrayLiteral(t, l); :}
+		|
+		THIS
+		{: RESULT = new This(); :}
+		|
+		GETINT
+		{: RESULT = new GetInt(); :}
+		|
+		GETFLOAT
+		{: RESULT = new GetFloat(); :}
+		|
+		GETBOOLEAN
+		{: RESULT = new GetBoolean(); :}
+		|
+		GETSTRING
+		{: RESULT = new GetString(); :}
+		|
+		CREATE type:t LBRACKET expression:e RBRACKET
+		{: RESULT = new ArrayCreate(t, e); :}
+		|
+		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
+		{: RESULT = new HashmapCreate(t1, t2); :}
+		|
+		STRINGLITERAL:s
+		{: RESULT = new StringLiteral(s); :}
+		|
+		MINUS expression:e
+		{: RESULT = new UnaryMinus(e); :}
+		|
+		typeof:t
+		{: RESULT = t; :}
+		|
+		paramlist:p POINTER LBRACE statementlist:l RBRACE
+		{: RESULT = new MethodLiteral(p, l); :}
+		;
+
+paramlist ::= LPAREN expression:e expressionchain:c RPAREN
+		{: RESULT = new ParamList(e, c); :}
+		|
+		LPAREN RPAREN
+		{: RESULT = new ParamList(); :}
+		;
+
+expressionchain ::= COMMA expression:e expressionchain:c
+		{: c.add(e, 0); RESULT = c; :}
+		|
+		{: RESULT = new ExprChain(); :} 
+		;
+
+identifier ::= IDENTIFIER:i
+		{: RESULT = new Identifier(i); :}
+		;
