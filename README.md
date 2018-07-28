@@ -1,4 +1,4 @@
-# Ocarina - An Esoteric Programming Language
+# Ocarina - A General Purpose Programming Language
 
 # What is Ocarina?
 Ocarina is a programming language heavily influenced by Python, Java, C#, and Ruby. It includes single class inheritance and the ability to create nested
