@@ -1,5 +1,5 @@
 package symboltable;
 
-public class Sym{
+public abstract class Sym{
 	
 }
