@@ -8,12 +8,14 @@ public class ClassSym extends Sym{
 	public int line;
 	public HashMap<String, Sym> children;
 	public boolean singleton;
+	public Sym parent;
 
-	public ClassSym(int line, String name, int protection, boolean singleton){
+	public ClassSym(int line, String name, int protection, boolean singleton, Sym parent){
 		this.line = line;
 		this.name = name;
 		this.protection = protection;
 		this.singleton = singleton;
+		this.parent = parent;
 		children = new HashMap<String, Sym>();
 	}
 
