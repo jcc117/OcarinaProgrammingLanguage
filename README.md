@@ -56,10 +56,12 @@ To be determined.
 	*Exception handling*
 
 # Progress report
-	Parser and Lexer Development
-	Finalization of Grammar
-	Development of pretty printer for parser testing
-	Adding error checking to parser
+	Symboltable generation and design
+	Syntactical rule development(what's considered an error other than grammar violations)
+	Instruction manual writing
+
+# Known Issues
+	For loop grammar
 
 # Items Under Consideration For Later Release
 	*operator overloading*
