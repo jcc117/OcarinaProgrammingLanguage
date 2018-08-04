@@ -4,9 +4,11 @@ import ast.*;
 
 public class SymbolTableBuilder implements Visitor{
 	private SymbolTable symboltable;
+	public boolean hadErrors;
 
 	public SymbolTableBuilder(){
 		symboltable = null;
+		hadErrors = false;
 	}
 
 	//Set force to true to force a new rebuild if the table is already built 
@@ -14,6 +16,7 @@ public class SymbolTableBuilder implements Visitor{
 		if(symboltable == null || force){
 			symboltable = new SymbolTable((SageSym)s.accept(this));
 		}
+		return symboltable;
 	}
 
 	public Sym visit(Sage s){
