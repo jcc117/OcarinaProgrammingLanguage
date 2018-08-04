@@ -3,16 +3,21 @@ package symboltable;
 import ast.*;
 
 public class SymbolTableBuilder implements Visitor{
-	public SymbolTableBuilder(){
+	private SymbolTable symboltable;
 
+	public SymbolTableBuilder(){
+		symboltable = null;
 	}
 
-	public SymbolTable build(Sage s){
-		return root;
+	//Set force to true to force a new rebuild if the table is already built 
+	public SymbolTable build(Sage s, boolean force){
+		if(symboltable == null || force){
+			symboltable = new SymbolTable((SageSym)s.accept(this));
+		}
 	}
 
 	public Sym visit(Sage s){
-
+		
 	}
 
 	public Sym visit(Using u){

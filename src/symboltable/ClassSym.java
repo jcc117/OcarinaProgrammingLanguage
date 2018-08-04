@@ -9,6 +9,7 @@ public class ClassSym extends Sym{
 	public HashMap<String, Sym> children;
 	public boolean singleton;
 	public Sym parent;
+	public Sym extension;
 
 	public ClassSym(int line, String name, int protection, boolean singleton, Sym parent){
 		this.line = line;
@@ -17,6 +18,17 @@ public class ClassSym extends Sym{
 		this.singleton = singleton;
 		this.parent = parent;
 		children = new HashMap<String, Sym>();
+		this.extension = null;
+	}
+
+	public ClassSym(int line, String name, int protection, boolean singleton, Sym parent, Sym extension){
+		this.line = line;
+		this.name = name;
+		this.protection = protection;
+		this.singleton = singleton;
+		this.parent = parent;
+		children = new HashMap<String, Sym>();
+		this.extension = extension;
 	}
 
 	public void put(String s, Sym symbol){

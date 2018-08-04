@@ -7,12 +7,14 @@ public class SageSym extends Sym{
 	public String name;
 	public HashMap<String, Sym> defTable;	//Associated classes, functions, and exceptions
 	public HashMap<String, SageSym> usingTable;	//Associated sages
+	public Sym parent;
 
-	public SageSym(int line, String name){
+	public SageSym(int line, String name, SageSym parent){
 		this.line = line;
 		this.name = name;
 		defTable = new HashMap<String, Sym>();
 		usingTable = new HashMap<String, SageSym>();
+		this.parent = parent;
 	}
 
 	public void put(String name, Sym sym){
