@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class Using{
+public class Using extends Node{
 	public Identifier i;
 	public IdChain chain;
 

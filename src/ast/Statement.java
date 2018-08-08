@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public abstract class Statement{
+public abstract class Statement extends Node{
 	public boolean breakPoint;
 
 	public void accept(VoidVisitor v){

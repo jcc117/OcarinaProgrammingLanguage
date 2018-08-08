@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class MethodDef implements Def{
+public class MethodDef extends Node implements Def{
 	public Type r;
 	public Identifier i;
 	public ArgList a;

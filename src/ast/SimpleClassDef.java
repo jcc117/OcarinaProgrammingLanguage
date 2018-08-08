@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class SimpleClassDef implements ClassDef{
+public class SimpleClassDef extends Node implements ClassDef{
 	public Identifier i;
 	public DefList d;
 	public VarDeclList v;

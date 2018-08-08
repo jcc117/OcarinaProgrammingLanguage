@@ -105,10 +105,10 @@ usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
 		|
 		{: RESULT = new UsingList(); :}
 		;
-program ::=	START statementlist:s END deflist:d
+program ::=	START:s1 statementlist:s END deflist:d
 		{: RESULT = new Program(s, d, false); :}
 		|
-		DEBUG START statementlist:s END deflist:d
+		DEBUG START:s1 statementlist:s END deflist:d
 		{: RESULT = new Program(s, d, true); :}
 		;
 
@@ -143,52 +143,52 @@ exceptiondef ::= EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
 		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 2); :}
 		; 
 
-classdef ::= PUBLIC CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+classdef ::= PUBLIC:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 3, c, false); :}
 		|
-		PUBLIC CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PUBLIC:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, false); :}
 		|
-		PRIVATE CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PRIVATE:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, false); :}
 		|
-		PRIVATE CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		PRIVATE:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 0, c, false); :}
 		|
-		CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		CLASS:c1 identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, false); :}
 		|
-		CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		CLASS:c1 identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 1, c, false); :}
 		|
-		PROTECTED CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PROTECTED:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, false); :}
 		|
-		PROTECTED CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		PROTECTED:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 2, c, false); :}
 		|
-		PUBLIC SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		PUBLIC:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 3, c, true); :}
 		|
-		PUBLIC SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PUBLIC:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, true); :}
 		|
-		PRIVATE SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PRIVATE:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, true); :}
 		|
-		PRIVATE SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		PRIVATE:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 0, c, true); :}
 		|
-		SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		SINGLETON:s CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, true); :}
 		|
-		SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		SINGLETON:s CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 1, c, true); :}
 		|
-		PROTECTED SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
+		PROTECTED:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, true); :}
 		|
-		PROTECTED SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
+		PROTECTED:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, v, 2, c, true); :}
 		;
 
@@ -197,20 +197,20 @@ constructorlist ::= constructorlist:l constructor:c
 		|
 		{: RESULT = new ConstructorList(); :}
 		;
-constructor ::= CONSTRUCTOR arglist:a COLON statementlist:s END
+constructor ::= CONSTRUCTOR:c arglist:a COLON statementlist:s END
 		{: RESULT = new Constructor(a, s); :}
 		;
 
-methoddef ::= PUBLIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+methoddef ::= PUBLIC:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 3); :}
 		|
-		PRIVATE SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		PRIVATE:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 0); :}
 		|
-		SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		SUBROUTINE:s type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 1); :}
 		|
-		PROTECTED SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		PROTECTED:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
 		{: RESULT = new MethodDef(r, i, a, l, 2); :}
 		;
 
@@ -257,49 +257,49 @@ parameter ::= type:t identifier:i
 type ::= type:t LBRACKET RBRACKET
 		{: RESULT = new ArrayType(t, false); :}
 		|
-		INT
+		INT:i
 		{: RESULT = new IntType(false); :}
 		|
-		FLOAT
+		FLOAT:f
 		{: RESULT = new FloatType(false); :}
 		|
-		BOOLEAN
+		BOOLEAN:b
 		{: RESULT = new BooleanType(false); :}
 		|
-		STRING
+		STRING:s
 		{: RESULT = new StringType(false); :}
 		|
-		HASHMAP LBRACE type:t1 COMMA type:t2 RBRACE
+		HASHMAP:h LBRACE type:t1 COMMA type:t2 RBRACE
 		{: RESULT = new HashmapType(t1, t2, false); :}
 		|
 		identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, false); :}
 		|
-		VOID
+		VOID:v
 		{: RESULT = new VoidType(); :}
 		|
-		VAR
+		VAR:v
 		{: RESULT = new VarType(false); :}
 		|
-		CONST VAR
+		CONST:c VAR
 		{: RESULT = new VarType(true); :}
 		|
-		CONST INT
+		CONST:c INT
 		{: RESULT = new IntType(true); :}
 		|
-		CONST FLOAT
+		CONST:c FLOAT
 		{: RESULT = new FloatType(true); :}
 		|
-		CONST BOOLEAN
+		CONST:c BOOLEAN
 		{: RESULT = new BooleanType(true); :}
 		|
-		CONST STRING
+		CONST:c STRING
 		{: RESULT = new StringType(true); :}
 		|
-		CONST identifier:i idchain:c
+		CONST:c1 identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, true); :}
 		|
-		CONST SUBROUTINE LBRACE type:t RBRACE
+		CONST:c SUBROUTINE LBRACE type:t RBRACE
 		{: RESULT = new MethodType(t, true); :}
 		;
 
@@ -310,7 +310,7 @@ typeof ::= identifier:i idchain:c TYPEOF type:t
 methodcall ::= EXEC identifier:i1 idchain:i2 WITH paramlist:l
 		{: RESULT = new MethodCall(i1, i2, l); :}
 		|
-		EXEC THIS idchain:i2 WITH paramlist:l
+		EXEC THIS:t idchain:i2 WITH paramlist:l
 		{: RESULT = new MethodCall(new This(), i2, l); :}
 		;
 
@@ -375,22 +375,22 @@ simple_statement ::= BEGIN statementlist:l END
 		EXIT LPAREN expression:e RPAREN SEMICOLON
 		{: RESULT = new Exit(e); :}
 		|
-		CONTINUE SEMICOLON
+		CONTINUE:c SEMICOLON
 		{: RESULT = new Continue(); :}
 		|
-		BREAK SEMICOLON
+		BREAK:b SEMICOLON
 		{: RESULT = new Break(); :}
 		|
 		identifier:i idchain:c INCREMENT SEMICOLON
 		{: RESULT = new Increment(i, c); :}
 		|
-		THIS idchain:c INCREMENT SEMICOLON
+		THIS:t idchain:c INCREMENT SEMICOLON
 		{: RESULT = new Increment(new This(), c); :}
 		|
 		identifier:i idchain:c DECREMENT SEMICOLON
 		{: RESULT = new Decrement(i, c); :}
 		|
-		THIS idchain:c DECREMENT SEMICOLON
+		THIS:t idchain:c DECREMENT SEMICOLON
 		{: RESULT = new Decrement(new This(), c); :}
 		|
 		vardec:v
@@ -399,13 +399,13 @@ simple_statement ::= BEGIN statementlist:l END
 		methodcall:m SEMICOLON
 		{: RESULT = new MethodCallStatement(m); :}
 		|
-		SUPER LPAREN RPAREN SEMICOLON
+		SUPER:s LPAREN RPAREN SEMICOLON
 		{: RESULT = new Super();:}
 		|
 		THROW identifier:i idchain:c SEMICOLON
 		{: RESULT = new Throw(i, c);:}
 		|
-		THROW THIS idchain:c SEMICOLON
+		THROW THIS:t idchain:c SEMICOLON
 		{: RESULT = new Throw(new This(), c); :}
 		|
 		trycatch:t
@@ -503,13 +503,13 @@ expression ::= expression:e1 AND expression:e2
 		FLOATLITERAL:f
 		{: RESULT = new FloatLiteral(f); :}
 		|
-		TRUE
+		TRUE:t
 		{: RESULT = new True(); :}
 		|
-		FALSE
+		FALSE:f
 		{: RESULT = new False(); :}
 		|
-		NIL
+		NIL:n
 		{: RESULT = new Nil(); :}
 		|
 		LPAREN expression:e RPAREN
@@ -524,19 +524,19 @@ expression ::= expression:e1 AND expression:e2
 		CREATE type:t LBRACKET RBRACKET paramlist:l
 		{: RESULT = new ArrayLiteral(t, l); :}
 		|
-		THIS
+		THIS:t
 		{: RESULT = new This(); :}
 		|
-		GETINT
+		GETINT:g
 		{: RESULT = new GetInt(); :}
 		|
-		GETFLOAT
+		GETFLOAT:g
 		{: RESULT = new GetFloat(); :}
 		|
-		GETBOOLEAN
+		GETBOOLEAN:g
 		{: RESULT = new GetBoolean(); :}
 		|
-		GETSTRING
+		GETSTRING:g
 		{: RESULT = new GetString(); :}
 		|
 		CREATE type:t LBRACKET expression:e RBRACKET

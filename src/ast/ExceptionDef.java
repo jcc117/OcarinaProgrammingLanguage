@@ -2,7 +2,7 @@ package ast;
 
 import symboltable.*;
 
-public class ExceptionDef implements Def{
+public class ExceptionDef extends Node implements Def{
 	public Identifier i;
 	public int protection;
 	public StringLiteral s;

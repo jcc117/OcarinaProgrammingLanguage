@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class Sage{
+public class Sage extends Node{
 	public Identifier i;
 	public DefList d;
 	public Program p;
