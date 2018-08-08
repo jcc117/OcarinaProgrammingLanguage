@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class Param {
+public class Param extends Node{
 	public Type t;
 	public Identifier i;
 

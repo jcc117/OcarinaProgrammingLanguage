@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class Rather {
+public class Rather extends Node{
 	public Expression e;
 	public StatementList s;
 
