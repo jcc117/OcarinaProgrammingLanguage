@@ -56,7 +56,6 @@ To be determined.
 	*Exception handling*
 
 # Progress report
-	Add lines and column numbers to all nodes - modifying the ast class constructors to accomodate this
 	Symboltable generation and design
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Instruction manual writing

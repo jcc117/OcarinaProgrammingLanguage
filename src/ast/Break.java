@@ -3,8 +3,10 @@ import symboltable.*;
 
 public class Break extends Statement{
 
-	public Break(){
+	public Break(int line, int column){
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

@@ -2,8 +2,9 @@ package ast;
 import symboltable.*;
 
 public class GetBoolean extends Expression{
-	public GetBoolean(){
-		
+	public GetBoolean(int line, int column){
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

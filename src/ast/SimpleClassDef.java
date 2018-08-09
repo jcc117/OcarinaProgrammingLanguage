@@ -9,13 +9,15 @@ public class SimpleClassDef extends Node implements ClassDef{
 	public ConstructorList c;
 	public boolean singleton;
 
-	public SimpleClassDef(Identifier i, DefList d, VarDeclList v, int protection, ConstructorList c, boolean singleton){
+	public SimpleClassDef(Identifier i, DefList d, VarDeclList v, int protection, ConstructorList c, boolean singleton, int line, int column){
 		this.i = i;
 		this.d = d;
 		this.v = v;
 		this.protection = protection;
 		this.c = c;
 		this.singleton = singleton;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

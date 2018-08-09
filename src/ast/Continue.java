@@ -3,8 +3,10 @@ import symboltable.*;
 
 public class Continue extends Statement{
 
-	public Continue(){
+	public Continue(int line, int column){
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

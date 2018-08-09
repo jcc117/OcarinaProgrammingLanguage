@@ -7,18 +7,22 @@ public class Sage extends Node{
 	public Program p;
 	public UsingList u;
 
-	public Sage(Identifier i, DefList d, UsingList u){
+	public Sage(Identifier i, DefList d, UsingList u, int line, int column){
 		this.i = i;
 		this.d = d;
 		this.p = null;
 		this.u = u;
+		this.line = line;
+		this.column = column;
 	}
 
-	public Sage(Identifier i, Program p, UsingList u){
+	public Sage(Identifier i, Program p, UsingList u, int line, int column){
 		this.i = i;
 		this.p = p;
 		this.d = null;
 		this.u = u;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

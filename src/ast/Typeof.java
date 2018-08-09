@@ -7,10 +7,12 @@ public class Typeof extends Expression{
 	public IdChain chain;
 	public Type t;
 
-	public Typeof(Identifier i, IdChain chain, Type t){
+	public Typeof(Identifier i, IdChain chain, Type t, int line, int column){
 		this.i = i;
 		this.chain = chain;
 		this.t = t;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

@@ -4,9 +4,11 @@ import symboltable.*;
 public class Print extends Statement{
 	public Expression e;
 
-	public Print(Expression e){
+	public Print(Expression e, int line, int column){
 		this.e = e;
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

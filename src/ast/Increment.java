@@ -6,18 +6,23 @@ public class Increment extends Statement{
 	public IdChain chain;
 	public This t;
 
-	public Increment(Identifier i, IdChain chain){
+	public Increment(Identifier i, IdChain chain, int line, int column){
 		this.i = i;
 		this.chain = chain;
 		this.t = null;
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
+
 	}
 
-	public Increment(This t, IdChain chain){
+	public Increment(This t, IdChain chain, int line, int column){
 		this.t = t;
 		this.chain = chain;
 		this.i  = null;
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

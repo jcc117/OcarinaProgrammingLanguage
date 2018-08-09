@@ -131,16 +131,16 @@ deflist ::= deflist:d classdef:c
 		;
 
 exceptiondef ::= EXCEPTION:e identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 1, eleft, eright); :}
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s, eleft, eright), 1, eleft, eright); :}
 		|
 		PUBLIC:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 3, pleft, pright); :}
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 3, pleft, pright); :}
 		|
 		PRIVATE:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 0, pleft, pright); :}
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 0, pleft, pright); :}
 		|
 		PROTECTED:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s), 2, pleft, pright); :}
+		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 2, pleft, pright); :}
 		; 
 
 classdef ::= PUBLIC:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
@@ -311,7 +311,7 @@ methodcall ::= EXEC identifier:i1 idchain:i2 WITH paramlist:l
 		{: RESULT = new MethodCall(i1, i2, l, i1.line, i1.column); :}
 		|
 		EXEC THIS:t idchain:i2 WITH paramlist:l
-		{: RESULT = new MethodCall(new This(), i2, l, tleft, tright); :}
+		{: RESULT = new MethodCall(new This(tleft, tright), i2, l, tleft, tright); :}
 		;
 
 idchain ::= DOT identifier:i idchain:c
@@ -385,13 +385,13 @@ simple_statement ::= BEGIN:b statementlist:l END
 		{: RESULT = new Increment(i, c, i.line, i.column); :}
 		|
 		THIS:t idchain:c INCREMENT SEMICOLON
-		{: RESULT = new Increment(new This(), c, tleft, tright); :}
+		{: RESULT = new Increment(new This(tleft, tright), c, tleft, tright); :}
 		|
 		identifier:i idchain:c DECREMENT SEMICOLON
 		{: RESULT = new Decrement(i, c, i.line, i.column); :}
 		|
 		THIS:t idchain:c DECREMENT SEMICOLON
-		{: RESULT = new Decrement(new This(), c, tleft, tright); :}
+		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
 		|
 		vardec:v
 		{: RESULT = v; :}
@@ -406,7 +406,7 @@ simple_statement ::= BEGIN:b statementlist:l END
 		{: RESULT = new Throw(i, c, i.line, i.column);:}
 		|
 		THROW THIS:t idchain:c SEMICOLON
-		{: RESULT = new Throw(new This(), c, tleft, tright); :}
+		{: RESULT = new Throw(new This(tleft, tright), c, tleft, tright); :}
 		|
 		trycatch:t
 		{: RESULT = t; :}
@@ -548,8 +548,8 @@ expression ::= expression:e1 AND expression:e2
 		STRINGLITERAL:s
 		{: RESULT = new StringLiteral(s, sleft, sright); :}
 		|
-		MINUS expression:e
-		{: RESULT = new UnaryMinus(e, e.line, e.column); :}
+		MINUS:m expression:e
+		{: RESULT = new UnaryMinus(e, mleft, mright); :}
 		|
 		typeof:t
 		{: RESULT = t; :}

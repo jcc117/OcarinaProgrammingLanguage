@@ -3,8 +3,10 @@ import symboltable.*;
 
 public class Super extends Statement{
 
-	public Super(){
+	public Super(int line, int column){
 		breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

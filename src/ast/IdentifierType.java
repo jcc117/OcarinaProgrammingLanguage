@@ -6,10 +6,12 @@ public class IdentifierType extends Type{
 	public IdChain chain;
 	public boolean constant;
 
-	public IdentifierType(Identifier i, IdChain chain, boolean constant){
+	public IdentifierType(Identifier i, IdChain chain, boolean constant, int line, int column){
 		this.i = i;
 		this.chain = chain;
 		this.constant = constant;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

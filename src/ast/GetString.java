@@ -2,8 +2,9 @@ package ast;
 import symboltable.*;
 
 public class GetString extends Expression{
-	public GetString(){
-		
+	public GetString(int line, int column){
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

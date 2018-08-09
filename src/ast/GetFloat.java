@@ -2,8 +2,9 @@ package ast;
 import symboltable.*;
 
 public class GetFloat extends Expression{
-	public GetFloat(){
-		
+	public GetFloat(int line, int column){
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

@@ -4,9 +4,11 @@ import symboltable.*;
 public class Block extends Statement{
 	public StatementList l;
 
-	public Block(StatementList l){
+	public Block(StatementList l, int line, int column){
 		this.l = l;
 		this.breakPoint = false;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

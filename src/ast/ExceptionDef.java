@@ -7,10 +7,12 @@ public class ExceptionDef extends Node implements Def{
 	public int protection;
 	public StringLiteral s;
 
-	public ExceptionDef(Identifier i, StringLiteral s, int protection){
+	public ExceptionDef(Identifier i, StringLiteral s, int protection, int line, int column){
 		this.i = i;
 		this.s = s;
 		this.protection = protection;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

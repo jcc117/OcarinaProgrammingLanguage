@@ -1,15 +1,17 @@
 package ast;
 import symboltable.*;
 
-public class Program{
+public class Program extends Node{
 	public StatementList s;
 	public DefList d;
 	public boolean debug;
 
-	public Program(StatementList s, DefList d, boolean debug){
+	public Program(StatementList s, DefList d, boolean debug, int line, int column){
 		this.s = s;
 		this.d = d;
 		this.debug = debug;
+		this.line = line;
+		this.column = column;
 	}
 
 	public void accept(VoidVisitor v){

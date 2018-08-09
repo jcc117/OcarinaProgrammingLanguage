@@ -4,9 +4,11 @@ import symboltable.*;
 public class MethodType extends Type{
 	public Type t;
 
-	public MethodType(Type t, boolean c){
+	public MethodType(Type t, boolean c, int line, int column){
 		this.t = t;
-		constant = c;		
+		constant = c;
+		this.line = line;
+		this.column = column;		
 	}
 
 	public void accept(VoidVisitor v){
