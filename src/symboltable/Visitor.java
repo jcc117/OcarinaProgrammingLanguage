@@ -75,10 +75,6 @@ public interface Visitor{
 	public Sym visit(IdentifierExpr i);
 	public Sym visit(ObjectCreate o);
 	public Sym visit(This t);
-	public Sym visit(GetInt g);
-	public Sym visit(GetFloat f);
-	public Sym visit(GetBoolean t);
-	public Sym visit(GetString s);
 	public Sym visit(ArrayCreate a);
 	public Sym visit(HashmapCreate h);
 	public Sym visit(StringLiteral s);

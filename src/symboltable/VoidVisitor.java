@@ -75,10 +75,6 @@ public interface VoidVisitor{
 	public void visit(IdentifierExpr i);
 	public void visit(ObjectCreate o);
 	public void visit(This t);
-	public void visit(GetInt g);
-	public void visit(GetFloat f);
-	public void visit(GetBoolean t);
-	public void visit(GetString s);
 	public void visit(ArrayCreate a);
 	public void visit(HashmapCreate h);
 	public void visit(StringLiteral s);

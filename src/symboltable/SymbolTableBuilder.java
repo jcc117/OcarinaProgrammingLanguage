@@ -43,6 +43,8 @@ public class SymbolTableBuilder implements Visitor{
 
 	}
 
+	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	//Defs
 	public Sym visit(SimpleClassDef s){
 
 	}
@@ -52,6 +54,10 @@ public class SymbolTableBuilder implements Visitor{
 	}
 
 	public Sym visit(ConstructorList c){
+
+	}
+
+	public Sym visit(ExceptionDef e){
 
 	}
 
@@ -79,6 +85,8 @@ public class SymbolTableBuilder implements Visitor{
 
 	}
 
+	//***************************************************************************************
+	//Types
 	public Sym visit(ArrayType t){
 
 	}
@@ -111,6 +119,8 @@ public class SymbolTableBuilder implements Visitor{
 
 	}
 
+	//=======================================================================================================================
+	//Statements
 	public Sym visit(Block b){
 
 	}
@@ -187,191 +197,7 @@ public class SymbolTableBuilder implements Visitor{
 
 	}
 
-	public Sym visit(And a){
-
-	}
-
-	public Sym visit(Or o){
-
-	}
-
-	public Sym visit(Nand n){
-
-	}
-
-	public Sym visit(Nor n){
-
-	}
-
-	public Sym visit(Equals e){
-
-	}
-
-	public Sym visit(Plus p){
-
-	}
-
-	public Sym visit(Minus m){
-
-	}
-
-	public Sym visit(Multiply m){
-
-	}
-
-	public Sym visit(Power p){
-
-	}
-
-	public Sym visit(Divide d){
-
-	}
-
-	public Sym visit(Modulo m){
-
-	}
-
-	public Sym visit(GreaterThanEqualTo g){
-
-	}
-
-	public Sym visit(LessThanEqualTo l){
-
-	}
-
-	public Sym visit(GreaterThan g){
-
-	}
-
-	public Sym visit(LessThan l){
-
-	}
-
-	public Sym visit(HashmapExpr h){
-
-	}
-
-	public Sym visit(ArrayExpr a){
-
-	}
-
-	public Sym visit(ObjectVarAccess o){
-
-	}
-
-	public Sym visit(MethodCall m){
-
-	}
-
-	public Sym visit(ArrayLength l){
-
-	}
-
-	public Sym visit(IntLiteral i){
-
-	}
-
-	public Sym visit(FloatLiteral f){
-
-	}
-
-	public Sym visit(True t){
-
-	}
-
-	public Sym visit(False f){
-
-	}
-
-	public Sym visit(Nil n){
-
-	}
-
-	public Sym visit(ParentExpr p){
-
-	}
-
-	public Sym visit(Not n){
-
-	}
-
-	public Sym visit(IdentifierExpr i){
-
-	}
-
-	public Sym visit(ObjectCreate o){
-
-	}
-
-	public Sym visit(This t){
-
-	}
-
-	public Sym visit(GetInt g){
-
-	}
-
-	public Sym visit(GetFloat f){
-
-	}
-
-	public Sym visit(GetBoolean t){
-
-	}
-
-	public Sym visit(GetString s){
-
-	}
-
-	public Sym visit(ArrayCreate a){
-
-	}
-
-	public Sym visit(HashmapCreate h){
-
-	}
-
-	public Sym visit(StringLiteral s){
-
-	}
-
-	public Sym visit(ParamList p){
-
-	}
-
-	public Sym visit(Identifier i){
-
-	}
-
-	public Sym visit(IdentifierType i){
-
-	}
-	
-	public Sym visit(Statement s){
-
-	}
-	
-	public Sym visit(Type t){
-
-	}
-	
-	public Sym visit(Expression e){
-
-	}
-	
-	public Sym visit(ArrayLiteral a){
-
-	}
-	
-	public Sym visit(IdChain i){
-
-	}
-	
 	public Sym visit(MethodCallStatement m){
-
-	}
-	
-	public Sym visit(UnaryMinus u){
 
 	}
 	
@@ -386,31 +212,7 @@ public class SymbolTableBuilder implements Visitor{
 	public Sym visit(Unless u){
 
 	}
-	
-	public Sym visit(Typeof t){
 
-	}
-	
-	public Sym visit(Differs d){
-
-	}
-	
-	public Sym visit(MethodType m){
-
-	}
-	
-	public Sym visit(MethodLiteral m){
-
-	}
-	
-	public Sym visit(ArgChain a){
-
-	}
-	
-	public Sym visit(ExprChain e){
-
-	}
-	
 	public Sym visit(Throw t){
 
 	}
@@ -422,12 +224,202 @@ public class SymbolTableBuilder implements Visitor{
 	public Sym visit(Catch c){
 
 	}
-	
-	public Sym visit(CatchList c){
+
+	//-----------------------------------------------------------------------------------------------------
+	//Expressions
+	public Type visit(And a){
+
+	}
+
+	public Type visit(Or o){
+
+	}
+
+	public Type visit(Nand n){
+
+	}
+
+	public Type visit(Nor n){
+
+	}
+
+	public Type visit(Equals e){
+
+	}
+
+	public Type visit(Plus p){
+
+	}
+
+	public Type visit(Minus m){
+
+	}
+
+	public Type visit(Multiply m){
+
+	}
+
+	public Type visit(Power p){
+
+	}
+
+	public Type visit(Divide d){
+
+	}
+
+	public Type visit(Modulo m){
+
+	}
+
+	public Type visit(GreaterThanEqualTo g){
+
+	}
+
+	public Type visit(LessThanEqualTo l){
+
+	}
+
+	public Type visit(GreaterThan g){
+
+	}
+
+	public Type visit(LessThan l){
+
+	}
+
+	public Type visit(HashmapExpr h){
+
+	}
+
+	public Type visit(ArrayExpr a){
+
+	}
+
+	public Type visit(ObjectVarAccess o){
+
+	}
+
+	public Type visit(MethodCall m){
+
+	}
+
+	public Type visit(ArrayLength l){
+
+	}
+
+	public Type visit(IntLiteral i){
+
+	}
+
+	public Type visit(FloatLiteral f){
+
+	}
+
+	public Type visit(True t){
+
+	}
+
+	public Type visit(False f){
+
+	}
+
+	public Type visit(Nil n){
+
+	}
+
+	public Type visit(ParentExpr p){
+
+	}
+
+	public Type visit(Not n){
+
+	}
+
+	public Type visit(IdentifierExpr i){
+
+	}
+
+	public Type visit(ObjectCreate o){
+
+	}
+
+	public Type visit(This t){
+
+	}
+
+	public Type visit(ArrayCreate a){
+
+	}
+
+	public Type visit(HashmapCreate h){
+
+	}
+
+	public Type visit(StringLiteral s){
+
+	}
+
+	public Type visit(ParamList p){
+
+	}
+
+	public Type visit(Identifier i){
+
+	}
+
+	public Type visit(IdentifierType i){
+
+	}
+
+	public Type visit(Typeof t){
+
+	}
+
+	public Type visit(UnaryMinus u){
+
+	}
+
+	public Type visit(Differs d){
+
+	}
+
+	public Type visit(MethodLiteral m){
+
+	}
+
+	public Type visit(ArrayLiteral a){
+
+	}
+	//------------------------------------------------------------------------------------------------------
+	public Sym visit(Statement s){
 
 	}
 	
-	public Sym visit(ExceptionDef e){
+	public Type visit(Type t){
+
+	}
+	
+	public Type visit(Expression e){
+
+	}
+	
+	public Sym visit(IdChain i){
+
+	}
+	
+	public Sym visit(MethodType m){
+
+	}
+	
+	public Sym visit(ArgChain a){
+
+	}
+	
+	public Sym visit(ExprChain e){
+
+	}
+	
+	public Sym visit(CatchList c){
 
 	}
 	

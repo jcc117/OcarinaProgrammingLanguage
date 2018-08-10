@@ -519,22 +519,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print("this");
 	}
 
-	public void visit(GetInt g){
-		System.out.print("getInt()");
-	}
-
-	public void visit(GetFloat f){
-		System.out.print("getFloat()");
-	}
-
-	public void visit(GetBoolean t){
-		System.out.print("getBoolean()");
-	}
-
-	public void visit(GetString s){
-		System.out.print("getString()");
-	}
-
 	public void visit(ArrayCreate a){
 		System.out.print("create ");
 		a.t.accept(this);

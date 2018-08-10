@@ -26,7 +26,6 @@ terminal AND, OR, NAND, NOR, EQUALS, DIFFERS;
 terminal TRUE, FALSE;
 terminal THIS, NIL;
 terminal ASSERT, CREATE, EXIT;
-terminal GETINT, GETFLOAT, GETBOOLEAN, GETSTRING;
 terminal LENGTH, PRINT;
 terminal DEBUG, BREAK, CONTINUE;
 terminal EXEC, WITH;
@@ -526,18 +525,6 @@ expression ::= expression:e1 AND expression:e2
 		|
 		THIS:t
 		{: RESULT = new This(tleft, tright); :}
-		|
-		GETINT:g
-		{: RESULT = new GetInt(gleft, gright); :}
-		|
-		GETFLOAT:g
-		{: RESULT = new GetFloat(gleft, gright); :}
-		|
-		GETBOOLEAN:g
-		{: RESULT = new GetBoolean(gleft, gright); :}
-		|
-		GETSTRING:g
-		{: RESULT = new GetString(gleft, gright); :}
 		|
 		CREATE:c type:t LBRACKET expression:e RBRACKET
 		{: RESULT = new ArrayCreate(t, e, cleft, cright); :}
