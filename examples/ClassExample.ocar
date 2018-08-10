@@ -66,6 +66,8 @@ public class Example:
 				print(y);
 			catch t.t.t t:
 			end
+			
+			int x = x and y or z && x &! y || u |! 8 == 0 != 2;
 		end
 	end
 	

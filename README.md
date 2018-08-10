@@ -45,7 +45,7 @@ To be determined.
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
 	*Handling of Integers and Floats of Any Size*
-	*Heavy use of keywords to promote readability*
+	*Heavy use of keywords to promote readability with the option to use traditional operators*
 	*Strictly Typed, but also supports var types (similar to C#)*
 	*Public and Private Classes and Subroutines*
 	*Variable Names, Class Names, and Subroutine Names which can include "?"*
@@ -64,7 +64,6 @@ To be determined.
 	For loop grammar
 
 # Items Under Consideration For Later Release
-	*operator overloading*
 	*repl mode*
 	*casting*
 	*generics*

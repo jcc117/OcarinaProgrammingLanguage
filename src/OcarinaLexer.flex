@@ -114,6 +114,12 @@ String = \"[^\"]*\"
 "++"	{return symbol(INCREMENT);}
 "--"	{return symbol(DECREMENT);}
 "=>"	{return symbol(POINTER);}
+"&&"	{return symbol(AND);}
+"||"	{return symbol(OR);}
+"&!"	{return symbol(NAND);}
+"|!"	{return symbol(NOR);}
+"=="	{return symbol(EQUALS);}
+"!="	{return symbol(DIFFERS);}
 "!"	{return symbol(BANG);}
 "+"	{return symbol(PLUS);}
 "-"	{return symbol(MINUS);}
