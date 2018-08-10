@@ -54,6 +54,7 @@ To be determined.
 	*Nested inner classes to any level desired*
 	*Packages (called Sages in this language)*
 	*Exception handling*
+	*"Double quoted strings" and 'Single quoted strings', similar to Javascript*
 
 # Progress report
 	Symboltable generation and design

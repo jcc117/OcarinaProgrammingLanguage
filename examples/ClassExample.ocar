@@ -68,6 +68,8 @@ public class Example:
 			end
 			
 			int x = x and y or z && x &! y || u |! 8 == 0 != 2;
+			string u = 'alsjslfjs';
+			string d = "aldfjlfjslfjslfsl";
 		end
 	end
 	
