@@ -1,0 +1,23 @@
+Pass 1
+	Simple classes
+Pass 2 and 3
+	Extended classes
+Pass 4
+	Class variables, class methods, sage methods
+Pass 5
+	Method variables, main method variables, method literal variables
+Pass 6+
+	var variables
+
+Each sage gets a thread to do this to add to the symboltable
+Each pass is done in lockstep
+
+Rules:
+	Conditionals must have booleans
+	strings, numbers, booleans, and other strings can be concatenated, noting else
+	no void type variables
+	var types must be immediately assigned: var x; is not valid
+	functions cannot have return type of var
+	only 1 sage can have a main method
+	to start debug only the main sage needs to contain 'debug', others will be ignored but breakpoints will be enabled
+	method literals must be constant - for now
