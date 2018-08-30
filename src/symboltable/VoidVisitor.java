@@ -102,4 +102,8 @@ public interface VoidVisitor{
 	public void visit(Catch c);
 	public void visit(CatchList c);
 	public void visit(ExceptionDef e);
+	public void visit(PostIncrement p);
+	public void visit(PreIncrement p);
+	public void visit(PostDecrement p);
+	public void visit(PreDecrement p);
 }

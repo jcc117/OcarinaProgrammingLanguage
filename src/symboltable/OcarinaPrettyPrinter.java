@@ -680,6 +680,42 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println(";");
 	}
 
+	public void visit(PostIncrement p){
+		if(p.i != null)
+			p.i.accept(this);
+		else
+			p.t.accept(this);
+		p.chain.accept(this);
+		System.out.print("++");
+	}
+
+	public void visit(PreIncrement p){
+		System.out.print("++");
+		if(p.i != null)
+			p.i.accept(this);
+		else
+			p.t.accept(this);
+		p.chain.accept(this);
+	}
+
+	public void visit(PostDecrement p){
+		if(p.i != null)
+			p.i.accept(this);
+		else
+			p.t.accept(this);
+		p.chain.accept(this);
+		System.out.print("--");
+	}
+
+	public void visit(PreDecrement p){
+		System.out.print("--");
+		if(p.i != null)
+			p.i.accept(this);
+		else
+			p.t.accept(this);
+		p.chain.accept(this);
+	}
+
 	public void visit(Statement s){
 
 	}

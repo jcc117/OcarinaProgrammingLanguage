@@ -102,4 +102,8 @@ public interface Visitor{
 	public Sym visit(Catch c);
 	public Sym visit(CatchList c);
 	public Sym visit(ExceptionDef e);
+	public Sym visit(PostIncrement p);
+	public Sym visit(PreIncrement p);
+	public Sym visit(PostDecrement p);
+	public Sym visit(PreDecrement p);
 }

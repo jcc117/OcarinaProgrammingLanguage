@@ -397,10 +397,22 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		THIS:t idchain:c INCREMENT
 		{: RESULT = new Increment(new This(tleft, tright), c, tleft, tright); :}
 		|
+		INCREMENT identifier:i idchain:c
+		{: RESULT = new Increment(i, c, i.line, i.column); :}
+		|
+		INCREMENT THIS:t idchain:c
+		{: RESULT = new Increment(new This(tleft, tright), c, tleft, tright); :}
+		|
 		identifier:i idchain:c DECREMENT
 		{: RESULT = new Decrement(i, c, i.line, i.column); :}
 		|
 		THIS:t idchain:c DECREMENT
+		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		DECREMENT identifier:i idchain:c
+		{: RESULT = new Decrement(i, c, i.line, i.column); :}
+		|
+		DECREMENT THIS:t idchain:c
 		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
 		|
 		methodcall:m
@@ -548,6 +560,30 @@ expression ::= expression:e1 AND expression:e2
 		|
 		paramlist:p POINTER:p1 LBRACE statementlist:l RBRACE
 		{: RESULT = new MethodLiteral(p, l, p1left, p1right); :}
+		|
+		identifier:i idchain:c INCREMENT
+		{: RESULT = new PostIncrement(i, c, i.line, i.column); :}
+		|
+		THIS:t idchain:c INCREMENT
+		{: RESULT = new PostIncrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		INCREMENT identifier:i idchain:c
+		{: RESULT = new PreIncrement(i, c, i.line, i.column); :}
+		|
+		INCREMENT THIS:t idchain:c
+		{: RESULT = new PreIncrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		identifier:i idchain:c DECREMENT
+		{: RESULT = new PostDecrement(i, c, i.line, i.column); :}
+		|
+		THIS:t idchain:c DECREMENT
+		{: RESULT = new PostDecrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		DECREMENT identifier:i idchain:c
+		{: RESULT = new PreDecrement(i, c, i.line, i.column); :}
+		|
+		DECREMENT THIS:t idchain:c
+		{: RESULT = new PreDecrement(new This(tleft, tright), c, tleft, tright); :}
 		;
 
 paramlist ::= LPAREN expression:e expressionchain:c RPAREN
