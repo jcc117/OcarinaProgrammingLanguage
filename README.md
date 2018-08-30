@@ -47,22 +47,25 @@ To be determined.
 	*Handling of Integers and Floats of Any Size*
 	*Heavy use of keywords to promote readability with the option to use traditional operators*
 	*Strictly Typed, but also supports var types (similar to C#)*
-	*Public and Private Classes and Subroutines*
-	*Variable Names, Class Names, and Subroutine Names which can include "?"*
+	*Public and Private Classes and Functions*
+	*Variable Names, Class Names, and Functions Names which can include "?"*
 	*Function-Type variables*
 	*Functions not strictly tied to classes*
 	*Nested inner classes to any level desired*
 	*Packages (called Sages in this language)*
 	*Exception handling*
-	*"Double quoted strings" and 'Single quoted strings', similar to Javascript*
+	*"Double quoted strings" and 'Single quoted strings', similar to JavaScript*
 
 # Progress report
+	Advanced architecture design and planning
 	Symboltable generation and design
 	Syntactical rule development(what's considered an error other than grammar violations)
-	Instruction manual writing
+	Research into other interpretters and virtual machines
+	Grammar improvements and expansion
 
-# Known Issues
-	For loop grammar
+# Planned Grammar Improvements
+	Sage-level variable declarations/assignments
+	Class-level variable assignments(not within a constructor or function)
 
 # Items Under Consideration For Later Release
 	*repl mode*

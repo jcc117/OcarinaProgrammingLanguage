@@ -46,7 +46,7 @@ String = \"[^\"]*\" | \'[^\']*\'
 "end"	{return symbol(END);}
 "class"	{return symbol(CLASS);}
 "extends"	{return symbol(EXTENDS);}
-"subroutine"	{return symbol(SUBROUTINE);}
+"function"	{return symbol(SUBROUTINE);}
 //"mock"	{return symbol(MOCK);}
 //"stub"	{return symbol(STUB);}
 "void"	{return symbol(VOID);}

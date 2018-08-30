@@ -8,6 +8,7 @@ Pass 3
 	resolve var types
 ----------------------------------------------------------------------------------------------------Symboltable complete
 
+Variable types of identifier type or that use an identifier type must hold a reference to said symbol in the symboltable- need to change this
 Each sage gets a thread to do this to add to the symboltable
 Each pass is done in lockstep
 
