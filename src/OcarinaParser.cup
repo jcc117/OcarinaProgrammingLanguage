@@ -67,6 +67,7 @@ non terminal Param parameter;
 non terminal RatherList ratherlist;
 non terminal StatementList else;
 non terminal Statement simple_statement;
+non terminal Statement semicolon_statement;
 non terminal Constructor constructor;
 non terminal ConstructorList constructorlist;
 non terminal MethodCall methodcall;
@@ -344,71 +345,75 @@ simple_statement ::= BEGIN:b statementlist:l END
 		UNTIL expression:e COLON statementlist:l END
 		{: RESULT = new Until(e, l, e.line, e.column); :}
 		|
-		FOR LPAREN statement:s1 expression:e SEMICOLON statement:s2 RPAREN COLON statementlist:s3 END
+		FOR LPAREN semicolon_statement:s1 SEMICOLON expression:e SEMICOLON semicolon_statement:s2 RPAREN COLON statementlist:s3 END
 		{: RESULT = new For(e, s1, s2, s3, s1.line, s1.column); :}
 		|
 		DO statementlist:s END WHILE expression:e SEMICOLON
 		{: RESULT = new DoWhile(e, s, e.line, e.column); :}
 		|
-		PRINT LPAREN expression:e RPAREN SEMICOLON
-		{: RESULT = new Print(e, e.line, e.column); :}
-		|
-		type:t identifier:i EQUAL expression:e SEMICOLON
-		{: RESULT = new VarDecAssignment(e, i, t, 1, t.line, t.column); :}
-		|
-		identifier:i EQUAL expression:e SEMICOLON
-		{: RESULT = new Assignment(e, i, i.line, i.column); :}
-		|
-		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2 SEMICOLON
-		{: RESULT = new HashmapAssignment(i, e1, e2, i.line, i.column); :}
-		|
-		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2 SEMICOLON
-		{: RESULT = new ArrayAssignment(i, e1, e2, i.line, i.column); :}
-		|
-		RETURN expression:e SEMICOLON
-		{: RESULT = new Return(e, e.line, e.column); :}
-		|
-		ASSERT LPAREN expression:e RPAREN SEMICOLON
-		{: RESULT = new Assert(e, e.line, e.column); :}
-		|
-		EXIT LPAREN expression:e RPAREN SEMICOLON
-		{: RESULT = new Exit(e, e.line, e.column); :}
-		|
-		CONTINUE:c SEMICOLON
-		{: RESULT = new Continue(cleft, cright); :}
-		|
-		BREAK:b SEMICOLON
-		{: RESULT = new Break(bleft, bright); :}
-		|
-		identifier:i idchain:c INCREMENT SEMICOLON
-		{: RESULT = new Increment(i, c, i.line, i.column); :}
-		|
-		THIS:t idchain:c INCREMENT SEMICOLON
-		{: RESULT = new Increment(new This(tleft, tright), c, tleft, tright); :}
-		|
-		identifier:i idchain:c DECREMENT SEMICOLON
-		{: RESULT = new Decrement(i, c, i.line, i.column); :}
-		|
-		THIS:t idchain:c DECREMENT SEMICOLON
-		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
-		|
-		vardec:v
-		{: RESULT = v; :}
-		|
-		methodcall:m SEMICOLON
-		{: RESULT = new MethodCallStatement(m, m.line, m.column); :}
-		|
-		SUPER:s LPAREN RPAREN SEMICOLON
-		{: RESULT = new Super(sleft, sright);:}
-		|
-		THROW identifier:i idchain:c SEMICOLON
-		{: RESULT = new Throw(i, c, i.line, i.column);:}
-		|
-		THROW THIS:t idchain:c SEMICOLON
-		{: RESULT = new Throw(new This(tleft, tright), c, tleft, tright); :}
+		semicolon_statement:s SEMICOLON
+		{: RESULT = s; :}
 		|
 		trycatch:t
 		{: RESULT = t; :}
+		|
+		vardec:v
+		{: RESULT = v; :}
+		;
+
+semicolon_statement ::= PRINT LPAREN expression:e RPAREN
+		{: RESULT = new Print(e, e.line, e.column); :}
+		|
+		type:t identifier:i EQUAL expression:e
+		{: RESULT = new VarDecAssignment(e, i, t, 1, t.line, t.column); :}
+		|
+		identifier:i EQUAL expression:e
+		{: RESULT = new Assignment(e, i, i.line, i.column); :}
+		|
+		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2
+		{: RESULT = new HashmapAssignment(i, e1, e2, i.line, i.column); :}
+		|
+		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2
+		{: RESULT = new ArrayAssignment(i, e1, e2, i.line, i.column); :}
+		|
+		RETURN expression:e
+		{: RESULT = new Return(e, e.line, e.column); :}
+		|
+		ASSERT LPAREN expression:e RPAREN
+		{: RESULT = new Assert(e, e.line, e.column); :}
+		|
+		EXIT LPAREN expression:e RPAREN
+		{: RESULT = new Exit(e, e.line, e.column); :}
+		|
+		CONTINUE:c
+		{: RESULT = new Continue(cleft, cright); :}
+		|
+		BREAK:b
+		{: RESULT = new Break(bleft, bright); :}
+		|
+		identifier:i idchain:c INCREMENT
+		{: RESULT = new Increment(i, c, i.line, i.column); :}
+		|
+		THIS:t idchain:c INCREMENT
+		{: RESULT = new Increment(new This(tleft, tright), c, tleft, tright); :}
+		|
+		identifier:i idchain:c DECREMENT
+		{: RESULT = new Decrement(i, c, i.line, i.column); :}
+		|
+		THIS:t idchain:c DECREMENT
+		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		methodcall:m
+		{: RESULT = new MethodCallStatement(m, m.line, m.column); :}
+		|
+		SUPER:s LPAREN RPAREN
+		{: RESULT = new Super(sleft, sright);:}
+		|
+		THROW identifier:i idchain:c
+		{: RESULT = new Throw(i, c, i.line, i.column);:}
+		|
+		THROW THIS:t idchain:c
+		{: RESULT = new Throw(new This(tleft, tright), c, tleft, tright); :}
 		;
 
 trycatch ::= TRY:t COLON statementlist:s1 catchlist:c END

@@ -1,13 +1,12 @@
-Pass 1
-	Simple classes
-Pass 2 and 3
-	Extended classes
-Pass 4
-	Class variables, class methods, sage methods
-Pass 5
-	Method variables, main method variables, method literal variables
-Pass 6+
-	var variables
+Pass 1, each thread gets a file to analyze
+	create symbols, leave null entries if necessary
+----------------------------------------------------------------------------------------------------Stop threads, add all threads information to the root symboltable
+Pass 2, continue execution of threads using the single root symboltree
+	fill in those null gaps that were left, just repeat Pass 1 with more information at hand
+----------------------------------------------------------------------------------------------------Stop threads, wait for all to sync up
+Pass 3
+	resolve var types
+----------------------------------------------------------------------------------------------------Symboltable complete
 
 Each sage gets a thread to do this to add to the symboltable
 Each pass is done in lockstep
