@@ -64,8 +64,9 @@ To be determined.
 	Grammar improvements and expansion
 
 # Planned Grammar Improvements
-	Sage-level variable declarations/assignments
+	Sage-level variable declarations/assignments(can be declared public or without a keyword only: private and protected cannot apply here)
 	Class-level variable assignments(not within a constructor or function)
+	Static classes, methods, and variables
 
 # Items Under Consideration For Later Release
 	*repl mode*
