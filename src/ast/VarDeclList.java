@@ -4,13 +4,13 @@ import symboltable.*;
 import java.util.ArrayList;
 
 public class VarDeclList{
-	public ArrayList<VarDecl> l;
+	public ArrayList<Statement> l;
 
 	public VarDeclList(){
-		this.l = new ArrayList<VarDecl>();
+		this.l = new ArrayList<Statement>();
 	}
 
-	public void add(VarDecl v){
+	public void add(Statement v){
 		l.add(v);
 	}
 

@@ -56,11 +56,12 @@ non terminal ExceptionDef exceptiondef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
 non terminal VarDeclList vardeclist;
-non terminal VarDecl vardec, classvardec;
+non terminal Statement vardec, classvardec;
 non terminal ArgList arglist;
 non terminal Type type;
 non terminal Statement statement;
 non terminal Expression expression;
+non terminal Expression literal;
 non terminal ParamList paramlist;
 non terminal Identifier identifier;
 non terminal Param parameter;
@@ -97,19 +98,19 @@ precedence left EQUALS, DIFFERS;
 sage ::= SAGE identifier:i SEMICOLON usinglist:u program:p
 		{: RESULT = new Sage(i, p, u, i.line, i.column); :}
 		|
-		SAGE identifier:i SEMICOLON usinglist:u deflist:d
-		{: RESULT = new Sage(i, d, u, i.line, i.column); :}
+		SAGE identifier:i SEMICOLON usinglist:u vardeclist:v deflist:d
+		{: RESULT = new Sage(i, d, u, v, i.line, i.column); :}
 		;
 usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
 		{: u.add(new Using(i, c, i.line, i.column)); RESULT = u; :}
 		|
 		{: RESULT = new UsingList(); :}
 		;
-program ::=	START:s1 statementlist:s END deflist:d
-		{: RESULT = new Program(s, d, false, s1left, s1right); :}
+program ::=	START:s1 statementlist:s END vardeclist:v deflist:d
+		{: RESULT = new Program(s, v, d, false, s1left, s1right); :}
 		|
-		DEBUG START:s1 statementlist:s END deflist:d
-		{: RESULT = new Program(s, d, true, s1left, s1right); :}
+		DEBUG START:s1 statementlist:s END vardeclist:v deflist:d
+		{: RESULT = new Program(s, v, d, true, s1left, s1right); :}
 		;
 
 statementlist ::= statement:s statementlist:l
@@ -197,6 +198,7 @@ constructorlist ::= constructorlist:l constructor:c
 		|
 		{: RESULT = new ConstructorList(); :}
 		;
+
 constructor ::= CONSTRUCTOR:c arglist:a COLON statementlist:s END
 		{: RESULT = new Constructor(a, s, cleft, cright); :}
 		;
@@ -231,6 +233,18 @@ classvardec ::= type:t identifier:i SEMICOLON
 		|
 		type:t PUBLIC identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 3, t.line, t.column); :}
+		|
+		type:t identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 1, t.line, t.column); :}
+		|
+		type:t PRIVATE identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 0, t.line, t.column); :}
+		|
+		type:t PROTECTED identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 2, t.line, t.column); :}
+		|
+		type:t PUBLIC identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 3, t.line, t.column); :}
 		;
 
 vardec ::= type:t identifier:i SEMICOLON
@@ -513,53 +527,17 @@ expression ::= expression:e1 AND expression:e2
 		expression:e DOT LENGTH
 		{: RESULT = new ArrayLength(e, e.line, e.column); :}
 		|
-		INTLITERAL:i
-		{: RESULT = new IntLiteral(i, ileft, iright); :}
-		|
-		FLOATLITERAL:f
-		{: RESULT = new FloatLiteral(f, fleft, fright); :}
-		|
-		TRUE:t
-		{: RESULT = new True(tleft, tright); :}
-		|
-		FALSE:f
-		{: RESULT = new False(fleft, fright); :}
-		|
-		NIL:n
-		{: RESULT = new Nil(nleft, nright); :}
-		|
 		LPAREN expression:e RPAREN
 		{: RESULT = new ParentExpr(e, e.line, e.column); :}
 		|
 		BANG expression:e
 		{: RESULT = new Not(e, e.line, e.column); :}
 		|
-		CREATE:c identifier:i paramlist:l
-		{: RESULT = new ObjectCreate(i, l, cleft, cright); :}
-		|
-		CREATE:c type:t LBRACKET RBRACKET paramlist:l
-		{: RESULT = new ArrayLiteral(t, l, cleft, cright); :}
-		|
 		THIS:t
 		{: RESULT = new This(tleft, tright); :}
 		|
-		CREATE:c type:t LBRACKET expression:e RBRACKET
-		{: RESULT = new ArrayCreate(t, e, cleft, cright); :}
-		|
-		HASHMAP:h LBRACE type:t1 COMMA type:t2 RBRACE
-		{: RESULT = new HashmapCreate(t1, t2, hleft, hright); :}
-		|
-		STRINGLITERAL:s
-		{: RESULT = new StringLiteral(s, sleft, sright); :}
-		|
-		MINUS:m expression:e
-		{: RESULT = new UnaryMinus(e, mleft, mright); :}
-		|
 		typeof:t
 		{: RESULT = t; :}
-		|
-		paramlist:p POINTER:p1 LBRACE statementlist:l RBRACE
-		{: RESULT = new MethodLiteral(p, l, p1left, p1right); :}
 		|
 		identifier:i idchain:c INCREMENT
 		{: RESULT = new PostIncrement(i, c, i.line, i.column); :}
@@ -584,6 +562,46 @@ expression ::= expression:e1 AND expression:e2
 		|
 		DECREMENT THIS:t idchain:c
 		{: RESULT = new PreDecrement(new This(tleft, tright), c, tleft, tright); :}
+		|
+		literal:l
+		{: RESULT = l; :}
+		;
+
+literal ::= INTLITERAL:i
+		{: RESULT = new IntLiteral(i, ileft, iright); :}
+		|
+		FLOATLITERAL:f
+		{: RESULT = new FloatLiteral(f, fleft, fright); :}
+		|
+		TRUE:t
+		{: RESULT = new True(tleft, tright); :}
+		|
+		FALSE:f
+		{: RESULT = new False(fleft, fright); :}
+		|
+		NIL:n
+		{: RESULT = new Nil(nleft, nright); :}
+		|
+		CREATE:c identifier:i paramlist:l
+		{: RESULT = new ObjectCreate(i, l, cleft, cright); :}
+		|
+		paramlist:p POINTER:p1 LBRACE statementlist:l RBRACE
+		{: RESULT = new MethodLiteral(p, l, p1left, p1right); :}
+		|
+		MINUS:m expression:e
+		{: RESULT = new UnaryMinus(e, mleft, mright); :}
+		|
+		CREATE:c type:t LBRACKET expression:e RBRACKET
+		{: RESULT = new ArrayCreate(t, e, cleft, cright); :}
+		|
+		HASHMAP:h LBRACE type:t1 COMMA type:t2 RBRACE
+		{: RESULT = new HashmapCreate(t1, t2, hleft, hright); :}
+		|
+		STRINGLITERAL:s
+		{: RESULT = new StringLiteral(s, sleft, sright); :}
+		|
+		CREATE:c type:t LBRACKET RBRACKET paramlist:l
+		{: RESULT = new ArrayLiteral(t, l, cleft, cright); :}
 		;
 
 paramlist ::= LPAREN expression:e expressionchain:c RPAREN

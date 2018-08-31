@@ -16,6 +16,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		s.i.accept(this);
 		System.out.println(";");
 		s.u.accept(this);
+		if(s.v != null){
+			s.v.accept(this);
+		}
 		if(s.p == null){
 			s.d.accept(this);
 		}
@@ -41,6 +44,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println("start");
 		p.s.accept(this);
 		System.out.println("end");
+		p.v.accept(this);
 		p.d.accept(this);
 	}
 
@@ -116,7 +120,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(VarDeclList l){
-		for(VarDecl d : l.l){
+		for(Statement d : l.l){
 			d.accept(this);
 		}
 	}

@@ -9,3 +9,6 @@ start
 		int z = i++ + u-- * ++l / --z;
 	end
 end
+
+var x = 0;
+int y;
