@@ -16,9 +16,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		s.i.accept(this);
 		System.out.println(";");
 		s.u.accept(this);
-		if(s.v != null){
-			s.v.accept(this);
-		}
 		if(s.p == null){
 			s.d.accept(this);
 		}
@@ -44,7 +41,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println("start");
 		p.s.accept(this);
 		System.out.println("end");
-		p.v.accept(this);
 		p.d.accept(this);
 	}
 
@@ -68,8 +64,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print(" class ");
 		s.i.accept(this);
 		System.out.println(":");
-		s.v.accept(this);
-		s.c.accept(this);
 		s.d.accept(this);
 		System.out.println("end");
 	}
@@ -84,16 +78,8 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print(" extends ");
 		e.c.accept(this); 
 		System.out.println(":");
-		e.v.accept(this);
-		e.o.accept(this);
 		e.d.accept(this);
 		System.out.println("end");
-	}
-
-	public void visit(ConstructorList c){
-		for(Constructor o : c.l){
-			o.accept(this);
-		}
 	}
 
 	public void visit(Constructor c){
@@ -119,22 +105,13 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println("end");
 	}
 
-	public void visit(VarDeclList l){
-		for(Statement d : l.l){
-			d.accept(this);
-		}
-	}
-
 	public void visit(VarDecl v){
-		v.t.accept(this);
 		String prot = get_protection_level(v.protection);
 		if(prot.length() != 0){
-			System.out.print(" " + prot + " ");
+			System.out.print(prot + " ");
 		}
-		else
-		{
-			System.out.print(" ");
-		}
+		v.t.accept(this);
+		System.out.print(" ");
 		v.i.accept(this);
 		System.out.println(";");
 	}
@@ -257,6 +234,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(VarDecAssignment v){
+		String prot = get_protection_level(v.protection);
+		if(prot.length() != 0){
+			System.out.print(prot + " ");
+		}
 		v.t.accept(this);
 		System.out.print(" ");
 		v.i.accept(this);

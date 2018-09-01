@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class VarDecl extends Statement{
+public class VarDecl extends Statement implements Def{
 	public Type t;
 	public Identifier i;
 	public int protection;

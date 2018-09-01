@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class Constructor extends Node{
+public class Constructor extends Node implements Def{
 	public StatementList l;
 	public ArgList a;
 

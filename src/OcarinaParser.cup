@@ -55,7 +55,6 @@ non terminal MethodDef methoddef;
 non terminal ExceptionDef exceptiondef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
-non terminal VarDeclList vardeclist;
 non terminal Statement vardec, classvardec;
 non terminal ArgList arglist;
 non terminal Type type;
@@ -70,7 +69,6 @@ non terminal StatementList else;
 non terminal Statement simple_statement;
 non terminal Statement semicolon_statement;
 non terminal Constructor constructor;
-non terminal ConstructorList constructorlist;
 non terminal MethodCall methodcall;
 non terminal IdChain idchain;
 non terminal Typeof typeof;
@@ -98,19 +96,19 @@ precedence left EQUALS, DIFFERS;
 sage ::= SAGE identifier:i SEMICOLON usinglist:u program:p
 		{: RESULT = new Sage(i, p, u, i.line, i.column); :}
 		|
-		SAGE identifier:i SEMICOLON usinglist:u vardeclist:v deflist:d
-		{: RESULT = new Sage(i, d, u, v, i.line, i.column); :}
+		SAGE identifier:i SEMICOLON usinglist:u deflist:d
+		{: RESULT = new Sage(i, d, u, i.line, i.column); :}
 		;
 usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
 		{: u.add(new Using(i, c, i.line, i.column)); RESULT = u; :}
 		|
 		{: RESULT = new UsingList(); :}
 		;
-program ::=	START:s1 statementlist:s END vardeclist:v deflist:d
-		{: RESULT = new Program(s, v, d, false, s1left, s1right); :}
+program ::=	START:s1 statementlist:s END deflist:d
+		{: RESULT = new Program(s, d, false, s1left, s1right); :}
 		|
-		DEBUG START:s1 statementlist:s END vardeclist:v deflist:d
-		{: RESULT = new Program(s, v, d, true, s1left, s1right); :}
+		DEBUG START:s1 statementlist:s END deflist:d
+		{: RESULT = new Program(s, d, true, s1left, s1right); :}
 		;
 
 statementlist ::= statement:s statementlist:l
@@ -128,6 +126,12 @@ deflist ::= deflist:d classdef:c
 		deflist:d exceptiondef:e
 		{: d.add(e); RESULT = d; :}
 		|
+		deflist:d constructor:c
+		{: d.add(c); RESULT = d; :}
+		|
+		deflist:d classvardec:c
+		{: d.add((Def)c); RESULT = d; :}
+		|
 		{: RESULT = new DefList(); :}
 		;
 
@@ -144,59 +148,53 @@ exceptiondef ::= EXCEPTION:e identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLO
 		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 2, pleft, pright); :}
 		; 
 
-classdef ::= PUBLIC:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 3, c, false, pleft, pright); :}
+classdef ::= PUBLIC:p CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 3, false, pleft, pright); :}
 		|
-		PUBLIC:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, false, pleft, pright); :}
+		PUBLIC:p CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 3, false, pleft, pright); :}
 		|
-		PRIVATE:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, false, pleft, pright); :}
+		PRIVATE:p CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 0, false, pleft, pright); :}
 		|
-		PRIVATE:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 0, c, false, pleft, pright); :}
+		PRIVATE:p CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 0, false, pleft, pright); :}
 		|
-		CLASS:c1 identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, false, c1left, c1right); :}
+		CLASS:c1 identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 1, false, c1left, c1right); :}
 		|
-		CLASS:c1 identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 1, c, false, c1left, c1right); :}
+		CLASS:c1 identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 1, false, c1left, c1right); :}
 		|
-		PROTECTED:p CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, false, pleft, pright); :}
+		PROTECTED:p CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 2, false, pleft, pright); :}
 		|
-		PROTECTED:p CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 2, c, false, pleft, pright); :}
+		PROTECTED:p CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 2, false, pleft, pright); :}
 		|
-		PUBLIC:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 3, c, true, pleft, pright); :}
+		PUBLIC:p SINGLETON CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 3, true, pleft, pright); :}
 		|
-		PUBLIC:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 3, c, true, pleft, pright); :}
+		PUBLIC:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 3, true, pleft, pright); :}
 		|
-		PRIVATE:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 0, c, true, pleft, pright); :}
+		PRIVATE:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 0, true, pleft, pright); :}
 		|
-		PRIVATE:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 0, c, true, pleft, pright); :}
+		PRIVATE:p SINGLETON CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 0, true, pleft, pright); :}
 		|
-		SINGLETON:s CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 1, c, true, sleft, sright); :}
+		SINGLETON:s CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 1, true, sleft, sright); :}
 		|
-		SINGLETON:s CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 1, c, true, sleft, sright); :}
+		SINGLETON:s CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 1, true, sleft, sright); :}
 		|
-		PROTECTED:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new ExtendsClassDef(i1, i2, d, v, 2, c, true, pleft, pright); :}
+		PROTECTED:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		{: RESULT = new ExtendsClassDef(i1, i2, d, 2, true, pleft, pright); :}
 		|
-		PROTECTED:p SINGLETON CLASS identifier:i COLON vardeclist:v constructorlist:c deflist:d END
-		{: RESULT = new SimpleClassDef(i, d, v, 2, c, true, pleft, pright); :}
-		;
-
-constructorlist ::= constructorlist:l constructor:c
-		{: l.add(c); RESULT = l; :}
-		|
-		{: RESULT = new ConstructorList(); :}
+		PROTECTED:p SINGLETON CLASS identifier:i COLON deflist:d END
+		{: RESULT = new SimpleClassDef(i, d, 2, true, pleft, pright); :}
 		;
 
 constructor ::= CONSTRUCTOR:c arglist:a COLON statementlist:s END
@@ -216,34 +214,28 @@ methoddef ::= PUBLIC:p SUBROUTINE type:r identifier:i arglist:a COLON statementl
 		{: RESULT = new MethodDef(r, i, a, l, 2, pleft, pright); :}
 		;
 
-vardeclist ::= vardeclist:l classvardec:v 
-		{: l.add(v); RESULT = l;:}
-		|
-		{: RESULT = new VarDeclList(); :}
-		;
-
 classvardec ::= type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 1, t.line, t.column); :}
 		|
-		type:t PRIVATE identifier:i SEMICOLON
+		PRIVATE type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 0, t.line, t.column); :}
 		|
-		type:t PROTECTED identifier:i SEMICOLON
+		PROTECTED type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 2, t.line, t.column); :}
 		|
-		type:t PUBLIC identifier:i SEMICOLON
+		PUBLIC type:t identifier:i SEMICOLON
 		{: RESULT = new VarDecl(t, i, 3, t.line, t.column); :}
 		|
 		type:t identifier:i EQUAL literal:l SEMICOLON
 		{: RESULT = new VarDecAssignment(l, i, t, 1, t.line, t.column); :}
 		|
-		type:t PRIVATE identifier:i EQUAL literal:l SEMICOLON
+		PRIVATE type:t identifier:i EQUAL literal:l SEMICOLON
 		{: RESULT = new VarDecAssignment(l, i, t, 0, t.line, t.column); :}
 		|
-		type:t PROTECTED identifier:i EQUAL literal:l SEMICOLON
+		PROTECTED type:t identifier:i EQUAL literal:l SEMICOLON
 		{: RESULT = new VarDecAssignment(l, i, t, 2, t.line, t.column); :}
 		|
-		type:t PUBLIC identifier:i EQUAL literal:l SEMICOLON
+		PUBLIC type:t identifier:i EQUAL literal:l SEMICOLON
 		{: RESULT = new VarDecAssignment(l, i, t, 3, t.line, t.column); :}
 		;
 

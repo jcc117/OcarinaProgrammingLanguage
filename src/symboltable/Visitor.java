@@ -11,10 +11,8 @@ public interface Visitor{
 	public Sym visit(DefList d);
 	public Sym visit(SimpleClassDef s);
 	public Sym visit(ExtendsClassDef e);
-	public Sym visit(ConstructorList c);
 	public Sym visit(Constructor c);
 	public Sym visit(MethodDef m);
-	public Sym visit(VarDeclList l);
 	public Sym visit(VarDecl v);
 	public Sym visit(ArgList a);
 	public Sym visit(Param p);

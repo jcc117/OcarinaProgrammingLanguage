@@ -10,5 +10,5 @@ start
 	end
 end
 
-var x = 0;
-int y;
+public var x = 0;
+private int y;

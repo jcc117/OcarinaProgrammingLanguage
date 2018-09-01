@@ -1,7 +1,7 @@
 package ast;
 import symboltable.*;
 
-public class VarDecAssignment extends Statement{
+public class VarDecAssignment extends Statement implements Def{
 	public Expression e;
 	public Identifier i;
 	public Type t;

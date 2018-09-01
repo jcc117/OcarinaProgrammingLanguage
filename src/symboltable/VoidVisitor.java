@@ -11,10 +11,8 @@ public interface VoidVisitor{
 	public void visit(DefList d);
 	public void visit(SimpleClassDef s);
 	public void visit(ExtendsClassDef e);
-	public void visit(ConstructorList c);
 	public void visit(Constructor c);
 	public void visit(MethodDef m);
-	public void visit(VarDeclList l);
 	public void visit(VarDecl v);
 	public void visit(ArgList a);
 	public void visit(Param p);
