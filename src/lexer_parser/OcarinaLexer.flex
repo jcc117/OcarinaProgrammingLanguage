@@ -1,9 +1,10 @@
+package lexer_parser;
 import java_cup.runtime.*;
 import java.math.*;
 
 %%
 
-
+%public
 %class OcarinaLexer
 %extends sym
 /*

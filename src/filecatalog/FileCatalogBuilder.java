@@ -1,37 +1,19 @@
-// Ocarina compiler driver
-
+package filecatalog;
+import java_cup.runtime.*;
 import java.util.*;
 import java.io.*;
-import symboltable.*;
 import ast.*;
-import java_cup.runtime.*;
-import java.math.*;
+import lexer_parser.*;
 
-public class Ocarinac{
-	private ArrayList<Sage> fileCatalog = new ArrayList<Sage>();
-	private ArrayDeque<String> fileBackLog = new ArrayDeque<String>();
+public class FileCatalogBuilder{
+	private static ArrayList<Sage> fileCatalog = new ArrayList<Sage>();
+	private static ArrayDeque<String> fileBackLog = new ArrayDeque<String>();
 
-	public static void main(String args[]) throws IOException, InterruptedException{
-		// No args: Print options
-		if(args.length == 0){
-			System.out.println("No file provided");
-			System.exit(-1);
-		}
-
-		Thread builder = new Thread(new AstBuilder(args[0]));
+	public ArrayList<Sage> build(String filename) throws InterruptedException {
+		Thread builder = new Thread(new AstBuilder(filename));
 		builder.start();
 		builder.join();
-
-    	//For testing purposes only
-    	OcarinaPrettyPrinter pretty_printer = new OcarinaPrettyPrinter();
-    	pretty_printer.print(fileCatalog.get(0));
-    	/*
-    	SymbolTableBuilder stb = new SymbolTableBuilder();
-    	SymbolTable st = stb.build((Sage)result.value);
-    	ErrorChecker ec = new ErrorChecker();
-    	if(ec.checkForErrors(result, st)){
-    		
-    	}*/
+		return fileCatalog;
 	}
 
 	private class AstBuilder implements Runnable {
@@ -42,6 +24,7 @@ public class Ocarinac{
 		}
 		public void run(){
 			try{
+				System.out.println("start thread");
 				FileReader sourceReader = new FileReader(new File(filename));
 		    	OcarinaLexer lexer = new OcarinaLexer(sourceReader);
 		    	Symbol result = null;
@@ -49,7 +32,8 @@ public class Ocarinac{
 	    		parser _parser = new parser(lexer);
 	    		result = _parser.parse();
 
-	    		addToCatalog((Sage)result);
+	    		addToCatalog((Sage)result.value);
+	    		System.out.println("end thread");
 	    	}
 	    	catch(IOException d){
 	    		System.out.println("Invalid file");
@@ -69,7 +53,7 @@ public class Ocarinac{
 	}
 
 	private synchronized String grabFileToProcess(){
-		fileBackLog.poll();
+		return fileBackLog.poll();
 	}
 
 	private synchronized void addToBackLog(String file){
