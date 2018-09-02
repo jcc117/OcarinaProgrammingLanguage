@@ -52,13 +52,12 @@ To be determined.
 	*Function-Type variables*
 	*Functions not strictly tied to classes*
 	*Nested inner classes to any level desired*
-	*Packages (called Sages in this language)*
 	*Exception handling*
 	*"Double quoted strings" and 'Single quoted strings', similar to JavaScript*
 
 # Progress report
 	Advanced architecture design and planning
-	Symboltable generation and design
+	File catalog design and importing sages
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Research into other interpretters and virtual machines
 	Grammar improvements and expansion
