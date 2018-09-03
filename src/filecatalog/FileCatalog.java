@@ -19,4 +19,8 @@ public class FileCatalog{
 	public boolean contains(CatalogItem f){
 		return fc.contains(f);
 	}
+
+	public int size(){
+		return fc.size();
+	}
 }
