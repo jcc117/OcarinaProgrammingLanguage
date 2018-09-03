@@ -1,5 +1,7 @@
 package ast;
 import symboltable.*;
+import java.lang.StringBuilder;
+import java.util.ArrayList;
 
 public class Sage extends Node{
 	public Identifier i;
@@ -31,5 +33,21 @@ public class Sage extends Node{
 
 	public Sym accept(Visitor v){
 		return v.visit(this);
+	}
+
+	public ArrayList<String> getUsings(){
+		//Poor naming conventions are coming back to haunt me :(
+		ArrayList<String> files = new ArrayList<String>();
+		for(Using usingItem : u.l){
+			StringBuilder name = new StringBuilder(usingItem.i.i);	//First part of the name
+			for(Identifier id : usingItem.chain.chain){
+				name.append("/");
+				name.append(id.i);
+			}
+			//Append the file extension
+			name.append(".ocar");
+			files.add(name.toString());
+		}
+		return files;
 	}
 }
