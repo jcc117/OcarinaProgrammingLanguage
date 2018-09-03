@@ -19,11 +19,11 @@ public class Ocarinac{
 		}
 
 		FileCatalogBuilder builder = new FileCatalogBuilder();
-		ArrayList<Sage> fileCatalog = builder.build(args[0]);
+		FileCatalog fileCatalog = builder.build(args[0]);
 
     	//For testing purposes only
     	OcarinaPrettyPrinter pretty_printer = new OcarinaPrettyPrinter();
-    	pretty_printer.print(fileCatalog.get(0));
+    	pretty_printer.print(fileCatalog.get(0).getSage());
 	}
 
 }

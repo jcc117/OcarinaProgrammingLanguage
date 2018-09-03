@@ -6,10 +6,10 @@ import ast.*;
 import lexer_parser.*;
 
 public class FileCatalogBuilder{
-	private static ArrayList<Sage> fileCatalog = new ArrayList<Sage>();
+	private static FileCatalog fileCatalog = new FileCatalog();
 	private static ArrayDeque<String> fileBackLog = new ArrayDeque<String>();
 
-	public ArrayList<Sage> build(String filename) throws InterruptedException {
+	public FileCatalog build(String filename) throws InterruptedException {
 		Thread builder = new Thread(new AstBuilder(filename));
 		builder.start();
 		builder.join();
@@ -32,7 +32,7 @@ public class FileCatalogBuilder{
 	    		parser _parser = new parser(lexer);
 	    		result = _parser.parse();
 
-	    		addToCatalog((Sage)result.value);
+	    		addToCatalog(new CatalogItem((Sage)result.value));
 	    		System.out.println("end thread");
 	    	}
 	    	catch(IOException d){
@@ -46,7 +46,7 @@ public class FileCatalogBuilder{
 		}
 	}
 
-	private synchronized void addToCatalog(Sage result){
+	private synchronized void addToCatalog(CatalogItem result){
 		if(!fileCatalog.contains(result)){
 			fileCatalog.add(result);
 		}
