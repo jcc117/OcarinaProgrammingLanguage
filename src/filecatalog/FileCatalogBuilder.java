@@ -22,6 +22,9 @@ public class FileCatalogBuilder{
 		addToProcessed(initialFile.getAbsolutePath());
 
 		//Build any imports
+		if(fileCatalog.size() == 0){
+			System.exit(-1);
+		}
 		ArrayList<String> usings = fileCatalog.get(0).getSage().getUsings();
 		String sageName = fileCatalog.get(0).getSage().i.i;
 		String name = initialFile.getName();
@@ -106,17 +109,33 @@ public class FileCatalogBuilder{
 		}
 		public void run(){
 			try{
-				System.out.println("Processing " + filename + "...");
-				FileReader sourceReader = new FileReader(filename);
-		    	OcarinaLexer lexer = new OcarinaLexer(sourceReader);
-		    	Symbol result = null;
+				//Check for file extension
+				String path = filename.getAbsolutePath();
+				if(path.length() < 6)
+				{
+					throw new Exception();
+				}
 
-	    		parser _parser = new parser(lexer);
-	    		result = _parser.parse();
+				String extension = path.substring(path.length() - 5);
+				if(!extension.equals(".ocar")){
+					System.out.println(extension);
+					System.out.println("Invalid file type: file at " + path + " does not have .ocar file extension");
+					hadError = true;
+					addToProcessed(path);
+				}
+				else{
+					//System.out.println("Processing " + filename + "...");
+					FileReader sourceReader = new FileReader(filename);
+			    	OcarinaLexer lexer = new OcarinaLexer(sourceReader);
+			    	Symbol result = null;
 
-	    		addToCatalog(new CatalogItem((Sage)result.value, ((Sage)result.value).i.i, filename.getAbsolutePath()));
-	    		addToProcessed(filename.getAbsolutePath());
-	    		System.out.println("Done processing " + filename);
+		    		parser _parser = new parser(lexer);
+		    		result = _parser.parse();
+
+		    		addToCatalog(new CatalogItem((Sage)result.value, ((Sage)result.value).i.i, path));
+		    		addToProcessed(path);
+		    		//System.out.println("Done processing " + filename);
+		    	}
 	    	}
 	    	catch(IOException d){
 	    		System.out.println("Unable to process " + filename.getAbsolutePath());
