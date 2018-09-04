@@ -1,0 +1,6 @@
+sage work;
+using example4;
+
+start
+	print(1 + 1);
+end

@@ -25,7 +25,9 @@ public class Ocarinac{
     	//Do not continue if there were any errors in the input
     	if(!builder.hadErrors()){
     		OcarinaPrettyPrinter pretty_printer = new OcarinaPrettyPrinter();
-    		pretty_printer.print(fileCatalog.get(0).getSage());
+    		for(int i = 0; i < fileCatalog.size(); i++){
+    			pretty_printer.print(fileCatalog.get(i).getSage());
+    		}
     	}
 	}
 

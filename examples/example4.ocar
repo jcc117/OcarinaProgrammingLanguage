@@ -1,7 +1,7 @@
-sage x;
+sage example4;
 using work;
-using work.overkill.why;
-using because;
+#using work.overkill.why;
+#using because;
 
 start
 	for(int i = 0; i < j; i++):

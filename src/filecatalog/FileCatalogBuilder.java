@@ -23,16 +23,38 @@ public class FileCatalogBuilder{
 
 		//Build any imports
 		ArrayList<String> usings = fileCatalog.get(0).getSage().getUsings();
+		String sageName = fileCatalog.get(0).getSage().i.i;
+		String name = initialFile.getName();
+
+		//Ensure the sage name matches the file name
+		if(!name.equals(sageName  + ".ocar")){
+			System.out.println(name);
+			System.out.println("Ocarina Error: Sage name \"" + sageName + "\" does not match file name");
+			System.exit(-1);	//Temporary
+		}
+
+		//Create the basepath for other files to latch onto
+		String basePath = initialFile.getAbsolutePath();
+		basePath = basePath.replace(sageName + ".ocar", "");
+
+		/****************************************************
+		To Do
+		Add error statements for sage names not matching file names
+		Fix base paths for all future files to process
+		*******************************************************/
 
 		// Create files here and add them to the back log
 		for(String s : usings){
-			System.out.println(s);	//For testing purposes only
-			File fileToProcess = new File(s);
-			addToBackLog(fileToProcess.getAbsolutePath());	//Change this to create a file instead
+			addToBackLog(basePath + s);	//Change this to create a file instead
+			System.out.println(basePath + s);
 		}
 
 		//Process remaining imports
 		while(!fileBackLog.isEmpty()){
+			for(String k : fileBackLog){
+				System.out.println("in backlog => " + k);
+			}
+
 			//Create a new thread for each item and process it
 			ArrayList<Thread> builders = new ArrayList<Thread>();
 			while(!fileBackLog.isEmpty()){
@@ -49,10 +71,23 @@ public class FileCatalogBuilder{
 
 			//Get the new items, look at their imports, and add them to the file backlog
 			for(int i = 0; i < fileCatalog.size(); i++){
+				CatalogItem ci = fileCatalog.get(i);
+				String innerBasePath = ci.getPath();
+				sageName = ci.getName();
+				File temp = new File(innerBasePath);
+				filename = temp.getName();
+				if(!filename.equals(sageName + ".ocar")){
+					System.out.println("Ocarina Error: Sage name \"" + sageName + "\" does not match file name");
+					System.exit(-1);	//Temporary
+				}
+				temp = null;
+				innerBasePath = innerBasePath.replace(sageName + ".ocar", "");
+
 				ArrayList<String> usingList = fileCatalog.get(i).getSage().getUsings();
 				for(int j = 0; j < usingList.size(); j++){
-					File fileToProcess = new File(usingList.get(j));
-					String path = fileToProcess.getAbsolutePath();
+					//Get the absolute path for the file
+					String path = innerBasePath + usingList.get(j);
+					//Don't add the file to the backlog if it is already in there or it was already processed
 					if(!fileBackLog.contains(path) && !processed.contains(path)){
 						addToBackLog(path);
 					}
@@ -71,7 +106,7 @@ public class FileCatalogBuilder{
 		}
 		public void run(){
 			try{
-				System.out.println("start thread");
+				System.out.println("Processing " + filename + "...");
 				FileReader sourceReader = new FileReader(filename);
 		    	OcarinaLexer lexer = new OcarinaLexer(sourceReader);
 		    	Symbol result = null;
@@ -79,17 +114,17 @@ public class FileCatalogBuilder{
 	    		parser _parser = new parser(lexer);
 	    		result = _parser.parse();
 
-	    		addToCatalog(new CatalogItem((Sage)result.value));
+	    		addToCatalog(new CatalogItem((Sage)result.value, ((Sage)result.value).i.i, filename.getAbsolutePath()));
 	    		addToProcessed(filename.getAbsolutePath());
-	    		System.out.println("end thread");
+	    		System.out.println("Done processing " + filename);
 	    	}
 	    	catch(IOException d){
-	    		System.out.println("Unable to process " + filename);
+	    		System.out.println("Unable to process " + filename.getAbsolutePath());
 	    		addToProcessed(filename.getAbsolutePath());
 	    		hadError = true;
 	    	}
 	    	catch(Exception e){
-	    		System.out.println("Exited with errors");
+	    		System.out.println("Errors occurred when processing" + filename.getAbsolutePath());
 	    		addToProcessed(filename.getAbsolutePath());
 	    		System.out.println(e);
 	    		hadError = true;
