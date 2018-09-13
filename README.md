@@ -17,6 +17,10 @@ interpretter in a similar way to Java class files and the JVM.
 
 For examples, please navigate to the 'examples' folder.
 
+Note: It appears that I haven't been keeping up with this project. Commits have been sparse lately. That is not the case. I've been doing research into other languages to 
+gather ideas. Now is the time to make design changes before I move further with developing a symbol table. I wrote the code for the file catalog before this since it 
+doesn't really depend on the grammar itself.
+
 # What are the goals of Ocarina?
 1. A well-rounded, general-purpose programming language
 2. English readable and very easy to understand
@@ -59,11 +63,17 @@ To be determined.
 	Advanced architecture design and planning
 	File catalog design and importing sages
 	Syntactical rule development(what's considered an error other than grammar violations)
-	Research into other interpretters and virtual machines
+	Research into the JVM
+	Research into the Ruby interpreter
+	Research into the Python interpeter
+	Planning of the Ocarina Standard Library
 	Grammar improvements and expansion
 
 # Planned Grammar Improvements
 	Static classes, methods, and variables
+	Smooth out implementations of user defined exceptions - implemented as a class that extends Throwable
+	Replace "float" with "decimal"
+	Treating everything as an object
 
 # Items Under Consideration For Later Release
 	*repl mode*
