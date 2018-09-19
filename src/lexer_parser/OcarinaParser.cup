@@ -32,7 +32,7 @@ terminal DEBUG, BREAK, CONTINUE;
 terminal EXEC, WITH;
 terminal TYPEOF;
 terminal TRY, CATCH, FINALLY;
-terminal THROW, EXCEPTION;
+terminal THROW;
 
 /* Terminals - Non Keywords */
 terminal AT, COMMA, POINTER;
@@ -53,7 +53,6 @@ non terminal StatementList statementlist;
 non terminal DefList deflist;
 non terminal ClassDef classdef;
 non terminal MethodDef methoddef;
-non terminal ExceptionDef exceptiondef;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
 non terminal Statement vardec, classvardec;
@@ -77,6 +76,9 @@ non terminal ExprChain expressionchain;
 non terminal ArgChain argchain;
 non terminal TryCatch trycatch;
 non terminal CatchList catchlist;
+
+/* Note: some keywords replaced in the lexer to save work */
+/* This includes subroutine(function), singleton(static), float(decimal) */
 
 /* Precedence */
 precedence left BANG;
@@ -124,9 +126,6 @@ deflist ::= deflist:d classdef:c
 		deflist:d methoddef:m
 		{: d.add(m); RESULT = d; :}
 		|
-		deflist:d exceptiondef:e
-		{: d.add(e); RESULT = d; :}
-		|
 		deflist:d constructor:c
 		{: d.add(c); RESULT = d; :}
 		|
@@ -135,19 +134,6 @@ deflist ::= deflist:d classdef:c
 		|
 		{: RESULT = new DefList(); :}
 		;
-
-exceptiondef ::= EXCEPTION:e identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s, eleft, eright), 1, eleft, eright); :}
-		|
-		PUBLIC:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 3, pleft, pright); :}
-		|
-		PRIVATE:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 0, pleft, pright); :}
-		|
-		PROTECTED:p EXCEPTION identifier:i LPAREN STRINGLITERAL:s RPAREN SEMICOLON
-		{: RESULT = new ExceptionDef(i, new StringLiteral(s, pleft, pright), 2, pleft, pright); :}
-		; 
 
 classdef ::= PUBLIC:p CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 3, false, pleft, pright); :}
@@ -428,11 +414,8 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		SUPER:s LPAREN RPAREN
 		{: RESULT = new Super(sleft, sright);:}
 		|
-		THROW identifier:i idchain:c
-		{: RESULT = new Throw(i, c, i.line, i.column);:}
-		|
-		THROW THIS:t idchain:c
-		{: RESULT = new Throw(new This(tleft, tright), c, tleft, tright); :}
+		THROW expression:e
+		{: RESULT = new Throw(e, e.line, e.column);:}
 		;
 
 trycatch ::= TRY:t COLON statementlist:s1 catchlist:c END

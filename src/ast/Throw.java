@@ -2,23 +2,10 @@ package ast;
 import symboltable.*;
 
 public class Throw extends Statement{
-	public Identifier i;
-	public IdChain chain;
-	public This t;
+	public Expression e;
 
-	public Throw(Identifier i, IdChain chain, int line, int column){
-		this.i = i;
-		this.chain = chain;
-		this.t = null;
-		breakPoint = false;
-		this.line = line;
-		this.column = column;
-	}
-
-	public Throw(This t, IdChain chain, int line, int column){
-		this.i = null;
-		this.chain = chain;
-		this.t = t;
+	public Throw(Expression e, int line, int column){
+		this.e = e;
 		breakPoint = false;
 		this.line = line;
 		this.column = column;

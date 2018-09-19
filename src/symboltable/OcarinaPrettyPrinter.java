@@ -620,18 +620,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		}
 	}
 
-	public void visit(ExceptionDef e){
-		String prot = get_protection_level(e.protection);
-		if(prot.length() > 0)
-			System.out.print(prot + " ");
-		System.out.print("exception ");
-		e.i.accept(this);
-		System.out.print("(");
-		e.s.accept(this);
-		System.out.println(");");
-
-	}
-
 	public void visit(TryCatch t){
 		System.out.println("try:");
 		t.l.accept(this);
@@ -660,8 +648,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(Throw t){
 		System.out.print("throw ");
-		t.i.accept(this);
-		t.chain.accept(this);
+		t.e.accept(this);
 		System.out.println(";");
 	}
 

@@ -70,9 +70,8 @@ To be determined.
 	Grammar improvements and expansion
 
 # Planned Grammar Improvements
-	Static classes, methods, and variables
-	Smooth out implementations of user defined exceptions - implemented as a class that extends Throwable
-	Replace "float" with "decimal"
+	Static variables
+	redesign methodcall
 	Treating everything as an object
 
 # Items Under Consideration For Later Release

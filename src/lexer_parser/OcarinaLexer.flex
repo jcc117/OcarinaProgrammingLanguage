@@ -52,7 +52,7 @@ String = \"[^\"]*\" | \'[^\']*\'
 //"stub"	{return symbol(STUB);}
 "void"	{return symbol(VOID);}
 "int"	{return symbol(INT);}
-"float"	{return symbol(FLOAT);}
+"decimal"	{return symbol(FLOAT);}
 "boolean"	{return symbol(BOOLEAN);}
 "hashmap"	{return symbol(HASHMAP);}
 "string"	{return symbol(STRING);}
@@ -95,14 +95,13 @@ String = \"[^\"]*\" | \'[^\']*\'
 "until"	{return symbol(UNTIL); }
 "unless"	{return symbol(UNLESS); }
 "var"	{return symbol(VAR);}
-"singleton"	{return symbol(SINGLETON); }
+"static"	{return symbol(SINGLETON); }
 "const"	{return symbol(CONST); }
 "typeof"	{return symbol(TYPEOF); }
 "differs"	{return symbol(DIFFERS); }
 "try"	{return symbol(TRY); }
 "catch"	{return symbol(CATCH); }
 "finally"	{return symbol(FINALLY); }
-"exception"	{return symbol(EXCEPTION); }
 "throw"	{return symbol(THROW); }
 
 /*Identifiers and numbers*/
