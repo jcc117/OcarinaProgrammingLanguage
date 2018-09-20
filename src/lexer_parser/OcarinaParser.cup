@@ -15,7 +15,7 @@ parser code {: @Override
 /* Terminals - Keywords*/
 
 terminal START, END, SAGE, USING, PUBLIC, PRIVATE, PROTECTED;
-terminal CLASS, EXTENDS, CONSTRUCTOR, SUPER, SINGLETON;
+terminal CLASS, EXTENDS, CONSTRUCTOR, SUPER, STATIC;
 terminal SUBROUTINE;
 /* terminal MOCK; */
 /* terminal STUB; */
@@ -78,7 +78,7 @@ non terminal TryCatch trycatch;
 non terminal CatchList catchlist;
 
 /* Note: some keywords replaced in the lexer to save work */
-/* This includes subroutine(function), singleton(static), float(decimal) */
+/* This includes subroutine(function), STATIC(static), float(decimal) */
 
 /* Precedence */
 precedence left BANG;
@@ -159,28 +159,28 @@ classdef ::= PUBLIC:p CLASS identifier:i COLON deflist:d END
 		PROTECTED:p CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 2, false, pleft, pright); :}
 		|
-		PUBLIC:p SINGLETON CLASS identifier:i COLON deflist:d END
+		PUBLIC:p STATIC CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 3, true, pleft, pright); :}
 		|
-		PUBLIC:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		PUBLIC:p STATIC CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, 3, true, pleft, pright); :}
 		|
-		PRIVATE:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		PRIVATE:p STATIC CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, 0, true, pleft, pright); :}
 		|
-		PRIVATE:p SINGLETON CLASS identifier:i COLON deflist:d END
+		PRIVATE:p STATIC CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 0, true, pleft, pright); :}
 		|
-		SINGLETON:s CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		STATIC:s CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, 1, true, sleft, sright); :}
 		|
-		SINGLETON:s CLASS identifier:i COLON deflist:d END
+		STATIC:s CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 1, true, sleft, sright); :}
 		|
-		PROTECTED:p SINGLETON CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
+		PROTECTED:p STATIC CLASS identifier:i1 EXTENDS identifier:i2 COLON deflist:d END
 		{: RESULT = new ExtendsClassDef(i1, i2, d, 2, true, pleft, pright); :}
 		|
-		PROTECTED:p SINGLETON CLASS identifier:i COLON deflist:d END
+		PROTECTED:p STATIC CLASS identifier:i COLON deflist:d END
 		{: RESULT = new SimpleClassDef(i, d, 2, true, pleft, pright); :}
 		;
 
@@ -189,45 +189,81 @@ constructor ::= CONSTRUCTOR:c arglist:a COLON statementlist:s END
 		;
 
 methoddef ::= PUBLIC:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, 3, pleft, pright); :}
+		{: RESULT = new MethodDef(r, i, a, l, 3, false, pleft, pright); :}
 		|
 		PRIVATE:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, 0, pleft, pright); :}
+		{: RESULT = new MethodDef(r, i, a, l, 0, false, pleft, pright); :}
 		|
 		SUBROUTINE:s type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, 1, sleft, sright); :}
+		{: RESULT = new MethodDef(r, i, a, l, 1, false, sleft, sright); :}
 		|
 		PROTECTED:p SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, 2, pleft, pright); :}
+		{: RESULT = new MethodDef(r, i, a, l, 2, false, pleft, pright); :}
+		|
+		PUBLIC:p STATIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 3, true, pleft, pright); :}
+		|
+		PRIVATE:p STATIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 0, true, pleft, pright); :}
+		|
+		STATIC SUBROUTINE:s type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 1, true, sleft, sright); :}
+		|
+		PROTECTED:p STATIC SUBROUTINE type:r identifier:i arglist:a COLON statementlist:l END
+		{: RESULT = new MethodDef(r, i, a, l, 2, true, pleft, pright); :}
 		;
 
 classvardec ::= type:t identifier:i SEMICOLON
-		{: RESULT = new VarDecl(t, i, 1, t.line, t.column); :}
+		{: RESULT = new VarDecl(t, i, 1, false,t.line, t.column); :}
 		|
 		PRIVATE type:t identifier:i SEMICOLON
-		{: RESULT = new VarDecl(t, i, 0, t.line, t.column); :}
+		{: RESULT = new VarDecl(t, i, 0, false,t.line, t.column); :}
 		|
 		PROTECTED type:t identifier:i SEMICOLON
-		{: RESULT = new VarDecl(t, i, 2, t.line, t.column); :}
+		{: RESULT = new VarDecl(t, i, 2, false,t.line, t.column); :}
 		|
 		PUBLIC type:t identifier:i SEMICOLON
-		{: RESULT = new VarDecl(t, i, 3, t.line, t.column); :}
+		{: RESULT = new VarDecl(t, i, 3, false,t.line, t.column); :}
 		|
 		type:t identifier:i EQUAL literal:l SEMICOLON
-		{: RESULT = new VarDecAssignment(l, i, t, 1, t.line, t.column); :}
+		{: RESULT = new VarDecAssignment(l, i, t, 1, false,t.line, t.column); :}
 		|
 		PRIVATE type:t identifier:i EQUAL literal:l SEMICOLON
-		{: RESULT = new VarDecAssignment(l, i, t, 0, t.line, t.column); :}
+		{: RESULT = new VarDecAssignment(l, i, t, 0, false,t.line, t.column); :}
 		|
 		PROTECTED type:t identifier:i EQUAL literal:l SEMICOLON
-		{: RESULT = new VarDecAssignment(l, i, t, 2, t.line, t.column); :}
+		{: RESULT = new VarDecAssignment(l, i, t, 2, false,t.line, t.column); :}
 		|
 		PUBLIC type:t identifier:i EQUAL literal:l SEMICOLON
-		{: RESULT = new VarDecAssignment(l, i, t, 3, t.line, t.column); :}
+		{: RESULT = new VarDecAssignment(l, i, t, 3, false,t.line, t.column); :}
+		|
+		STATIC type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 1, true, t.line, t.column); :}
+		|
+		PRIVATE STATIC type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 0, true, t.line, t.column); :}
+		|
+		PROTECTED STATIC type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 2, true, t.line, t.column); :}
+		|
+		PUBLIC STATIC type:t identifier:i SEMICOLON
+		{: RESULT = new VarDecl(t, i, 3, true, t.line, t.column); :}
+		|
+		STATIC type:t identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 1, true, t.line, t.column); :}
+		|
+		PRIVATE STATIC type:t identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 0, true, t.line, t.column); :}
+		|
+		PROTECTED STATIC type:t identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 2, true, t.line, t.column); :}
+		|
+		PUBLIC STATIC type:t identifier:i EQUAL literal:l SEMICOLON
+		{: RESULT = new VarDecAssignment(l, i, t, 3, true, t.line, t.column); :}
 		;
 
 vardec ::= type:t identifier:i SEMICOLON
-		{: RESULT = new VarDecl(t, i, 1, t.line, t.column); :}
+		{: RESULT = new VarDecl(t, i, 1, false,t.line, t.column); :}
 		;
 
 arglist ::= LPAREN parameter:p argchain:c RPAREN
@@ -358,7 +394,7 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		{: RESULT = new Print(e, e.line, e.column); :}
 		|
 		type:t identifier:i EQUAL expression:e
-		{: RESULT = new VarDecAssignment(e, i, t, 1, t.line, t.column); :}
+		{: RESULT = new VarDecAssignment(e, i, t, 1, false, t.line, t.column); :}
 		|
 		identifier:i EQUAL expression:e
 		{: RESULT = new Assignment(e, i, i.line, i.column); :}

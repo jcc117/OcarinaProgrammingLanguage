@@ -5,13 +5,13 @@ public class SimpleClassDef extends Node implements ClassDef{
 	public Identifier i;
 	public DefList d;
 	public int protection;
-	public boolean singleton;
+	public boolean is_static;
 
 	public SimpleClassDef(Identifier i, DefList d, int protection, boolean singleton, int line, int column){
 		this.i = i;
 		this.d = d;
 		this.protection = protection;
-		this.singleton = singleton;
+		this.is_static = singleton;
 		this.line = line;
 		this.column = column;
 	}

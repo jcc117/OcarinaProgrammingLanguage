@@ -51,7 +51,7 @@ To be determined.
 	*Handling of Integers and Floats of Any Size*
 	*Heavy use of keywords to promote readability with the option to use traditional operators*
 	*Strictly Typed, but also supports var types (similar to C#)*
-	*Public and Private Classes and Functions*
+	*Public, Private, and Static Classes and Functions*
 	*Variable Names, Class Names, and Functions Names which can include "?"*
 	*Function-Type variables*
 	*Functions not strictly tied to classes*
@@ -59,9 +59,8 @@ To be determined.
 	*Exception handling*
 	*"Double quoted strings" and 'Single quoted strings', similar to JavaScript*
 
-# Progress report
+# In Planning
 	Advanced architecture design and planning
-	File catalog design and importing sages
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Research into the JVM
 	Research into the Ruby interpreter
@@ -69,10 +68,12 @@ To be determined.
 	Planning of the Ocarina Standard Library
 	Grammar improvements and expansion
 
+# Recently Accomplished
+	Adding static variables, functions, and classes
+	Development of file catalog and searcher to compile imported files with a variable degree of parallelism
+
 # Planned Grammar Improvements
-	Static variables
 	redesign methodcall
-	Treating everything as an object
 
 # Items Under Consideration For Later Release
 	*repl mode*

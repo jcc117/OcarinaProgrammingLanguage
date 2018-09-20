@@ -59,8 +59,8 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(SimpleClassDef s){
 		String prot = get_protection_level(s.protection);
 		System.out.print(prot);
-		if(s.singleton)
-			System.out.print(" singleton");
+		if(s.is_static)
+			System.out.print(" static");
 		System.out.print(" class ");
 		s.i.accept(this);
 		System.out.println(":");
@@ -71,8 +71,8 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(ExtendsClassDef e){
 		String prot = get_protection_level(e.protection);
 		System.out.print(prot);
-		if(e.singleton)
-			System.out.print(" singleton");
+		if(e.is_static)
+			System.out.print(" static");
 		System.out.print(" class ");
 		e.i.accept(this);
 		System.out.print(" extends ");
@@ -94,7 +94,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		String prot = get_protection_level(m.protection);
 		if(prot.length() != 0)
 			System.out.print(prot + " ");
-		System.out.print("subroutine ");
+		if(m.is_static)
+			System.out.print("static ");
+		System.out.print("function ");
 		m.r.accept(this);
 		System.out.print(" ");
 		m.i.accept(this);
@@ -109,6 +111,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		String prot = get_protection_level(v.protection);
 		if(prot.length() != 0){
 			System.out.print(prot + " ");
+		}
+		if(v.is_static){
+			System.out.print("static ");
 		}
 		v.t.accept(this);
 		System.out.print(" ");
@@ -145,7 +150,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(FloatType t){
 		if(t.constant)
 			System.out.print("const ");
-		System.out.print("float");
+		System.out.print("decimal");
 	}
 
 	public void visit(BooleanType t){
@@ -237,6 +242,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		String prot = get_protection_level(v.protection);
 		if(prot.length() != 0){
 			System.out.print(prot + " ");
+		}
+		if(v.is_static){
+			System.out.print("static ");
 		}
 		v.t.accept(this);
 		System.out.print(" ");

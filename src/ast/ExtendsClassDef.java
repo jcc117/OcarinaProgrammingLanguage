@@ -6,14 +6,14 @@ public class ExtendsClassDef extends Node implements ClassDef{
 	public Identifier c;
 	public DefList d;
 	public int protection;
-	public boolean singleton;
+	public boolean is_static;
 
 	public ExtendsClassDef(Identifier i, Identifier c, DefList d, int protection, boolean singleton, int line, int column){
 		this.i = i;
 		this.c = c;
 		this.d = d;
 		this.protection = protection;
-		this.singleton = singleton;
+		this.is_static = singleton;
 		this.line = line;
 		this.column = column;
 	}

@@ -12,7 +12,7 @@ public class FileCatalogBuilder{
 	private static ArrayList<String> processed = new ArrayList<String>();
 	private boolean hadError;
 
-	public FileCatalog build(String filename) throws InterruptedException {
+	public FileCatalog build(String filename, int MAX_DEGREE_PARALLELISM) throws InterruptedException {
 		hadError = false;
 		//Run the initial file
 		File initialFile = new File(filename);
@@ -40,12 +40,6 @@ public class FileCatalogBuilder{
 		String basePath = initialFile.getAbsolutePath();
 		basePath = basePath.replace(sageName + ".ocar", "");
 
-		/****************************************************
-		To Do
-		Add error statements for sage names not matching file names
-		Fix base paths for all future files to process
-		*******************************************************/
-
 		// Create files here and add them to the back log
 		for(String s : usings){
 			addToBackLog(basePath + s);	//Change this to create a file instead
@@ -60,10 +54,12 @@ public class FileCatalogBuilder{
 
 			//Create a new thread for each item and process it
 			ArrayList<Thread> builders = new ArrayList<Thread>();
-			while(!fileBackLog.isEmpty()){
+			int counter = 0;
+			while(!fileBackLog.isEmpty() && counter < MAX_DEGREE_PARALLELISM){
 				File fileToProcess = new File(fileBackLog.poll());
 				builders.add(new Thread(new AstBuilder(fileToProcess)));
 				inProcessing.add(fileToProcess.getAbsolutePath());
+				counter++;
 			}
 
 			//Run the threads

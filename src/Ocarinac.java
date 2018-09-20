@@ -17,10 +17,10 @@ public class Ocarinac{
 			System.out.println("No file provided");
 			System.exit(-1);
 		}
-
+		int maxDegreeParallelism = 20;
 		//Build abstract syntax trees and put them into the file catalog
 		FileCatalogBuilder builder = new FileCatalogBuilder();
-		FileCatalog fileCatalog = builder.build(args[0]);
+		FileCatalog fileCatalog = builder.build(args[0], maxDegreeParallelism);
 
     	//Do not continue if there were any errors in the input
     	if(!builder.hadErrors()){

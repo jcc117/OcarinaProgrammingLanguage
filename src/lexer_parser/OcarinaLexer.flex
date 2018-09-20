@@ -95,7 +95,7 @@ String = \"[^\"]*\" | \'[^\']*\'
 "until"	{return symbol(UNTIL); }
 "unless"	{return symbol(UNLESS); }
 "var"	{return symbol(VAR);}
-"static"	{return symbol(SINGLETON); }
+"static"	{return symbol(STATIC); }
 "const"	{return symbol(CONST); }
 "typeof"	{return symbol(TYPEOF); }
 "differs"	{return symbol(DIFFERS); }

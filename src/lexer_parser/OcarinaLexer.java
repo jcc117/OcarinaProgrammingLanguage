@@ -1165,7 +1165,7 @@ public class OcarinaLexer extends sym implements java_cup.runtime.Scanner {
             }
           case 160: break;
           case 71: 
-            { return symbol(SINGLETON);
+            { return symbol(STATIC);
             }
           case 161: break;
           case 72: 
