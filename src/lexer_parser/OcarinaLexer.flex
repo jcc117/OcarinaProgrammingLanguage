@@ -29,7 +29,6 @@ import java.math.*;
 	}
 %}
 
-IntegerLiteral = {DecimalLiteral} | {HexLiteral} | {OctalLiteral}
 DecimalLiteral = [1-9][0-9]*
 HexLiteral = 0(x | X)[0-9a-fA-F]+
 OctalLiteral = 0[0-7]+
@@ -83,6 +82,8 @@ String = \"[^\"]*\" | \'[^\']*\'
 "continue"	{return symbol(CONTINUE);}
 "sage"	{return symbol(SAGE);}
 "for"	{return symbol(FOR);}
+"foreach"	{return symbol(FOREACH);}
+"in"	{return symbol(IN);}
 "do"	{return symbol(DO);}
 "using"	{return symbol(USING);}
 "public"	{return symbol(PUBLIC); }
@@ -90,7 +91,6 @@ String = \"[^\"]*\" | \'[^\']*\'
 "protected" {return symbol(PROTECTED);}
 "constructor" {return symbol(CONSTRUCTOR); }
 "exec"	{return symbol(EXEC); }
-"with"	{return symbol(WITH); }
 "super" {return symbol(SUPER); }
 "until"	{return symbol(UNTIL); }
 "unless"	{return symbol(UNLESS); }

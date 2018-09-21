@@ -223,6 +223,19 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.println("end");
 	}
 
+	public void visit(Foreach f){
+		System.out.print("foreach ");
+		f.t.accept(this);
+		System.out.print(" ");
+		f.i1.accept(this);
+		System.out.print(" in ");
+		f.i2.accept(this);
+		f.chain.accept(this);
+		System.out.println(":");
+		f.s.accept(this);
+		System.out.println("end");
+	}
+
 	public void visit(DoWhile d){
 		System.out.println("do");
 		d.s.accept(this);

@@ -28,6 +28,7 @@ public interface Visitor{
 	public Sym visit(If i);
 	public Sym visit(While w);
 	public Sym visit(For f);
+	public Sym visit(Foreach f);
 	public Sym visit(DoWhile d);
 	public Sym visit(Print p);
 	public Sym visit(VarDecAssignment v);

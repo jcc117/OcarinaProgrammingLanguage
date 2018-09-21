@@ -21,7 +21,7 @@ terminal SUBROUTINE;
 /* terminal STUB; */
 terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, VAR, CONST;
 terminal IF, ELSE, BEGIN, RATHER, UNLESS;
-terminal WHILE, FOR, DO, UNTIL;
+terminal WHILE, FOR, DO, UNTIL, FOREACH, IN;
 terminal RETURN;
 terminal AND, OR, NAND, NOR, EQUALS, DIFFERS;
 terminal TRUE, FALSE;
@@ -29,7 +29,7 @@ terminal THIS, NIL;
 terminal ASSERT, CREATE, EXIT;
 terminal LENGTH, PRINT;
 terminal DEBUG, BREAK, CONTINUE;
-terminal EXEC, WITH;
+terminal EXEC;
 terminal TYPEOF;
 terminal TRY, CATCH, FINALLY;
 terminal THROW;
@@ -374,6 +374,9 @@ simple_statement ::= BEGIN:b statementlist:l END
 		|
 		FOR LPAREN semicolon_statement:s1 SEMICOLON expression:e SEMICOLON semicolon_statement:s2 RPAREN COLON statementlist:s3 END
 		{: RESULT = new For(e, s1, s2, s3, s1.line, s1.column); :}
+		|
+		FOREACH type:t identifier:i1 IN identifier:i2 idchain:c COLON statementlist:s END
+		{: RESULT = new Foreach(t, i1, i2, c, s, t.line, t.column); :}
 		|
 		DO statementlist:s END WHILE expression:e SEMICOLON
 		{: RESULT = new DoWhile(e, s, e.line, e.column); :}

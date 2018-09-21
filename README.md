@@ -35,13 +35,9 @@ With the following command:
 
 This shall produce a file called filename.rina, which runs on the Ocarina interpretter.
 
-# Can I compile multiple files at once?
-In later versions yes. For the initial release, no.
-
 # How do I run an Ocarina file?
 With the following command:
-
-	*ocarina filename.rina*
+*ocarina filename.rina*
 
 # How do I install Ocarina?
 To be determined.
@@ -72,9 +68,7 @@ To be determined.
 	Added static variables, functions, and classes
 	Development of file catalog and searcher to compile imported files with a variable degree of parallelism
 	Improved the way functions are called to be a bit more conventional
-
-# Planned Grammar Improvements
-	Foreach loops
+	Added foreach loops
 
 # Items Under Consideration For Later Release
 	*repl mode*

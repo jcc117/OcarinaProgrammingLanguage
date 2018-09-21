@@ -28,6 +28,7 @@ public interface VoidVisitor{
 	public void visit(If i);
 	public void visit(While w);
 	public void visit(For f);
+	public void visit(Foreach f);
 	public void visit(DoWhile d);
 	public void visit(Print p);
 	public void visit(VarDecAssignment v);
