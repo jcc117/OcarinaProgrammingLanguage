@@ -69,6 +69,7 @@ To be determined.
 	Development of file catalog and searcher to compile imported files with a variable degree of parallelism
 	Improved the way functions are called to be a bit more conventional
 	Added foreach loops
+	Cleaned up operator precedence
 
 # Items Under Consideration For Later Release
 	*repl mode*

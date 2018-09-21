@@ -82,13 +82,15 @@ non terminal CatchList catchlist;
 /* This includes subroutine(function), STATIC(static), float(decimal) */
 
 /* Precedence */
-precedence left BANG;
 precedence left LPAREN, RPAREN, DOT, AT, LBRACKET, RBRACKET, LBRACE, RBRACE;
-precedence left DIV, MULT, POWER, MOD;
+precedence left BANG, INCREMENT, DECREMENT;
+precedence left POWER;
+precedence left DIV, MULT, MOD;
 precedence left MINUS, PLUS;
-precedence left AND, OR, NAND, NOR;
 precedence left GTHANE, LTHANE, GTHAN, LTHAN;
 precedence left EQUALS, DIFFERS;
+precedence left AND, NAND;
+precedence left OR, NOR;
 
 /* Productions */
 /* Note on protection levels
