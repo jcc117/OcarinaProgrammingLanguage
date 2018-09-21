@@ -561,6 +561,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodCallStatement m){
+		System.out.print("exec ");
 		m.method.accept(this);
 		System.out.println(";");
 	}

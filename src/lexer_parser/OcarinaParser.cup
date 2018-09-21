@@ -442,7 +442,7 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		DECREMENT THIS:t idchain:c
 		{: RESULT = new Decrement(new This(tleft, tright), c, tleft, tright); :}
 		|
-		methodcall:m
+		EXEC methodcall:m
 		{: RESULT = new MethodCallStatement(m, m.line, m.column); :}
 		|
 		SUPER:s LPAREN RPAREN

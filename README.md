@@ -69,11 +69,12 @@ To be determined.
 	Grammar improvements and expansion
 
 # Recently Accomplished
-	Adding static variables, functions, and classes
+	Added static variables, functions, and classes
 	Development of file catalog and searcher to compile imported files with a variable degree of parallelism
+	Improved the way functions are called to be a bit more conventional
 
 # Planned Grammar Improvements
-	redesign methodcall
+	Foreach loops
 
 # Items Under Consideration For Later Release
 	*repl mode*
