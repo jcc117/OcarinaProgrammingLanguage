@@ -452,10 +452,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodCall m){
-		System.out.print("exec ");
 		m.e.accept(this);
-		m.i.accept(this);
-		System.out.print(" with ");
 		System.out.print("(");
 		m.l.accept(this);
 		System.out.print(")");

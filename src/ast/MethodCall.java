@@ -3,12 +3,10 @@ import symboltable.*;
 
 public class MethodCall extends Expression{
 	public Expression e;
-	public IdChain i;
 	public ParamList l;
 
-	public MethodCall(Expression e, IdChain i, ParamList l, int line, int column){
+	public MethodCall(Expression e, ParamList l, int line, int column){
 		this.e = e;
-		this.i = i;
 		this.l = l;
 		this.line = line;
 		this.column = column;

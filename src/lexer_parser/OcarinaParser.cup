@@ -62,6 +62,7 @@ non terminal Statement statement;
 non terminal Expression expression;
 non terminal Expression literal;
 non terminal ParamList paramlist;
+non terminal ParamList bracelist;
 non terminal Identifier identifier;
 non terminal Param parameter;
 non terminal RatherList ratherlist;
@@ -336,11 +337,8 @@ typeof ::= identifier:i idchain:c TYPEOF type:t
 		{: RESULT = new Typeof(i, c, t, i.line, i.column); :}
 		;
 
-methodcall ::= EXEC identifier:i1 idchain:i2 WITH paramlist:l
-		{: RESULT = new MethodCall(i1, i2, l, i1.line, i1.column); :}
-		|
-		EXEC THIS:t idchain:i2 WITH paramlist:l
-		{: RESULT = new MethodCall(new This(tleft, tright), i2, l, tleft, tright); :}
+methodcall ::= expression:e paramlist:l
+		{: RESULT = new MethodCall(e, l, e.line, e.column); :}
 		;
 
 idchain ::= DOT identifier:i idchain:c
@@ -612,8 +610,15 @@ literal ::= INTLITERAL:i
 		STRINGLITERAL:s
 		{: RESULT = new StringLiteral(s, sleft, sright); :}
 		|
-		CREATE:c type:t LBRACKET RBRACKET paramlist:l
+		CREATE:c type:t LBRACKET RBRACKET bracelist:l
 		{: RESULT = new ArrayLiteral(t, l, cleft, cright); :}
+		;
+
+bracelist ::= LBRACE expression:e expressionchain:c RBRACE
+		{: RESULT = new ParamList(e, c); :}
+		|
+		LBRACE RBRACE
+		{: RESULT = new ParamList(); :}
 		;
 
 paramlist ::= LPAREN expression:e expressionchain:c RPAREN
