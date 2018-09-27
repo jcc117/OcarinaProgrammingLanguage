@@ -56,13 +56,12 @@ To be determined.
 	*"Double quoted strings" and 'Single quoted strings', similar to JavaScript*
 
 # In Planning
-	Advanced architecture design and planning
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Research into the JVM
 	Research into the Ruby interpreter
 	Research into the Python interpeter
 	Planning of the Ocarina Standard Library
-	Grammar improvements and expansion
+	Handling function literals in symbol table
 
 # Recently Accomplished
 	Added static variables, functions, and classes
@@ -70,6 +69,8 @@ To be determined.
 	Improved the way functions are called to be a bit more conventional
 	Added foreach loops
 	Cleaned up operator precedence
+	Compiler Architecture Design
+	Initial Design of Symbols for Symbol Table
 
 # Items Under Consideration For Later Release
 	*repl mode*
