@@ -62,6 +62,7 @@ To be determined.
 	Research into the Python interpeter
 	Planning of the Ocarina Standard Library
 	Handling function literals in symbol table
+	Handling changes of scope within a method(loops, blocks, if statements, etc)
 
 # Recently Accomplished
 	Added static variables, functions, and classes
