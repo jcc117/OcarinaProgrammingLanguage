@@ -6,6 +6,7 @@ public class ClassSym extends Sym{
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, MethodSym> methodTable;
 	public Hashtable<String, ClassSym> classTable;
+	public Hashtable<String, MethodSym> constructorTable;
 	public ClassSym extension;
 
 	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection){
@@ -18,6 +19,7 @@ public class ClassSym extends Sym{
 		this.varTable = new Hashtable<String, VarSym>();
 		this.methodTable = new Hashtable<String, MethodSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
+		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
 	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, ClassSym extension){
@@ -31,6 +33,7 @@ public class ClassSym extends Sym{
 		this.varTable = new Hashtable<String, VarSym>();
 		this.methodTable = new Hashtable<String, MethodSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
+		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
 	public void addVar(String name, VarSym symbol){
@@ -45,6 +48,10 @@ public class ClassSym extends Sym{
 		classTable.put(name, symbol);
 	}
 
+	public void addConstructor(String name, MethodSym symbol){
+		constructorTable.put(name, symbol);
+	}
+
 	public VarSym getVar(String name){
 		return varTable.get(name);
 	}
@@ -55,5 +62,9 @@ public class ClassSym extends Sym{
 
 	public ClassSym getClass(String name){
 		return classTable.get(name);
+	}
+
+	public MethodSym getConstructor(String name){
+		return constructorTable.get(name);
 	}
 }

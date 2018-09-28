@@ -61,7 +61,7 @@ To be determined.
 	Research into the Ruby interpreter
 	Research into the Python interpeter
 	Planning of the Ocarina Standard Library
-	Handling function literals in symbol table
+	Handling array types and hashmap types in symbol table
 	Handling changes of scope within a method(loops, blocks, if statements, etc)
 
 # Recently Accomplished
@@ -72,6 +72,7 @@ To be determined.
 	Cleaned up operator precedence
 	Compiler Architecture Design
 	Initial Design of Symbols for Symbol Table
+	Workaround for function literals
 
 # Items Under Consideration For Later Release
 	*repl mode*
