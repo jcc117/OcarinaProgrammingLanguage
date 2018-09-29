@@ -57,11 +57,7 @@ To be determined.
 
 # In Planning
 	Syntactical rule development(what's considered an error other than grammar violations)
-	Research into the JVM
-	Research into the Ruby interpreter
-	Research into the Python interpeter
 	Planning of the Ocarina Standard Library
-	Changing ast nodes to handle inner scopes for methods (if statements, for loops, etc.)
 
 # Recently Accomplished
 	Added static variables, functions, and classes
