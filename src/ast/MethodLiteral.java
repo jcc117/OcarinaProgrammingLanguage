@@ -4,12 +4,14 @@ import symboltable.*;
 public class MethodLiteral extends Expression{
 	public ParamList p;
 	public StatementList s;
+	public String name;
 
-	public MethodLiteral(ParamList p, StatementList s, int line, int column){
+	public MethodLiteral(ParamList p, StatementList s, String name, int line, int column){
 		this.p = p;
 		this.s = s;
 		this.line = line;
 		this.column = column;
+		this.name = name;
 	}
 
 	public void accept(VoidVisitor v){

@@ -3,6 +3,7 @@ import java_cup.runtime.*;
 import java.util.*;
 import java.math.*;
 import ast.*;
+import filecatalog.FileCatalogBuilder;
 
 /* Setup */
 scan with {: return getScanner().next_token(); :};
@@ -307,6 +308,9 @@ type ::= type:t LBRACKET RBRACKET
 		identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, false, i.line, i.column); :}
 		|
+		SUBROUTINE:c LBRACE type:t RBRACE
+		{: RESULT = new MethodType(t, false, cleft, cright); :}
+		|
 		VOID:v
 		{: RESULT = new VoidType(vleft, vright); :}
 		|
@@ -601,7 +605,7 @@ literal ::= INTLITERAL:i
 		{: RESULT = new ObjectCreate(i, l, cleft, cright); :}
 		|
 		paramlist:p POINTER:p1 LBRACE statementlist:l RBRACE
-		{: RESULT = new MethodLiteral(p, l, p1left, p1right); :}
+		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), p1left, p1right); :}
 		|
 		MINUS:m expression:e
 		{: RESULT = new UnaryMinus(e, mleft, mright); :}

@@ -61,8 +61,7 @@ To be determined.
 	Research into the Ruby interpreter
 	Research into the Python interpeter
 	Planning of the Ocarina Standard Library
-	Handling array types and hashmap types in symbol table
-	Handling changes of scope within a method(loops, blocks, if statements, etc)
+	Changing ast nodes to handle inner scopes for methods (if statements, for loops, etc.)
 
 # Recently Accomplished
 	Added static variables, functions, and classes
@@ -72,7 +71,8 @@ To be determined.
 	Cleaned up operator precedence
 	Compiler Architecture Design
 	Initial Design of Symbols for Symbol Table
-	Workaround for function literals
+	Better handling of types for symbol table
+	Initial implementation of inner scopes within a method
 
 # Items Under Consideration For Later Release
 	*repl mode*

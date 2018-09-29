@@ -7,6 +7,7 @@ public class SageSym extends Sym{
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, ClassSym> classTable;
 	public Hashtable<String, MethodSym> methodTable;
+	public Hashtable<String, MethodSym> methodLiteralTable;
 	public boolean hasMainMethod;
 	public Hashtable<String, VarSym> mainMethodVarTable;
 
@@ -42,6 +43,10 @@ public class SageSym extends Sym{
 		methodTable.put(name, symbol);
 	}
 
+	public void addMethodLiteral(String name, MethodSym symbol){
+		methodLiteralTable.put(name, symbol);
+	}
+
 	public void addClass(String name, ClassSym symbol){
 		classTable.put(name, symbol);
 	}
@@ -61,6 +66,10 @@ public class SageSym extends Sym{
 
 	public MethodSym getMethod(String name){
 		return methodTable.get(name);
+	}
+
+	public MethodSym getMethodLiteral(String name){
+		return methodLiteralTable.get(name);
 	}
 
 	public ClassSym getClass(String name){

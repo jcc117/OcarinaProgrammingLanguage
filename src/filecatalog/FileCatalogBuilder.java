@@ -169,6 +169,12 @@ public class FileCatalogBuilder{
 		}
 	}
 
+	//For generating method literals - they shall be treated like other functions but given
+	//a unique id for the symbol table
+	public static synchronized String generateLiteralId(){
+		return "$" + UUID.randomUUID().toString();
+	}
+
 	public boolean hadErrors(){
 		return hadError;
 	}

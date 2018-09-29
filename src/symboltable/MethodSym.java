@@ -3,15 +3,13 @@ import ast.*;
 import java.util.Hashtable;
 
 public class MethodSym extends Sym{
-	//Unsure how to handle arrays and hashmap return types
-	public enum ReturnTypeEnum{
-		INT, DECIMAL, BOOLEAN, STRING, ARRAY, HASHMAP, ID, FUNCTION, VOID;
-	}
+
 	public Hashtable<String, VarSym> varTable;
-	public ReturnTypeEnum returnType;
-	public Sym returnSym;	//If return type is ID or FUNCTION this is set
+	public Hashtable<String, MethodScope> innerScopeTable;
+	public TypeSym returnType;
+	public boolean is_literal;
 
-	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, ReturnTypeEnum returnType){
+	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal){
 		this.name = name;
 		this.line = line;
 		this.column = column;
@@ -19,18 +17,8 @@ public class MethodSym extends Sym{
 		this.protection = protection;
 		this.returnType = returnType;
 		this.varTable = new Hashtable<String, VarSym>();
-		this.returnSym = null;
-	}
-
-	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, ReturnTypeEnum returnType, Sym returnSym){
-		this.name = name;
-		this.line = line;
-		this.column = column;
-		this.is_static = is_static;
-		this.protection = protection;
-		this.returnType = returnType;
-		this.varTable = new Hashtable<String, VarSym>();
-		this.returnSym = returnSym;
+		this.innerScopeTable = new Hashtable<String, MethodScope>();
+		this.is_literal = is_literal;
 	}
 
 	public void addVar(String name, VarSym symbol){
@@ -39,5 +27,20 @@ public class MethodSym extends Sym{
 
 	public VarSym getVar(String name){
 		return varTable.get(name);
+	}
+
+	/*
+	Paths are created as such:
+	"2for-1while-4if" represents a for loop with scope equal to the second for loop in the method,
+	this first while loop within that for loop, and the 4th if statement in the while loop.
+	They are created with a number along with 'for', 'if', 'rather', 'else', 'while', 'do', 'unless',
+	'until', 'try', or 'foreach'. Each inner scope is connected with '-'.
+	*/
+	public void addScope(String path, MethodScope scope){
+		innerScopeTable.put(path, scope);
+	}
+
+	public MethodScope getScope(String path){
+		return innerScopeTable.get(path);
 	}
 }
