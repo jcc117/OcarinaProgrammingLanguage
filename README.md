@@ -58,6 +58,7 @@ To be determined.
 # In Planning
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Planning of the Ocarina Standard Library
+	Planning of Symbol Table Builder
 
 # Recently Accomplished
 	Added static variables, functions, and classes

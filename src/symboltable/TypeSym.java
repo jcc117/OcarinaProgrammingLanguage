@@ -2,7 +2,7 @@ package symboltable;
 
 public class TypeSym{
 	public enum TypeEnum{
-		INT, DECIMAL, BOOLEAN, ID, FUNCTION, ARRAY, HASHMAP, VOID
+		INT, DECIMAL, BOOLEAN, ID, STRING, FUNCTION, ARRAY, HASHMAP, VOID, VAR
 	}
 
 	public TypeEnum type;
