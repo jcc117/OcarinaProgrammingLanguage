@@ -103,6 +103,7 @@ String = \"[^\"]*\" | \'[^\']*\'
 "catch"	{return symbol(CATCH); }
 "finally"	{return symbol(FINALLY); }
 "throw"	{return symbol(THROW); }
+"delegate"	{return symbol(DELEGATE); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

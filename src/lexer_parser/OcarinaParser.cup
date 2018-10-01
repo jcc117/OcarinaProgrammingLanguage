@@ -21,6 +21,7 @@ terminal SUBROUTINE;
 /* terminal MOCK; */
 /* terminal STUB; */
 terminal VOID, INT, FLOAT, BOOLEAN, HASHMAP, STRING, VAR, CONST;
+terminal DELEGATE;
 terminal IF, ELSE, BEGIN, RATHER, UNLESS;
 terminal WHILE, FOR, DO, UNTIL, FOREACH, IN;
 terminal RETURN;
@@ -454,8 +455,8 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		EXEC methodcall:m
 		{: RESULT = new MethodCallStatement(m, m.line, m.column); :}
 		|
-		SUPER:s LPAREN RPAREN
-		{: RESULT = new Super(sleft, sright);:}
+		SUPER:s paramlist:p
+		{: RESULT = new Super(p, sleft, sright);:}
 		|
 		THROW expression:e
 		{: RESULT = new Throw(e, e.line, e.column);:}
@@ -604,8 +605,8 @@ literal ::= INTLITERAL:i
 		CREATE:c identifier:i paramlist:l
 		{: RESULT = new ObjectCreate(i, l, cleft, cright); :}
 		|
-		paramlist:p POINTER:p1 LBRACE statementlist:l RBRACE
-		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), p1left, p1right); :}
+		DELEGATE:d arglist:p LBRACE statementlist:l RBRACE
+		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}
 		|
 		MINUS:m expression:e
 		{: RESULT = new UnaryMinus(e, mleft, mright); :}
