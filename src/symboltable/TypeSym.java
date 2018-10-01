@@ -10,6 +10,7 @@ public class TypeSym{
 	public TypeSym returnType;
 	public TypeSym keyType;
 	public TypeSym valueType;
+	public Sym idSym;
 
 	public TypeSym(TypeEnum type){
 		this.type = type;
@@ -17,6 +18,16 @@ public class TypeSym{
 		this.returnType = null;
 		this.keyType = null;
 		this.valueType = null;
+		this.idSym = null;
+	}
+
+	public TypeSym(TypeEnum type, Sym idSym){
+		this.type = type;
+		this.arrayType = null;
+		this.returnType = null;
+		this.keyType = null;
+		this.valueType = null;
+		this.idSym = idSym;
 	}
 
 	public TypeSym(TypeEnum type, TypeSym t){
@@ -32,6 +43,7 @@ public class TypeSym{
 
 		this.keyType = null;
 		this.valueType = null;
+		this.idSym = null;
 	}
 
 	public TypeSym(TypeEnum type, TypeSym keyType, TypeSym valueType){
@@ -40,5 +52,6 @@ public class TypeSym{
 		this.returnType = null;
 		this.keyType = keyType;
 		this.valueType = valueType;
+		this.idSym = null;
 	}
 }
