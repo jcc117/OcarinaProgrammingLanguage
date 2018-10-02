@@ -404,14 +404,14 @@ semicolon_statement ::= PRINT LPAREN expression:e RPAREN
 		type:t identifier:i EQUAL expression:e
 		{: RESULT = new VarDecAssignment(e, i, t, 1, false, t.line, t.column); :}
 		|
-		identifier:i EQUAL expression:e
-		{: RESULT = new Assignment(e, i, i.line, i.column); :}
+		identifier:i idchain:c EQUAL expression:e
+		{: RESULT = new Assignment(e, i, c, i.line, i.column); :}
 		|
-		identifier:i LBRACE expression:e1 RBRACE EQUAL expression:e2
-		{: RESULT = new HashmapAssignment(i, e1, e2, i.line, i.column); :}
+		identifier:i idchain:c LBRACE expression:e1 RBRACE EQUAL expression:e2
+		{: RESULT = new HashmapAssignment(i, c, e1, e2, i.line, i.column); :}
 		|
-		identifier:i LBRACKET expression:e1 RBRACKET EQUAL expression:e2
-		{: RESULT = new ArrayAssignment(i, e1, e2, i.line, i.column); :}
+		identifier:i idchain:c LBRACKET expression:e1 RBRACKET EQUAL expression:e2
+		{: RESULT = new ArrayAssignment(i, c, e1, e2, i.line, i.column); :}
 		|
 		RETURN expression:e
 		{: RESULT = new Return(e, e.line, e.column); :}

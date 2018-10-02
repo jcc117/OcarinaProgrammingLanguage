@@ -3,8 +3,9 @@ package symboltable;
 import ast.*;
 
 public class OcarinaPrettyPrinter implements VoidVisitor{
+	private int tabs;
 	public OcarinaPrettyPrinter(){
-		
+		tabs = 0;
 	}
 
 	public void print(Sage s){
@@ -39,7 +40,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(Program p){
 		System.out.println("start");
+		tabs++;
 		p.s.accept(this);
+		tabs--;
 		System.out.println("end");
 		p.d.accept(this);
 	}
@@ -57,6 +60,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(SimpleClassDef s){
+		printTabs();
 		String prot = get_protection_level(s.protection);
 		System.out.print(prot);
 		if(s.is_static)
@@ -64,11 +68,15 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print(" class ");
 		s.i.accept(this);
 		System.out.println(":");
+		tabs++;
 		s.d.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(ExtendsClassDef e){
+		printTabs();
 		String prot = get_protection_level(e.protection);
 		System.out.print(prot);
 		if(e.is_static)
@@ -78,19 +86,27 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print(" extends ");
 		e.c.accept(this); 
 		System.out.println(":");
+		tabs++;
 		e.d.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(Constructor c){
+		printTabs();
 		System.out.print("constructor(");
 		c.a.accept(this);
 		System.out.println("):");
+		tabs++;
 		c.l.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(MethodDef m){
+		printTabs();
 		String prot = get_protection_level(m.protection);
 		if(prot.length() != 0)
 			System.out.print(prot + " ");
@@ -103,11 +119,15 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		System.out.print("(");
 		m.a.accept(this);
 		System.out.println("):");
+		tabs++;
 		m.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(VarDecl v){
+		printTabs();
 		String prot = get_protection_level(v.protection);
 		if(prot.length() != 0){
 			System.out.print(prot + " ");
@@ -176,7 +196,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodType m){
-		System.out.print("const subroutine{");
+		if(m.constant)
+			System.out.print("const ");
+		System.out.print("function{");
 		m.t.accept(this);
 		System.out.print("}");
 	}
@@ -186,44 +208,64 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Block b){
+		printTabs();
 		System.out.println("begin");
+		tabs++;
 		b.l.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(If i){
+		printTabs();
 		System.out.print("if ");
 		i.e.accept(this);
 		System.out.println(":");
+		tabs++;
 		i.s1.accept(this);
+		tabs--;
 		i.r.accept(this);
 		if(i.s2 != null){
+			printTabs();
 			System.out.println("else:");
+			tabs++;
 			i.s2.accept(this);
+			tabs--;
 		}
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(While w){
+		printTabs();
 		System.out.print("while ");
 		w.e.accept(this);
 		System.out.println(":");
+		tabs++;
 		w.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(For f){
+		printTabs();
 		System.out.print("for(");
 		f.s1.accept(this);
 		f.e.accept(this);
 		System.out.print("; ");
 		f.s2.accept(this);
 		System.out.println("):");
+		tabs++;
 		f.s3.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(Foreach f){
+		printTabs();
 		System.out.print("foreach ");
 		f.t.accept(this);
 		System.out.print(" ");
@@ -232,26 +274,36 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		f.i2.accept(this);
 		f.chain.accept(this);
 		System.out.println(":");
+		tabs++;
 		f.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(DoWhile d){
-		System.out.println("do");
+		printTabs();
+		System.out.println("do:");
+		tabs++;
 		d.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
+		printTabs();
 		System.out.print("while ");
 		d.e.accept(this);
 		System.out.println(";");
 	}
 
 	public void visit(Print p){
+		printTabs();
 		System.out.print("print(");
 		p.e.accept(this);
 		System.out.println(");");
 	}
 
 	public void visit(VarDecAssignment v){
+		printTabs();
 		String prot = get_protection_level(v.protection);
 		if(prot.length() != 0){
 			System.out.print(prot + " ");
@@ -268,14 +320,18 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Assignment a){
+		printTabs();
 		a.i.accept(this);
+		a.chain.accept(this);
 		System.out.print(" = ");
 		a.e.accept(this);
 		System.out.println(";");
 	}
 
 	public void visit(HashmapAssignment h){
+		printTabs();
 		h.i.accept(this);
+		h.chain.accept(this);
 		System.out.print("{");
 		h.e1.accept(this);
 		System.out.print("} = ");
@@ -284,7 +340,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayAssignment a){
+		printTabs();
 		a.i.accept(this);
+		a.chain.accept(this);
 		System.out.print("[");
 		a.e1.accept(this);
 		System.out.print("] = ");
@@ -293,32 +351,38 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Return r){
+		printTabs();
 		System.out.print("return ");
 		r.e.accept(this);
 		System.out.println(";");
 	}
 
 	public void visit(Assert a){
+		printTabs();
 		System.out.print("assert ");
 		a.e.accept(this);
 		System.out.println(";");
 	}
 
 	public void visit(Exit e){
+		printTabs();
 		System.out.print("exit(");
 		e.e.accept(this);
 		System.out.println(");");
 	}
 
 	public void visit(Break b){
+		printTabs();
 		System.out.println("break;");
 	}
 
 	public void visit(Continue c){
+		printTabs();
 		System.out.println("continue;");
 	}
 
 	public void visit(Increment i){
+		printTabs();
 		if(i.i != null)
 			i.i.accept(this);
 		else
@@ -328,6 +392,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Decrement d){
+		printTabs();
 		if(d.i != null)
 			d.i.accept(this);
 		else
@@ -343,10 +408,13 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Rather r){
+		printTabs();
 		System.out.print("rather ");
 		r.e.accept(this);
 		System.out.println(":");
+		tabs++;
 		r.s.accept(this);
+		tabs--;
 	}
 
 	public void visit(And a){
@@ -574,6 +642,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodCallStatement m){
+		printTabs();
 		System.out.print("exec ");
 		m.method.accept(this);
 		System.out.println(";");
@@ -585,22 +654,31 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Super s){
+		printTabs();
 		System.out.println("super();");
 	}
 
 	public void visit(Unless u){
+		printTabs();
 		System.out.print("unless ");
 		u.e.accept(this);
 		System.out.println(":");
+		tabs++;
 		u.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(Until u){
+		printTabs();
 		System.out.print("until ");
 		u.e.accept(this);
 		System.out.println(":");
+		tabs++;
 		u.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.println("end");
 	}
 
@@ -618,10 +696,13 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodLiteral m){
-		System.out.print("(");
+		System.out.print("delegate(");
 		m.p.accept(this);
-		System.out.println(") => {");
+		System.out.println("){");
+		tabs++;
 		m.s.accept(this);
+		tabs--;
+		printTabs();
 		System.out.print("}");
 	}
 
@@ -640,23 +721,33 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(TryCatch t){
+		printTabs();
 		System.out.println("try:");
+		tabs++;
 		t.l.accept(this);
+		tabs--;
 		t.c.accept(this);
 		if(t.f.l.size() > 0){
+			printTabs();
 			System.out.println("finally:");
+			tabs++;
 			t.f.accept(this);
+			tabs--;
 		}
+		printTabs();
 		System.out.println("end");
 	}
 
 	public void visit(Catch c){
+		printTabs();
 		System.out.print("catch ");
 		c.i.accept(this);
 		c.chain.accept(this);
 		c.i2.accept(this);
 		System.out.println(":");
+		tabs++;
 		c.s.accept(this);
+		tabs--;
 	}
 
 	public void visit(CatchList c){
@@ -666,6 +757,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Throw t){
+		printTabs();
 		System.out.print("throw ");
 		t.e.accept(this);
 		System.out.println(";");
@@ -736,5 +828,11 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 				break;
 		}
 		return prot;
+	}
+
+	private void printTabs(){
+		for(int i = 0; i < tabs; i++){
+			System.out.print("\t");
+		}
 	}
 }

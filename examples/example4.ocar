@@ -12,9 +12,31 @@ start
 		
 		int z = i++ + u-- * ++l / --z;
 	end
+	
+	function{decimal} thing = delegate(int i, decimal j){
+		return i * j;
+	};
+	exec thing(20, 20.1);
+	
+	int[][] doubleArray = create int[30][20];
+	x.y.z = false;
+	x.y.z.w = nil;
 end
 
 public var x = 0;
 private int y;
 
 protected static int z = 9;
+static const function{Class} func = delegate(boolean b){boolean b = b and b; return b;};
+private function{void} func2 = delegate(){print( x % -9);};
+
+public static class Class:
+	constructor():
+	
+	end
+	
+end
+
+'''
+Comments
+'''

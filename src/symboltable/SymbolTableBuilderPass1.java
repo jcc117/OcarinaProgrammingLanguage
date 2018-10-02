@@ -8,6 +8,17 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	//refrences throughout some areas.
 	//A third pass will be needed to resolve all var-type variables.
 
+	private SymbolTable table;
+
+	public SymbolTableBuilderPass1(SymbolTable table){
+		this.table = table;
+	}
+
+	//Build the symboltable
+	public void build(Sage sage){
+		sage.visit(this);
+	}
+
 	public SageSym visit(Sage s);
 	public void visit(Using u);
 	public void visit(UsingList u);
