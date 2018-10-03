@@ -11,11 +11,12 @@ only brief descriptions of syntax will be given so you have an idea of where to 
 *Basic Types*
 
 	int
-	float
+	decimal
 	boolean
 	string
 	array
 	hashmap
+	function{_type_}
 
 *Class Initialization*
 
@@ -25,11 +26,11 @@ only brief descriptions of syntax will be given so you have an idea of where to 
 
 # Conditionals and Loops
 *Evaluating Conditionals*
-*if loops*
-*unless loops*
+*if statements*
+*unless statements*
 *while loops*
 *until loops*
-*do while loops*
+*do-while loops*
 *for loops*
 
 # Classes
@@ -50,8 +51,6 @@ multiple files. Only one main subroutine may be declared in any sage, and you ma
 		...
 	end
 	...
-
-# Exceptions
 
 # Running An Ocarina Program
 

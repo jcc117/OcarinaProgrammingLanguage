@@ -9,20 +9,21 @@ public class ClassSym extends Sym{
 	public Hashtable<String, MethodSym> constructorTable;
 	public ClassSym extension;
 
-	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection){
+	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent){
 		this.is_initialized = true;
 		this.name = name;
 		this.line = line;
 		this.column = column;
 		this.is_static = is_static;
 		this.protection = protection;
+		this.parent = parent;
 		this.varTable = new Hashtable<String, VarSym>();
 		this.methodTable = new Hashtable<String, MethodSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
 		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
-	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, ClassSym extension){
+	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, ClassSym extension){
 		this.is_initialized = true;
 		this.name = name;
 		this.line = line;
@@ -30,6 +31,7 @@ public class ClassSym extends Sym{
 		this.is_static = is_static;
 		this.protection = protection;
 		this.extension = extension;
+		this.parent = parent;
 		this.varTable = new Hashtable<String, VarSym>();
 		this.methodTable = new Hashtable<String, MethodSym>();
 		this.classTable = new Hashtable<String, ClassSym>();

@@ -9,7 +9,7 @@ public class MethodSym extends Sym{
 	public TypeSym returnType;
 	public boolean is_literal;
 
-	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal){
+	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal, Sym parent){
 		this.name = name;
 		this.line = line;
 		this.column = column;
@@ -19,6 +19,7 @@ public class MethodSym extends Sym{
 		this.varTable = new Hashtable<String, VarSym>();
 		this.innerScopeTable = new Hashtable<String, MethodScope>();
 		this.is_literal = is_literal;
+		this.parent = parent;
 	}
 
 	public void addVar(String name, VarSym symbol){

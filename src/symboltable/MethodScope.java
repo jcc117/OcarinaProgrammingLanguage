@@ -5,9 +5,11 @@ public class MethodScope{
 	public String path;
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, MethodScope> innerScopes;
+	public MethodScope parent;
 
-	public MethodScope(String path){
+	public MethodScope(String path, MethodScope parent){
 		this.path = path;
+		this.parent = parent;
 		varTable = new Hashtable<String, VarSym>();
 		innerScopes = new Hashtable<String, MethodScope>();
 	}

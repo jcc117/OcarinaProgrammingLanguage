@@ -3,7 +3,7 @@ import ast.*;
 import java.util.Hashtable;
 
 public class SageSym extends Sym{
-	public Hashtable<String, SageSym> usingTable;
+	public Hashtable<String, SymbolTable> usingTable;
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, ClassSym> classTable;
 	public Hashtable<String, MethodSym> methodTable;
@@ -11,7 +11,7 @@ public class SageSym extends Sym{
 	public boolean hasMainMethod;
 	public Hashtable<String, VarSym> mainMethodVarTable;
 
-	public SageSym(String name, boolean hasMainMethod){
+	public SageSym(String name, boolean hasMainMethod, Sym parent){
 		this.name = name;
 		this.line = 0;
 		this.column = 0;
@@ -19,7 +19,7 @@ public class SageSym extends Sym{
 		this.is_initialized = true;
 		this.hasMainMethod = hasMainMethod;
 		this.protection = ProtectionLevel.PUBLIC;
-		this.usingTable = new Hashtable<String, SageSym>();
+		this.usingTable = new Hashtable<String, SymbolTable>();
 		this.varTable = new Hashtable<String, VarSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
 		this.methodTable = new Hashtable<String, MethodSym>();
@@ -29,10 +29,11 @@ public class SageSym extends Sym{
 		else{
 			this.mainMethodVarTable = null;
 		}
+		this.parent = parent;
 	}
 
-	public void addSage(String name, SageSym sage){
-		usingTable.put(name, sage);
+	public void addTable(String name, SymbolTable table){
+		usingTable.put(name, table);
 	}
 
 	public void addVar(String name, VarSym symbol){
@@ -56,7 +57,7 @@ public class SageSym extends Sym{
 			mainMethodVarTable.put(name, var);
 	}
 
-	public SageSym getSage(String name){
+	public SymbolTable getTable(String name){
 		return usingTable.get(name);
 	}
 

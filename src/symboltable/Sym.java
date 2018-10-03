@@ -11,4 +11,5 @@ public abstract class Sym{
 	public boolean is_static;
 	public ProtectionLevel protection;
 	public boolean is_initialized;
+	public Sym parent;
 }
