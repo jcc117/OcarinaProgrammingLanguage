@@ -10,16 +10,6 @@ public class SymbolTable{
 		this.root = root;
 	}
 
-	//Retrieve the symbol from the symbol table identified by the String called name.
-	//If symbol is not in the current scope it will search in the scope above it and keep doing so
-	//until it is either found or it hits the root. When the root is hit it will then check the top level
-	//of all imports. If it is not there null is returned. Proper protections will be checked if the symbol
-	//is found but does not have the proper protections. Appropriate protection exceptions will be thrown if
-	//one is violated.
-	public Sym getSymbol(String name){
-		return null;
-	}
-
 	//Retrive the symbol from the symbol table with the identified path. Each string in the array is
 	//identified as a different component of the path. The first item in path is treated like the above method
 	//where it will keep floating up scopes until it is found or it is not. If not found, null is returned. If
@@ -27,27 +17,60 @@ public class SymbolTable{
 	//the last item in the path is found and returned. It cannot return variables symbols within functions.
 	//Proper protections of these scopes will be checked. Appropriate protection exceptions will be thrown if
 	//one is violated with the given path.
-	public Sym getSymbolWithPath(String[] path){
+	public Sym getSymbol(String[] path){
 		return null;
 	}
 
 	//Navigate up to the parent scope from the current one.
 	public void floatScope(){
 		if(currentMethodScope == null){
-			currentScope = currentScope.parent;
+			if(currentScope.parent != null){
+				currentScope = currentScope.parent;
+			}
+			else{
+				//Throw exception - illegal floating of scope
+			}
 		}
 		else{
 			currentMethodScope = currentMethodScope.parent;
 		}
 	}
 
-	//Navigate down to the child scope from the current one with the name scopeName.
-	public void sinkScope(String scopeName){
-		if(currentMethodScope == null){
-
+	//Navigate down to the child scope which is a class
+	public void sinkToClassScope(String scopeName){
+		if(currentScope.instanceof(SageSym) || currentScope.instanceof(ClassSym)){
+			currentScope = currentScope.getClass(scopeName);
 		}
 		else{
+			//Throw exception - illegal navigation to a class scope
+		}
+	}
 
+	//Navigate down to the child scope which is a method
+	public void sinkToMethodScope(String scopeName){
+		if(currentScope.instanceof(SageSym) || currentScope.instanceof(ClassSym)){
+			currentScope = currentScope.getMethod(scopeName);
+		}
+		else if(currentScope.instanceof(MethodSym)){
+			currentScope = currentScope.getMethodLiteral(scopeName);
+		}
+		else{
+			//Throw exception - illegal navigation to a method scope
+		}
+	}
+
+	//Navigate down to the child scope which is an inner method scope
+	public void sinkToInnerMethodScope(String scopeName){
+		if(currentMethodScope == null){
+			if(currentScope.instanceof(MethodSym)){
+				currentMethodScope = currentScope.getScope(scopeName);
+			}
+			else{
+				//Throw exception - illegal navigation to inner method scope
+			}
+		}
+		else{
+			currentMethodScope = currentMethodScope.getScope(scopeName);
 		}
 	}
 
