@@ -581,6 +581,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(ObjectCreate o){
 		System.out.print("create ");
 		o.i.accept(this);
+		o.chain.accept(this);
 		System.out.print("(");
 		o.l.accept(this);
 		System.out.print(")");

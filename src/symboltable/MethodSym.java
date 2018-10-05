@@ -9,6 +9,8 @@ public class MethodSym extends Sym{
 	public Hashtable<String, MethodSym> methodLiteralTable;
 	public TypeSym returnType;
 	public boolean is_literal;
+	//names for methods will be their signature
+	//formatted as "name(type1, type2,...)"
 
 	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal, Sym parent){
 		this.name = name;
@@ -36,7 +38,7 @@ public class MethodSym extends Sym{
 		methodLiteralTable.put(name, symbol);
 	}
 
-	public VarSym getMethodLiteral(String name){
+	public MethodSym getMethodLiteral(String name){
 		return methodLiteralTable.get(name);
 	}
 

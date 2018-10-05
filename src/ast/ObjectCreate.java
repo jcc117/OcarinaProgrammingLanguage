@@ -4,10 +4,12 @@ import symboltable.*;
 public class ObjectCreate extends Expression{
 	public ParamList l;
 	public Identifier i;
+	public IdChain chain;
 
-	public ObjectCreate(Identifier i, ParamList l, int line, int column){
+	public ObjectCreate(Identifier i, IdChain chain, ParamList l, int line, int column){
 		this.l = l;
 		this.i = i;
+		this.chain = chain;
 		this.line = line;
 		this.column = column;
 	}

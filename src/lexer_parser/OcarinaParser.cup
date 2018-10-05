@@ -602,8 +602,8 @@ literal ::= INTLITERAL:i
 		NIL:n
 		{: RESULT = new Nil(nleft, nright); :}
 		|
-		CREATE:c identifier:i paramlist:l
-		{: RESULT = new ObjectCreate(i, l, cleft, cright); :}
+		CREATE:c identifier:i idchain:d paramlist:l
+		{: RESULT = new ObjectCreate(i, d, l, cleft, cright); :}
 		|
 		DELEGATE:d arglist:p LBRACE statementlist:l RBRACE
 		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}

@@ -17,18 +17,34 @@ public class SymbolTable{
 	//the last item in the path is found and returned. It cannot return variables symbols within functions.
 	//Proper protections of these scopes will be checked. Appropriate protection exceptions will be thrown if
 	//one is violated with the given path.
-	public Sym getSymbol(String[] path){
+	public Sym getSymbol(String[] path, boolean isTypeSearch){
+		if(path.length == 0){
+			return null
+		}
+		else{
+			//Indicates the item under question can only be searched under a class table
+			if(isTypeSearch){
+				//Search current scope for first item in path under class scopes - float up til found
+				//If found - search the rest of the path under class scopes only
+			}
+			else{
+				//If the symbol is the last one in the class search in the var and method tables
+				//Otherwise search the class tables
+			}
+		}
+
 		return null;
 	}
 
 	//Navigate up to the parent scope from the current one.
-	public void floatScope(){
+	public void floatScope() throws IllegalScopeException{
 		if(currentMethodScope == null){
 			if(currentScope.parent != null){
 				currentScope = currentScope.parent;
 			}
 			else{
 				//Throw exception - illegal floating of scope
+				throw new IllegalScopeException("Illegal transition to a scope that has no parent scope");
 			}
 		}
 		else{
@@ -37,36 +53,42 @@ public class SymbolTable{
 	}
 
 	//Navigate down to the child scope which is a class
-	public void sinkToClassScope(String scopeName){
-		if(currentScope.instanceof(SageSym) || currentScope.instanceof(ClassSym)){
-			currentScope = currentScope.getClass(scopeName);
+	public void sinkToClassScope(String scopeName) throws IllegalScopeException{
+		if((currentScope instanceof SageSym) || (currentScope instanceof ClassSym)){
+			currentScope = ((SageSym)currentScope).getClass(scopeName);
 		}
 		else{
 			//Throw exception - illegal navigation to a class scope
+			throw new IllegalScopeException("Illegal transition to a class scope");
 		}
 	}
 
 	//Navigate down to the child scope which is a method
-	public void sinkToMethodScope(String scopeName){
-		if(currentScope.instanceof(SageSym) || currentScope.instanceof(ClassSym)){
-			currentScope = currentScope.getMethod(scopeName);
+	public void sinkToMethodScope(String scopeName) throws IllegalScopeException{
+		if(currentScope instanceof SageSym){
+			currentScope = ((SageSym)currentScope).getMethod(scopeName);
 		}
-		else if(currentScope.instanceof(MethodSym)){
-			currentScope = currentScope.getMethodLiteral(scopeName);
+		else if(currentScope instanceof ClassSym){
+			currentScope = ((ClassSym)currentScope).getMethod(scopeName);
+		}
+		else if(currentScope instanceof MethodSym){
+			currentScope = ((MethodSym)currentScope).getMethodLiteral(scopeName);
 		}
 		else{
 			//Throw exception - illegal navigation to a method scope
+			throw new IllegalScopeException("Illegal transition to a function scope");
 		}
 	}
 
 	//Navigate down to the child scope which is an inner method scope
-	public void sinkToInnerMethodScope(String scopeName){
+	public void sinkToInnerMethodScope(String scopeName) throws IllegalScopeException{
 		if(currentMethodScope == null){
-			if(currentScope.instanceof(MethodSym)){
-				currentMethodScope = currentScope.getScope(scopeName);
+			if(currentScope instanceof MethodSym){
+				currentMethodScope = ((MethodSym)currentScope).getScope(scopeName);
 			}
 			else{
 				//Throw exception - illegal navigation to inner method scope
+				throw new IllegalScopeException("Illegal transition to an inner scope within a function");
 			}
 		}
 		else{
