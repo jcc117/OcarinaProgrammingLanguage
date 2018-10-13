@@ -284,10 +284,113 @@ public class SymbolTable{
 				while(index < path.length){
 					if(index == (path.length - 1)){
 						//The last item may be a variable or method
+						if(thisScope == null){
+							return null;
+						}
+						else if(thisScope instanceof SageSym){
+							Sym result = ((SageSym)thisScope).getVar(path[index]);
+							if(result != null)
+								return result;
+							result =((SageSym)thisScope).getMethod(path[index]);
+							if(result != null)
+								return result;
+						}
+						else if(thisScope instanceof ClassSym){
+							Sym result = ((ClassSym)thisScope).getVar(path[index]);
+							if(result != null)
+								return result;
+							result =((ClassSym)thisScope).getMethod(path[index]);
+							if(result != null)
+								return result;
+						}
+						else if(thisScope instanceof MethodSym){
+							Sym result = ((MethodSym)thisScope).getVar(path[index]);
+							if(result != null)
+								return result;
+						}
+						else{
+							return null;
+						}
 					}
 					else{
 						//All items except the last may be variables or static classes
 						//If it is a variable, go down to the type of the variable
+						if(thisScope == null){
+							return null;
+						}
+						else if(thisScope instanceof SageSym){
+							Sym result = ((SageSym)thisScope).getClass(path[index]);
+							if(result != null){
+								if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath) && result.is_static){
+									thisScope = result;
+									scopePath = thisScope.path;
+								}
+								else if(result.is_static){
+									thisScope = result;
+									scopePath = thisScope.path;
+								}
+								else{
+									//Print error message here
+									return null;
+								}
+							}
+							else{
+								result = ((SageSym)thisScope).getVar(path[index])
+								if(result != null){
+									if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath)){
+										thisScope = ((VarSym)thisScope).type.idSym;
+										scopePath = thisScope.path;
+									}
+									else{
+										thisScope = ((VarSym)thisScope).type.idSym;
+										scopePath = thisScope.path;
+									}
+								}
+								else{
+									return null;
+								}
+							}
+						}
+						else if(thisScope instanceof ClassSym){
+							Sym result = ((ClassSym)thisScope).getClass(path[index]);
+							if(result != null){
+								if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath) && result.is_static){
+									thisScope = result;
+									scopePath = thisScope.path;
+								}
+								else if(result.is_static){
+									thisScope = result;
+									scopePath = thisScope.path;
+								}
+								else{
+									//Print error message here
+									return null;
+								}
+							}
+							else{
+								result = ((ClassSym)thisScope).getVar(path[index])
+								if(result != null){
+									if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath)){
+										thisScope = ((VarSym)thisScope).type.idSym;
+										scopePath = thisScope.path;
+									}
+									else{
+										thisScope = ((VarSym)thisScope).type.idSym;
+										scopePath = thisScope.path;
+									}
+								}
+								else{
+									return null;
+								}
+							}
+						}
+						//Not allowed to access inner variables of methods
+						else if(thisScope instanceof MethodSym){
+							return null;
+						}
+						else{
+							return null;
+						}
 					}
 					index++;
 				}
