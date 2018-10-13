@@ -12,4 +12,5 @@ public abstract class Sym{
 	public ProtectionLevel protection;
 	public boolean is_initialized;
 	public Sym parent;
+	public String path;
 }

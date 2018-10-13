@@ -2,14 +2,16 @@ package symboltable;
 import java.util.Hashtable;
 
 public class MethodScope{
+	public String name;
 	public String path;
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, MethodScope> innerScopes;
 	public MethodScope parent;
 
-	public MethodScope(String path, MethodScope parent){
+	public MethodScope(String path, MethodScope parent, String name){
 		this.path = path;
 		this.parent = parent;
+		this.name = name;
 		varTable = new Hashtable<String, VarSym>();
 		innerScopes = new Hashtable<String, MethodScope>();
 	}

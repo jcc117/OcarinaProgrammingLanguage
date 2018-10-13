@@ -12,13 +12,14 @@ public class MethodSym extends Sym{
 	//names for methods will be their signature
 	//formatted as "name(type1, type2,...)"
 
-	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal, Sym parent){
+	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal, Sym parent, String path){
 		this.name = name;
 		this.line = line;
 		this.column = column;
 		this.is_static = is_static;
 		this.protection = protection;
 		this.returnType = returnType;
+		this.path = path;
 		this.varTable = new Hashtable<String, VarSym>();
 		this.innerScopeTable = new Hashtable<String, MethodScope>();
 		this.methodLiteralTable = new Hashtable<String, MethodSym>();

@@ -9,10 +9,11 @@ public class ClassSym extends Sym{
 	public Hashtable<String, MethodSym> constructorTable;
 	public ClassSym extension;
 
-	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent){
+	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, String path){
 		this.is_initialized = true;
 		this.name = name;
 		this.line = line;
+		this.path = path;
 		this.column = column;
 		this.is_static = is_static;
 		this.protection = protection;

@@ -11,12 +11,13 @@ public class SageSym extends Sym{
 	public boolean hasMainMethod;
 	public Hashtable<String, VarSym> mainMethodVarTable;
 
-	public SageSym(String name, boolean hasMainMethod, Sym parent){
+	public SageSym(String name, boolean hasMainMethod, Sym parent, String path){
 		this.name = name;
 		this.line = 0;
 		this.column = 0;
 		this.is_static = false;
 		this.is_initialized = true;
+		this.path = path;
 		this.hasMainMethod = hasMainMethod;
 		this.protection = ProtectionLevel.PUBLIC;
 		this.usingTable = new Hashtable<String, SymbolTable>();
