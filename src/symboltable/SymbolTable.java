@@ -289,23 +289,23 @@ public class SymbolTable{
 						}
 						else if(thisScope instanceof SageSym){
 							Sym result = ((SageSym)thisScope).getVar(path[index]);
-							if(result != null)
+							if(result != null && result.protection != Sym.ProtectionLevel.PRIVATE)
 								return result;
-							result =((SageSym)thisScope).getMethod(path[index]);
+							result = ((SageSym)thisScope).getMethod(path[index]);
 							if(result != null)
 								return result;
 						}
 						else if(thisScope instanceof ClassSym){
 							Sym result = ((ClassSym)thisScope).getVar(path[index]);
-							if(result != null)
+							if(result != null != Sym.ProtectionLevel.PRIVATE)
 								return result;
 							result =((ClassSym)thisScope).getMethod(path[index]);
-							if(result != null)
+							if(result != null != Sym.ProtectionLevel.PRIVATE)
 								return result;
 						}
 						else if(thisScope instanceof MethodSym){
 							Sym result = ((MethodSym)thisScope).getVar(path[index]);
-							if(result != null)
+							if(result != null != Sym.ProtectionLevel.PRIVATE)
 								return result;
 						}
 						else{
