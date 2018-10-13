@@ -335,7 +335,7 @@ public class SymbolTable{
 								}
 							}
 							else{
-								result = ((SageSym)thisScope).getVar(path[index])
+								result = ((SageSym)thisScope).getVar(path[index]);
 								if(result != null){
 									if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath)){
 										thisScope = ((VarSym)thisScope).type.idSym;
@@ -368,7 +368,7 @@ public class SymbolTable{
 								}
 							}
 							else{
-								result = ((ClassSym)thisScope).getVar(path[index])
+								result = ((ClassSym)thisScope).getVar(path[index]);
 								if(result != null){
 									if(result.protection == Sym.ProtectionLevel.PRIVATE && isInnerPath(scopePath)){
 										thisScope = ((VarSym)thisScope).type.idSym;
