@@ -297,15 +297,15 @@ public class SymbolTable{
 						}
 						else if(thisScope instanceof ClassSym){
 							Sym result = ((ClassSym)thisScope).getVar(path[index]);
-							if(result != null != Sym.ProtectionLevel.PRIVATE)
+							if(result != null && (result.protection != Sym.ProtectionLevel.PRIVATE))
 								return result;
 							result =((ClassSym)thisScope).getMethod(path[index]);
-							if(result != null != Sym.ProtectionLevel.PRIVATE)
+							if(result != null && result.protection != Sym.ProtectionLevel.PRIVATE)
 								return result;
 						}
 						else if(thisScope instanceof MethodSym){
 							Sym result = ((MethodSym)thisScope).getVar(path[index]);
-							if(result != null != Sym.ProtectionLevel.PRIVATE)
+							if(result != null && result.protection != Sym.ProtectionLevel.PRIVATE)
 								return result;
 						}
 						else{
@@ -474,13 +474,63 @@ public class SymbolTable{
 
 	//Add a symbol to the current scope.
 	public void addSymbol(Sym symbol){
-
+		if(symbol instanceof SageSym){
+			//Will work on later
+		}
+		else if(symbol instanceof ClassSym){
+			if(currentScope instanceof SageSym){
+				((SageSym)currentScope).addClass(symbol.name, (ClassSym)symbol);
+			}
+			else if(currentScope instanceof ClassSym){
+				((ClassSym)currentScope).addClass(symbol.name, (ClassSym)symbol);
+			}
+			else{
+				//Print error message here
+			}
+		}
+		else if(symbol instanceof MethodSym){
+			if(currentScope instanceof SageSym){
+				((SageSym)currentScope).addMethod(symbol.name, (MethodSym)symbol);
+			}
+			else if(currentScope instanceof ClassSym){
+				((ClassSym)currentScope).addMethod(symbol.name, (MethodSym)symbol);
+			}
+			else if(currentScope instanceof MethodSym){
+				((MethodSym)currentScope).addMethodLiteral(symbol.name, (MethodSym)symbol);
+			}
+			else{
+				//Print error message here
+			}
+		}
+		else if(symbol instanceof VarSym){
+			if(currentScope instanceof SageSym){
+				((SageSym)currentScope).addVar(symbol.name, (VarSym)symbol);
+			}
+			else if(currentScope instanceof ClassSym){
+				((ClassSym)currentScope).addVar(symbol.name, (VarSym)symbol);
+			}
+			else if((currentScope instanceof MethodSym) && currentMethodScope == null){
+				((MethodSym)currentScope).addVar(symbol.name, (VarSym)symbol);
+			}
+			else if((currentScope instanceof MethodSym) && currentMethodScope != null){
+				currentMethodScope.addVar(symbol.name, (VarSym)symbol);
+			}
+			else{
+				//Print error message here
+			}
+		}
 	}
 
 	//Add an inner scope to the current method scope
 	public void addMethodScope(MethodScope scope){
 		if(currentMethodScope != null){
 			currentMethodScope.addScope(scope.path, scope);
+		}
+		else if(currentScope instanceof MethodSym){
+			((MethodSym)currentScope).addScope(scope.path, scope);
+		}
+		else{
+			//Print error message
 		}
 	}
 

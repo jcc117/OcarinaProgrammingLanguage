@@ -1,5 +1,6 @@
 package symboltable;
 import ast.*;
+import java.util.Stack;
 
 public class SymbolTableBuilderPass1 implements Visitor{
 	//This builder will perform the initial pass of the ast to build the symbol table.
@@ -9,9 +10,13 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	//A third pass will be needed to resolve all var-type variables.
 
 	private SymbolTable table;
+	private StringBuilder path;
+	private Stack<PathCounterStruct> counterStack;
 
 	public SymbolTableBuilderPass1(SymbolTable table){
 		this.table = table;
+		this.path = new StringBuilder();
+		this.counterStack = new Stack<PathCounterStruct>();
 	}
 
 	//Build the symboltable
@@ -41,19 +46,19 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public TypeSym visit(IntType t){
-		return new TypeSym(TypeEnum.INT);
+		return new TypeSym(TypeSym.TypeEnum.INT);
 	}
 
 	public TypeSym visit(FloatType t){
-		return new TypeSym(TypeEnum.DECIMAL);
+		return new TypeSym(TypeSym.TypeEnum.DECIMAL);
 	}
 
 	public TypeSym visit(BooleanType t){
-		return new TypeSym(TypeEnum.BOOLEAN);
+		return new TypeSym(TypeSym.TypeEnum.BOOLEAN);
 	}
 
 	public TypeSym visit(StringType t){
-		return new TypeSym(TypeEnum.STRING);
+		return new TypeSym(TypeSym.TypeEnum.STRING);
 	}
 
 	public TypeSym visit(HashmapType t){
@@ -65,14 +70,26 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public TypeSym visit(VoidType t){
-		return new TypeSym(TypeEnum.VOID);
+		return new TypeSym(TypeSym.TypeEnum.VOID);
 	}
 
 	public TypeSym visit(VarType v){
-	 	return new TypeSym(TypeEnum.VAR);
+	 	return new TypeSym(TypeSym.TypeEnum.VAR);
 	}
 
-	public MethodScope visit(Block b);
+	public MethodScope visit(Block b){
+		String name = counterStack.peek().blockCounter++ + "block";
+		MethodScope newScope = new MethodScope(path.toString(), null, name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		for(Statement s : b.l.l){
+			s.accept(this);
+		}
+		table.floatScope();
+		counterStack.pop();
+	}
+
 	public MethodScope visit(If i);
 	public MethodScope visit(RatherList l);
 	public MethodScope visit(Rather r);
