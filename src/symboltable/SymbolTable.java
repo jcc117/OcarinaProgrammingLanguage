@@ -7,7 +7,13 @@ public class SymbolTable{
 	private MethodScope currentMethodScope;
 	private String currentPath;
 
-	public SymbolTable(SageSym root){
+	public SymbolTable(){
+		root = null;
+		currentScope = null;
+		currentPath = "";
+	}
+
+	public void setRoot(SageSym root){
 		this.root = root;
 		currentScope = root;
 		currentPath = root.path;
@@ -541,6 +547,10 @@ public class SymbolTable{
 
 	public void addImport(SymbolTable table){
 		root.addTable(table.getRoot().name, table);
+	}
+
+	public Sym getCurrentScope(){
+		return currentScope;
 	}
 
 	//Checks if the path makes up part of the currentPath

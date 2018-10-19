@@ -1,6 +1,7 @@
 package symboltable;
 import ast.*;
 import java.util.Stack;
+import java.util.ArrayList;
 
 public class SymbolTableBuilderPass1 implements Visitor{
 	//This builder will perform the initial pass of the ast to build the symbol table.
@@ -24,19 +25,89 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		sage.visit(this);
 	}
 
-	public SageSym visit(Sage s);
-	public void visit(Using u);
-	public void visit(UsingList u);
-	public void visit(Program p);
-	public void visit(StatementList l);
-	public void visit(DefList d);
-	public ClassSym visit(SimpleClassDef s);
-	public ClassSym visit(ExtendsClassDef e);
-	public MethodSym visit(Constructor c);
-	public MethodSym visit(MethodDef m);
-	public VarSym visit(VarDecl v);
-	public Sym visit(ArgList a);
-	public Sym visit(Param p);
+	public void visit(Sage s){
+		String name = s.i.accept(this);
+		boolean hasMainMethod = false;
+		if(s.p != null){
+			hasMainMethod = true;
+		}
+		SageSym root = new SageSym(name, hasMainMethod, null, name);
+		table.setRoot(root);
+
+		//If there is a main method, process it
+		if(hasMainMethod){
+			s.p.accept(this);
+		}
+		else{
+			//Process everything else
+			s.d.accept(this);
+		}
+	}
+
+	public void visit(Using u){
+		//Do nothing for now
+	}
+
+	public void visit(UsingList u){
+		//Do nothing for now
+	}
+
+	public void visit(Program p){
+		p.s.accept(this);
+		p.d.accept(this);
+	}
+
+	public void visit(StatementList l){
+		for(Statement s : l.l){
+			s.accept(this);
+		}
+	}
+
+	public void visit(DefList d){
+		for(Def def : d.l){
+			def.accept(this);
+		}
+	}
+
+	public void visit(SimpleClassDef s){
+		String name = s.i.accept(this);
+		appendToPath(name);
+		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, s.protection, table.getCurrentScope(), path);
+		table.addSymbol(symbol);
+		table.sinkToClassScope(name); 
+		s.d.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+	}
+
+	public void visit(ExtendsClassDef e){
+		String name = e.i.accept(this);
+		appendToPath(name);
+		ClassSym symbol = new ClassSym(name, e.line, e.column, e.is_static, e.protection, table.getCurrentScope(), path, table.getSymbol(e.c.accept(this), true));
+		table.addSymbol(symbol);
+		table.sinkToClassScope(name);
+		e.d.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+	}
+
+	public void visit(Constructor c){
+		//Treated like a method
+		//Need a naming convention for constructors
+		String name = "?";
+		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID);
+		appendToPath(name);
+		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path);
+		table.sinkToMethodScope(name);
+		c.l.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+	}
+
+	public void visit(MethodDef m);
+	public void visit(VarDecl v);
+	public void visit(ArgList a);
+	public void visit(Param p);
 	public TypeSym visit(ArrayType t){
 
 	}
@@ -292,8 +363,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return null;
 	}
 
-	public TypeSym visit(Identifier i){
-		return null;
+	public String visit(Identifier i){
+		return i.i;
 	}
 
 	public TypeSym visit(UnaryMinus u){
@@ -339,4 +410,19 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public TypeSym visit(ArgChain a);
 	public void visit(ExprChain e);
 	public void visit(CatchList c);
+
+	private void trimLastAddedPath(){
+		int slash = path.lastIndexOf("/");
+		if(slash != 1){
+			path.delete(slash, path.length() - 1);
+		}
+	}
+
+	private void appendToPath(String name){
+		path.append("/" + name);
+	}
+
+	private String[] getPathArray(){
+		return path.toString().split("/");
+	}
 }

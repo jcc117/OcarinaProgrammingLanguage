@@ -24,11 +24,12 @@ public class ClassSym extends Sym{
 		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
-	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, ClassSym extension){
+	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, String path, ClassSym extension){
 		this.is_initialized = true;
 		this.name = name;
 		this.line = line;
 		this.column = column;
+		this.path = path;
 		this.is_static = is_static;
 		this.protection = protection;
 		this.extension = extension;
