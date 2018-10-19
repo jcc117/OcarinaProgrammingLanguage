@@ -11,26 +11,29 @@ public class TypeSym{
 	public TypeSym keyType;
 	public TypeSym valueType;
 	public Sym idSym;
+	public boolean is_constant;
 
-	public TypeSym(TypeEnum type){
+	public TypeSym(TypeEnum type, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
 		this.returnType = null;
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = null;
+		this.is_constant = is_constant;
 	}
 
-	public TypeSym(TypeEnum type, Sym idSym){
+	public TypeSym(TypeEnum type, Sym idSym, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
 		this.returnType = null;
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = idSym;
+		this.is_constant = is_constant;
 	}
 
-	public TypeSym(TypeEnum type, TypeSym t){
+	public TypeSym(TypeEnum type, TypeSym t, boolean is_constant){
 		this.type = type;
 		if(type == TypeEnum.FUNCTION){
 			this.returnType = t;
@@ -44,14 +47,16 @@ public class TypeSym{
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = null;
+		this.is_constant = is_constant;
 	}
 
-	public TypeSym(TypeEnum type, TypeSym keyType, TypeSym valueType){
+	public TypeSym(TypeEnum type, TypeSym keyType, TypeSym valueType, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
 		this.returnType = null;
 		this.keyType = keyType;
 		this.valueType = valueType;
 		this.idSym = null;
+		this.is_constant = is_constant;
 	}
 }

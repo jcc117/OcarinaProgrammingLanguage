@@ -72,7 +72,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public void visit(SimpleClassDef s){
 		String name = s.i.accept(this);
 		appendToPath(name);
-		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, s.protection, table.getCurrentScope(), path);
+		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, s.protection, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		table.sinkToClassScope(name); 
 		s.d.accept(this);
@@ -97,55 +97,105 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = "?";
 		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID);
 		appendToPath(name);
-		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path);
+		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path.toString());
 		table.sinkToMethodScope(name);
 		c.l.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 	}
 
-	public void visit(MethodDef m);
-	public void visit(VarDecl v);
-	public void visit(ArgList a);
-	public void visit(Param p);
-	public TypeSym visit(ArrayType t){
+	public void visit(MethodDef m){
+		String name = m.i.accept(this);
+		TypeSym returnType = m.r.accept(this);
+		String args = m.a.accept(this);	//NEEDS FIXED
+		name = name + args;	//Creates the method signature
+		appendToPath(name);
+		MethodSym symbol = new MethodSym(name, m.line, m.column, m.is_static, m.protection, returnType, false, table.getCurrentScope(), path.toString());
+		table.sinkToMethodScope(name);
+		m.s.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+	}
 
+	public void visit(VarDecl v){
+		String name = v.i.accept(this);
+		TypeSym type = v.t.accept(this);
+		appendToPath(name);
+		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, v.protection, false, type, type.is_constant, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
+		trimLastAddedPath();
+	}
+	//NEEDS FIXED
+	public String visit(ArgList a){
+		a.p.accept(this);
+		ArrayList<Param> list = a.chain.accept(this);
+		for(Param p : list){
+			p.accept(this);
+		}
+	}
+
+	public ArrayList<Param> visit(ArgChain a){
+		return a.l;
+	}
+
+	public void visit(Param p){
+		TypeSym type = p.t.accept(this);
+		String name = p.i.accept(this);
+		appendToPath(name);
+		VarSym symbol = new VarSym(name, p.line, p.column, false, Sym.ProtectionLevel.PRIVATE, type, false, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
+		trimLastAddedPath();
+	}
+
+	public TypeSym visit(ArrayType t){
+		return new TypeSym(TypeSym.TypeEnum.ARRAY, t.t.accept(this));
 	}
 
 	public TypeSym visit(IdentifierType i){
+		String firstPart = i.i.accept(this);
+		ArrayList<String> chain = i.chain.accept(this);
+		chain.add(0, firstPart);
+		return new TypeSym(TypeSym.TypeEnum.IDENTIFIER, table.getSymbol(chain.toArray(), true));
+	}
 
+	public ArrayList<String> visit(IdChain i){
+		ArrayList<String> retVal = new ArrayList<String>();
+		for(Identifier id : i.chain){
+			retVal.add(id.accept(this));
+		}
+		return retVal;
 	}
 
 	public TypeSym visit(IntType t){
-		return new TypeSym(TypeSym.TypeEnum.INT);
+		return new TypeSym(TypeSym.TypeEnum.INT, t.constant);
 	}
 
 	public TypeSym visit(FloatType t){
-		return new TypeSym(TypeSym.TypeEnum.DECIMAL);
+		return new TypeSym(TypeSym.TypeEnum.DECIMAL, t.constant);
 	}
 
 	public TypeSym visit(BooleanType t){
-		return new TypeSym(TypeSym.TypeEnum.BOOLEAN);
+		return new TypeSym(TypeSym.TypeEnum.BOOLEAN, t.constant);
 	}
 
 	public TypeSym visit(StringType t){
-		return new TypeSym(TypeSym.TypeEnum.STRING);
+		return new TypeSym(TypeSym.TypeEnum.STRING, t.constant);
 	}
 
 	public TypeSym visit(HashmapType t){
-
+		return new TypeSym(TypeSym.TypeEnum.HASHMAP, t.t1.accept(this), t.t2.accept(this), t.constant);
 	}
 
 	public TypeSym visit(MethodType m){
-
+		return new TypeSym(TypeSym.TypeEnum.FUNCTION, m.t.accept(this), m.constant);
 	}
 
 	public TypeSym visit(VoidType t){
-		return new TypeSym(TypeSym.TypeEnum.VOID);
+		return new TypeSym(TypeSym.TypeEnum.VOID, t.constant);
 	}
 
 	public TypeSym visit(VarType v){
-	 	return new TypeSym(TypeSym.TypeEnum.VAR);
+	 	return new TypeSym(TypeSym.TypeEnum.VAR, v.constant);
 	}
 
 	public MethodScope visit(Block b){
@@ -406,8 +456,6 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public MethodScope visit(Statement s);
 	public TypeSym visit(Type t);
 	public TypeSym visit(Expression e);
-	public void visit(IdChain i);
-	public TypeSym visit(ArgChain a);
 	public void visit(ExprChain e);
 	public void visit(CatchList c);
 
