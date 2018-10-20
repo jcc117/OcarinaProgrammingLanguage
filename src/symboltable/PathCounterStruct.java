@@ -13,6 +13,7 @@ public class PathCounterStruct{
 	public int unlessCounter;
 	public int catchCounter;
 	public int finallyCounter;
+	public int elseCounter;
 
 	public PathCounterStruct(){
 		ifCounter = 0;
@@ -27,5 +28,6 @@ public class PathCounterStruct{
 		unlessCounter = 0;
 		catchCounter = 0;
 		finallyCounter = 0;
+		elseCounter = 0;
 	}
 }

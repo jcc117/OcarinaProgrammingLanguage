@@ -233,17 +233,58 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		for(Statement s : b.l.l){
-			s.accept(this);
-		}
+		b.l.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
 	}
 
-	public void visit(If i){}
-	public void visit(RatherList l){}
-	public void visit(Rather r){}
+	public void visit(If i){
+		String name = counterStack.peek().ifCounter++ + "if";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		i.s1.accep(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+		i.r.accept(this);
+
+		//Process the else statement
+		if(i.s2 != null && i.s2.l.size() > 0){
+			name = counterStack.peek().elseCounter++ + "else";
+			appendToPath(name);
+			newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			i.s2.accept(this);
+			table.floatScope();
+			trimLastAddedPath();
+			counterStack.pop();
+		}
+	}
+
+	public void visit(RatherList l){
+		for(Rather r : l.l){
+			r.accept(this);
+		}
+	}
+
+	public void visit(Rather r){
+		String name = counterStack.peek().ratherCounter++ + "rather";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		r.s.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
 
 	public void visit(While w){
 		String name = counterStack.peek().whileCounter++ + "while";
@@ -252,16 +293,45 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		for(Statement s : w.l.l){
-			s.accept(this);
-		}
+		w.s.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
 	}
 
-	public void visit(For f){}
-	public void visit(Foreach f){}
+	public void visit(For f){
+		String name = counterStack.peek().forCounter++ + "for";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		f.s1.accept(this);
+		f.s2.accept(this);
+		f.s3.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
+
+	public void visit(Foreach f){
+		String name = counterStack.peek().foreachCounter++ + "foreach";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		TypeSym type = f.t.accept(this);
+		String loopVar = f.i.accept(this);
+		appendToPath(loopVar);
+		VarSym symbol = new VarSym(loopVar, f.line, f.column, false, Sym.ProtectionLevel.PRIVATE, true, type, false, table.getCurrentScope(), path.toString());
+		trimLastAddedPath();
+		table.addSymbol(symbol);
+		f.s.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
 
 	public void visit(DoWhile d){
 		String name = counterStack.peek().doWhileCounter++ + "doWhile";
@@ -270,9 +340,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		for(Statement s : d.l.l){
-			s.accept(this);
-		}
+		d.s.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
@@ -285,9 +353,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		for(Statement s : u.l.l){
-			s.accept(this);
-		}
+		u.s.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
@@ -300,24 +366,61 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		for(Statement s : u.l.l){
-			s.accept(this);
-		}
+		u.s.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
 	}
 
 	public void visit(TryCatch t){
+		String name = counterStack.peek().tryCounter++ + "try";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		t.s1.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+		t.c.accept(this);
 
+		if(t.f != null && t.f.l.size() > 0){
+			name = counterStack.peek().finallyCounter++ + "finally";
+			appendToPath(name);
+			newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			t.f.accept(this);
+			table.floatScope();
+			trimLastAddedPath();
+			counterStack.pop();
+		}
 	}
 	public void visit(Catch c){
-
+		String name = counterStack.peek().catchCounter++ + "catch";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		String firstPart = c.i.accept(this);
+		ArrayList<String> chain = c.chain.accept(this);
+		chain.add(0, firstPart);
+		String exceptionName = c.i2.accept(this);
+		VarSym symbol = new VarSym(exceptionName, c.line, c.column, false, Sym.ProtectionLevel.PRIVATE, true, 
+			new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol(chain.toArray(), true)), false, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
+		c.s.accept(this);
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
 	}
 	public TypeSym visit(MethodLiteral m){
 		return null;
 	}
-	
+
 	public void visit(MethodCallStatement m){}
 	public void visit(Print p){}
 	public void visit(Throw t){}
