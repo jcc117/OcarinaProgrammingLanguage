@@ -553,6 +553,10 @@ public class SymbolTable{
 		return currentScope;
 	}
 
+	public MethodScope getCurrentMethodScope(){
+		return currentMethodScope;
+	}
+
 	//Checks if the path makes up part of the currentPath
 	private boolean isInnerPath(String path){
 		return currentPath.startsWith(path);

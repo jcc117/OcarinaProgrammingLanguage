@@ -59,4 +59,20 @@ public class TypeSym{
 		this.idSym = null;
 		this.is_constant = is_constant;
 	}
+
+	public String toString(){
+		switch(type){
+			case INT:	return "int";
+			case DECIMAL:	return "decimal";
+			case BOOLEAN:	return "boolean";
+			case ID:	return idSym.name;
+			case STRING:	return "string";
+			case FUNCTION:	return "function{" + returnType.toString() + "}";
+			case ARRAY:	return arrayType.toString() + "[]";
+			case HASHMAP:	return "hashmap{" + keyType.toString() + "," + valueType.toString() + "}";
+			case VOID:	return "void";
+			case VAR:	return "var";
+			default: return "";
+		}
+	}
 }

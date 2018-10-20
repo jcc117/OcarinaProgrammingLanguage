@@ -93,12 +93,13 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	public void visit(Constructor c){
 		//Treated like a method
-		//Need a naming convention for constructors
-		String name = "?";
+		String name = "constructor";
+		name = createMethodSignature(name, c.a);
 		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID);
 		appendToPath(name);
 		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path.toString());
 		table.sinkToMethodScope(name);
+		c.a.accept(this);
 		c.l.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
@@ -107,14 +108,32 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public void visit(MethodDef m){
 		String name = m.i.accept(this);
 		TypeSym returnType = m.r.accept(this);
-		String args = m.a.accept(this);	//NEEDS FIXED
-		name = name + args;	//Creates the method signature
+		name = createMethodSignature(name, m.a);	//Creates the method signature
+		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
 		MethodSym symbol = new MethodSym(name, m.line, m.column, m.is_static, m.protection, returnType, false, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
 		table.sinkToMethodScope(name);
+		m.a.accept(this);
 		m.s.accept(this);
+		counterStack.pop();
 		table.floatScope();
 		trimLastAddedPath();
+	}
+
+	private String createMethodSignature(String name, ArgList args){
+		StringBuilder signature = new StringBuilder(name);
+		signature.append("(");
+		TypeSym type = args.p.t.accept(this);
+		signature.append(type.toString());
+		ArrayList<Param> list = args.chain.accept(this);
+		for(Param parameter : list){
+			type = parameter.t.accept(this);
+			signature.append(",");
+			signature.append(type.toString());
+		}
+		signature.append(")");
+		return signature.toString();
 	}
 
 	public void visit(VarDecl v){
@@ -125,8 +144,17 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addSymbol(symbol);
 		trimLastAddedPath();
 	}
-	//NEEDS FIXED
-	public String visit(ArgList a){
+
+	public void visit(VarDecAssignment v){
+		String name = v.i.accept(this);
+		TypeSym type = v.t.accept(this);
+		appendToPath(name);
+		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, v.protection, true, type, type.is_constant, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
+		trimLastAddedPath();
+	}
+	
+	public void visit(ArgList a){
 		a.p.accept(this);
 		ArrayList<Param> list = a.chain.accept(this);
 		for(Param p : list){
@@ -155,7 +183,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String firstPart = i.i.accept(this);
 		ArrayList<String> chain = i.chain.accept(this);
 		chain.add(0, firstPart);
-		return new TypeSym(TypeSym.TypeEnum.IDENTIFIER, table.getSymbol(chain.toArray(), true));
+		return new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol(chain.toArray(), true));
 	}
 
 	public ArrayList<String> visit(IdChain i){
@@ -198,9 +226,10 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	 	return new TypeSym(TypeSym.TypeEnum.VAR, v.constant);
 	}
 
-	public MethodScope visit(Block b){
+	public void visit(Block b){
 		String name = counterStack.peek().blockCounter++ + "block";
-		MethodScope newScope = new MethodScope(path.toString(), null, name);
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
@@ -208,252 +237,146 @@ public class SymbolTableBuilderPass1 implements Visitor{
 			s.accept(this);
 		}
 		table.floatScope();
+		trimLastAddedPath();
 		counterStack.pop();
 	}
 
-	public MethodScope visit(If i);
-	public MethodScope visit(RatherList l);
-	public MethodScope visit(Rather r);
-	public MethodScope visit(While w);
-	public MethodScope visit(For f);
-	public MethodScope visit(Foreach f);
-	public MethodScope visit(DoWhile d);
-	public MethodScope visit(Print p);
-	public MethodScope visit(VarDecAssignment v);
-	public MethodScope visit(Until u);
-	public MethodScope visit(Unless u);
-	public MethodScope visit(TryCatch t);
-	public MethodScope visit(Catch c);
+	public void visit(If i){}
+	public void visit(RatherList l){}
+	public void visit(Rather r){}
 
-	public MethodScope visit(MethodCallStatement m){
-		return null;
+	public void visit(While w){
+		String name = counterStack.peek().whileCounter++ + "while";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		for(Statement s : w.l.l){
+			s.accept(this);
+		}
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
 	}
 
-	public MethodScope visit(Throw t){
+	public void visit(For f){}
+	public void visit(Foreach f){}
+
+	public void visit(DoWhile d){
+		String name = counterStack.peek().doWhileCounter++ + "doWhile";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		for(Statement s : d.l.l){
+			s.accept(this);
+		}
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
+
+	public void visit(Until u){
+		String name = counterStack.peek().untilCounter++ + "until";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		for(Statement s : u.l.l){
+			s.accept(this);
+		}
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
+
+	public void visit(Unless u){
+		String name = counterStack.peek().unlessCounter++ + "unless";
+		appendToPath(name);
+		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
+		table.addMethodScope(newScope);
+		counterStack.push(new PathCounterStruct());
+		table.sinkToInnerMethodScope(path.toString());
+		for(Statement s : u.l.l){
+			s.accept(this);
+		}
+		table.floatScope();
+		trimLastAddedPath();
+		counterStack.pop();
+	}
+
+	public void visit(TryCatch t){
+
+	}
+	public void visit(Catch c){
+
+	}
+	public TypeSym visit(MethodLiteral m){
 		return null;
 	}
 	
-	public MethodScope visit(Super s){
-		return null;
-	}
+	public void visit(MethodCallStatement m){}
+	public void visit(Print p){}
+	public void visit(Throw t){}
+	public void visit(Super s){}
+	public void visit(Assignment a){}
+	public void visit(HashmapAssignment h){}
+	public void visit(ArrayAssignment a){}
+	public void visit(Return r){}
+	public void visit(Assert a){}
+	public void visit(Exit e){}
+	public void visit(Break b){}	
+	public void visit(Continue c){}
+	public void visit(Increment i){}
+	public void visit(Decrement d){}
+	public TypeSym visit(And a){return null;}
+	public TypeSym visit(Or o){return null;}
+	public TypeSym visit(Nand n){return null;}
+	public TypeSym visit(Nor n){return null;}
+	public TypeSym visit(Equals e){return null;}
+	public TypeSym visit(Plus p){return null;}
+	public TypeSym visit(Minus m){return null;}
+	public TypeSym visit(Multiply m){return null;}
+	public TypeSym visit(Power p){return null;}
+	public TypeSym visit(Divide d){return null;}
+	public TypeSym visit(Modulo m){return null;}
+	public TypeSym visit(GreaterThanEqualTo g){return null;}
+	public TypeSym visit(LessThanEqualTo l){return null;}
+	public TypeSym visit(GreaterThan g){return null;}
+	public TypeSym visit(LessThan l){return null;}
+	public TypeSym visit(HashmapExpr h){return null;}
+	public TypeSym visit(ArrayExpr a){return null;}
+	public TypeSym visit(ObjectVarAccess o){return null;}
+	public TypeSym visit(MethodCall m){return null;}
+	public TypeSym visit(ArrayLength l){return null;}
+	public TypeSym visit(IntLiteral i){return null;}
+	public TypeSym visit(FloatLiteral f){return null;}
+	public TypeSym visit(True t){return null;}
+	public TypeSym visit(False f){return null;}
+	public TypeSym visit(Nil n){return null;}
+	public TypeSym visit(ParentExpr p){return null;}
+	public TypeSym visit(Not n){return null;}
+	public TypeSym visit(IdentifierExpr i){return null;}
+	public TypeSym visit(ObjectCreate o){return null;}
+	public TypeSym visit(This t){return null;}
+	public TypeSym visit(ArrayCreate a){return null;}
+	public TypeSym visit(HashmapCreate h){return null;}
+	public TypeSym visit(StringLiteral s){return null;}
+	public TypeSym visit(ParamList p){return null;}
+	public String visit(Identifier i){	return i.i;}
+	public TypeSym visit(UnaryMinus u){return null;}
+	public TypeSym visit(Typeof t){return null;}
+	public TypeSym visit(Differs d){return null;}
+	public TypeSym visit(PostIncrement p){return null;}
+	public TypeSym visit(PreIncrement p){return null;}
+	public TypeSym visit(PostDecrement p){return null;}
+	public TypeSym visit(PreDecrement p){return null;}
+	public TypeSym visit(ArrayLiteral a){return null;}
 
-	public MethodScope visit(Assignment a){
-		return null;
-	}
-
-	public MethodScope visit(HashmapAssignment h){
-		return null;
-	}
-
-	public MethodScope visit(ArrayAssignment a){
-		return null;
-	}
-
-	public MethodScope visit(Return r){
-		return null;
-	}
-
-	public MethodScope visit(Assert a){
-		return null;
-	}
-
-	public MethodScope visit(Exit e){
-		return null;
-	}
-
-	public MethodScope visit(Break b){
-		return null;
-	}	
-
-	public MethodScope visit(Continue c){
-		return null;
-	}
-
-	public MethodScope visit(Increment i){
-		return null;
-	}
-
-	public MethodScope visit(Decrement d){
-		return null;
-	}
-
-	public TypeSym visit(And a){
-		return null;
-	}
-
-	public TypeSym visit(Or o){
-		return null;
-	}
-
-	public TypeSym visit(Nand n){
-		return null;
-	}
-
-	public TypeSym visit(Nor n){
-		return null;
-	}
-
-	public TypeSym visit(Equals e){
-		return null;
-	}
-
-	public TypeSym visit(Plus p){
-		return null;
-	}
-
-	public TypeSym visit(Minus m){
-		return null;
-	}
-
-	public TypeSym visit(Multiply m){
-		return null;
-	}
-
-	public TypeSym visit(Power p){
-		return null;
-	}
-
-	public TypeSym visit(Divide d){
-		return null;
-	}
-
-	public TypeSym visit(Modulo m){
-		return null;
-	}
-
-	public TypeSym visit(GreaterThanEqualTo g){
-		return null;
-	}
-
-	public TypeSym visit(LessThanEqualTo l){
-		return null;
-	}
-
-	public TypeSym visit(GreaterThan g){
-		return null;
-	}
-
-	public TypeSym visit(LessThan l){
-		return null;
-	}
-
-	public TypeSym visit(HashmapExpr h){
-		return null;
-	}
-
-	public TypeSym visit(ArrayExpr a){
-		return null;
-	}
-
-	public TypeSym visit(ObjectVarAccess o){
-		return null;
-	}
-
-	public TypeSym visit(MethodCall m){
-		return null;
-	}
-
-	public TypeSym visit(ArrayLength l){
-		return null;
-	}
-
-	public TypeSym visit(IntLiteral i){
-		return null;
-	}
-
-	public TypeSym visit(FloatLiteral f){
-		return null;
-	}
-
-	public TypeSym visit(True t){
-		return null;
-	}
-
-	public TypeSym visit(False f){
-		return null;
-	}
-
-	public TypeSym visit(Nil n){
-		return null;
-	}
-
-	public TypeSym visit(ParentExpr p){
-		return null;
-	}
-
-	public TypeSym visit(Not n){
-		return null;
-	}
-
-	public TypeSym visit(IdentifierExpr i){
-		return null;
-	}
-
-	public TypeSym visit(ObjectCreate o){
-		return null;
-	}
-
-	public TypeSym visit(This t){
-		return null;
-	}
-
-	public TypeSym visit(ArrayCreate a){
-		return null;
-	}
-
-	public TypeSym visit(HashmapCreate h){
-		return null;
-	}
-
-	public TypeSym visit(StringLiteral s){
-		return null;
-	}
-
-	public TypeSym visit(ParamList p){
-		return null;
-	}
-
-	public String visit(Identifier i){
-		return i.i;
-	}
-
-	public TypeSym visit(UnaryMinus u){
-		return null;
-	}
-
-	public MethodSym visit(MethodLiteral m){
-
-	}
-
-	public TypeSym visit(Typeof t){
-		return null;
-	}
-
-	public TypeSym visit(Differs d){
-		return null;
-	}
-
-	public TypeSym visit(PostIncrement p){
-		return null;
-	}
-
-	public TypeSym visit(PreIncrement p){
-		return null;
-	}
-
-	public TypeSym visit(PostDecrement p){
-		return null;
-	}
-
-	public TypeSym visit(PreDecrement p){
-		return null;
-	}
-
-	public TypeSym visit(ArrayLiteral a){
-		return null;
-	}
-
-	public MethodScope visit(Statement s);
+	public void visit(Statement s);
 	public TypeSym visit(Type t);
 	public TypeSym visit(Expression e);
 	public void visit(ExprChain e);
