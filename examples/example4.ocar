@@ -21,6 +21,7 @@ start
 	int[][] doubleArray = create int[30][20];
 	x.y.z = false;
 	x.y.z.w = nil;
+	u = method() + 7;
 end
 
 public var x = 0;

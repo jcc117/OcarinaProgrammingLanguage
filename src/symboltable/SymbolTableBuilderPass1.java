@@ -418,72 +418,270 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 	public TypeSym visit(MethodLiteral m){
+		String name = m.name;
+		TypeSym returnType = m.returnType.accept(this);
+		name = createMethodSignature(name, m.a);	//Creates the method signature
+		counterStack.push(new PathCounterStruct());
+		appendToPath(name);
+		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, returnType, false, table.getCurrentScope(), path.toString());
+		table.addSymbol(symbol);
+		table.sinkToMethodScope(name);
+		m.p.accept(this);
+		m.s.accept(this);
+		counterStack.pop();
+		table.floatScope();
+		trimLastAddedPath();
 		return null;
 	}
 
-	public void visit(MethodCallStatement m){}
-	public void visit(Print p){}
-	public void visit(Throw t){}
-	public void visit(Super s){}
-	public void visit(Assignment a){}
-	public void visit(HashmapAssignment h){}
-	public void visit(ArrayAssignment a){}
-	public void visit(Return r){}
-	public void visit(Assert a){}
-	public void visit(Exit e){}
+	//Scan through the rest of the tree to search for method literals
+	public void visit(MethodCallStatement m){
+		m.method.accept(this);
+
+	}
+
+	public void visit(Print p){
+		p.e.accept(this);
+	}
+
+	public void visit(Throw t){
+		t.e.accept(this);
+	}
+
+	public void visit(Super s){
+		s.p.accept(this);
+	}
+
+	public void visit(Assignment a){
+		a.e.accept(this);
+	}
+
+	public void visit(HashmapAssignment h){
+		h.e1.accept(this);
+		h.e2.accept(this);
+	}
+
+	public void visit(ArrayAssignment a){
+		a.e1.accept(this);
+		a.e2.accept(this);
+	}
+
+	public void visit(Return r){
+		r.e.accept(this);
+	}
+
+	public void visit(Assert a){
+		a.e.accept(this);
+	}
+
+	public void visit(Exit e){
+		e.e.accept(this);
+	}
+
 	public void visit(Break b){}	
 	public void visit(Continue c){}
 	public void visit(Increment i){}
 	public void visit(Decrement d){}
-	public TypeSym visit(And a){return null;}
-	public TypeSym visit(Or o){return null;}
-	public TypeSym visit(Nand n){return null;}
-	public TypeSym visit(Nor n){return null;}
-	public TypeSym visit(Equals e){return null;}
-	public TypeSym visit(Plus p){return null;}
-	public TypeSym visit(Minus m){return null;}
-	public TypeSym visit(Multiply m){return null;}
-	public TypeSym visit(Power p){return null;}
-	public TypeSym visit(Divide d){return null;}
-	public TypeSym visit(Modulo m){return null;}
-	public TypeSym visit(GreaterThanEqualTo g){return null;}
-	public TypeSym visit(LessThanEqualTo l){return null;}
-	public TypeSym visit(GreaterThan g){return null;}
-	public TypeSym visit(LessThan l){return null;}
-	public TypeSym visit(HashmapExpr h){return null;}
-	public TypeSym visit(ArrayExpr a){return null;}
-	public TypeSym visit(ObjectVarAccess o){return null;}
-	public TypeSym visit(MethodCall m){return null;}
-	public TypeSym visit(ArrayLength l){return null;}
+
+	public TypeSym visit(And a){
+		a.e1.accpet(this);
+		a.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Or o){
+		o.e1.accept(this);
+		o.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Nand n){
+		n.e1.accept(this);
+		n.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Nor n){
+		n.e1.accept(this);
+		n.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Equals e){
+		e.e1.accept(this);
+		e.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Plus p){
+		p.e1.accept(this);
+		p.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Minus m){
+		m.e1.accept(this);
+		m.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Multiply m){
+		m.e1.accept(this);
+		m.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Power p){
+		p.e1.accept(this);
+		p.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Divide d){
+		d.e1.accept(this);
+		d.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Modulo m){
+		m.e1.accept(this);
+		m.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(GreaterThanEqualTo g){
+		g.e1.accept(this);
+		g.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(LessThanEqualTo l){
+		l.e1.accept(this);
+		l.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(GreaterThan g){
+		g.e1.accept(this);
+		g.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(LessThan l){
+		l.e1.accept(this);
+		l.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(HashmapExpr h){
+		h.e1.accept(this);
+		h.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(ArrayExpr a){
+		a.e1.accept(this);
+		a.e2.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(ObjectVarAccess o){
+		o.e.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(MethodCall m){
+		m.e.accept(this);
+		m.l.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(ArrayLength l){
+		l.e.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(IntLiteral i){return null;}
 	public TypeSym visit(FloatLiteral f){return null;}
 	public TypeSym visit(True t){return null;}
 	public TypeSym visit(False f){return null;}
 	public TypeSym visit(Nil n){return null;}
-	public TypeSym visit(ParentExpr p){return null;}
-	public TypeSym visit(Not n){return null;}
+
+	public TypeSym visit(ParentExpr p){
+		p.e.accept(this);
+		return null;
+	}
+
+	public TypeSym visit(Not n){
+		n.e.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(IdentifierExpr i){return null;}
-	public TypeSym visit(ObjectCreate o){return null;}
+
+	public TypeSym visit(ObjectCreate o){
+		o.l.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(This t){return null;}
-	public TypeSym visit(ArrayCreate a){return null;}
+
+	public TypeSym visit(ArrayCreate a){
+		a.e.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(HashmapCreate h){return null;}
 	public TypeSym visit(StringLiteral s){return null;}
-	public TypeSym visit(ParamList p){return null;}
-	public String visit(Identifier i){	return i.i;}
-	public TypeSym visit(UnaryMinus u){return null;}
+
+	public TypeSym visit(ParamList p){
+		p.e.accept(this);
+		p.chain.accept(this);
+		return null;
+	}
+
+	public String visit(Identifier i){
+		return i.i;
+	}
+
+	public TypeSym visit(UnaryMinus u){
+		u.e.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(Typeof t){return null;}
-	public TypeSym visit(Differs d){return null;}
+
+	public TypeSym visit(Differs d){
+		d.e1.accept(this);
+		d.e2.accept(this);
+		return null;
+	}
+
 	public TypeSym visit(PostIncrement p){return null;}
 	public TypeSym visit(PreIncrement p){return null;}
 	public TypeSym visit(PostDecrement p){return null;}
 	public TypeSym visit(PreDecrement p){return null;}
-	public TypeSym visit(ArrayLiteral a){return null;}
 
-	public void visit(Statement s);
-	public TypeSym visit(Type t);
-	public TypeSym visit(Expression e);
-	public void visit(ExprChain e);
-	public void visit(CatchList c);
+	public TypeSym visit(ArrayLiteral a){
+		a.l.accept(this);
+		return null;
+	}
+
+	public void visit(Statement s){}
+	public TypeSym visit(Type t){return null;}
+	public TypeSym visit(Expression e){return null;}
+
+	public void visit(ExprChain e){
+		for(Expression expr : e.l){
+			expr.accept(this);
+		}
+	}
+
+	public void visit(CatchList c){
+		for(Catch catch : c.l){
+			catch.accept(this);
+		}
+	}
 
 	private void trimLastAddedPath(){
 		int slash = path.lastIndexOf("/");

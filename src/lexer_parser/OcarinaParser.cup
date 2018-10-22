@@ -605,8 +605,8 @@ literal ::= INTLITERAL:i
 		CREATE:c identifier:i idchain:d paramlist:l
 		{: RESULT = new ObjectCreate(i, d, l, cleft, cright); :}
 		|
-		DELEGATE:d arglist:p LBRACE statementlist:l RBRACE
-		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}
+		DELEGATE:d arglist:p POINTER type:t LBRACE statementlist:l RBRACE
+		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), t, dleft, dright); :}
 		|
 		MINUS:m expression:e
 		{: RESULT = new UnaryMinus(e, mleft, mright); :}
