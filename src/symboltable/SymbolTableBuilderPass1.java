@@ -22,11 +22,11 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	//Build the symboltable
 	public void build(Sage sage){
-		sage.visit(this);
+		sage.accept(this);
 	}
 
 	public void visit(Sage s){
-		String name = s.i.accept(this);
+		String name = s.i.i;
 		boolean hasMainMethod = false;
 		if(s.p != null){
 			hasMainMethod = true;
@@ -70,9 +70,9 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public void visit(SimpleClassDef s){
-		String name = s.i.accept(this);
+		String name = s.i.i;
 		appendToPath(name);
-		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, s.protection, table.getCurrentScope(), path.toString());
+		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, convertProtection(s.protection), table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		table.sinkToClassScope(name); 
 		s.d.accept(this);
@@ -81,9 +81,11 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public void visit(ExtendsClassDef e){
-		String name = e.i.accept(this);
+		String name = e.i.i;
 		appendToPath(name);
-		ClassSym symbol = new ClassSym(name, e.line, e.column, e.is_static, e.protection, table.getCurrentScope(), path, table.getSymbol(e.c.accept(this), true));
+		ArrayList<String> chain = new ArrayList<String>();
+		chain.add(e.c.i);
+		ClassSym symbol = new ClassSym(name, e.line, e.column, e.is_static, convertProtection(e.protection), table.getCurrentScope(), path.toString(), (ClassSym)table.getSymbol((String[])chain.toArray(), true));
 		table.addSymbol(symbol);
 		table.sinkToClassScope(name);
 		e.d.accept(this);
@@ -95,7 +97,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		//Treated like a method
 		String name = "constructor";
 		name = createMethodSignature(name, c.a);
-		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID);
+		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID, true);
 		appendToPath(name);
 		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path.toString());
 		table.sinkToMethodScope(name);
@@ -106,12 +108,12 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public void visit(MethodDef m){
-		String name = m.i.accept(this);
+		String name = m.i.i;
 		TypeSym returnType = m.r.accept(this);
 		name = createMethodSignature(name, m.a);	//Creates the method signature
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
-		MethodSym symbol = new MethodSym(name, m.line, m.column, m.is_static, m.protection, returnType, false, table.getCurrentScope(), path.toString());
+		MethodSym symbol = new MethodSym(name, m.line, m.column, m.is_static, convertProtection(m.protection), returnType, false, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		table.sinkToMethodScope(name);
 		m.a.accept(this);
@@ -137,19 +139,19 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public void visit(VarDecl v){
-		String name = v.i.accept(this);
+		String name = v.i.i;
 		TypeSym type = v.t.accept(this);
 		appendToPath(name);
-		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, v.protection, false, type, type.is_constant, table.getCurrentScope(), path.toString());
+		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, convertProtection(v.protection), false, type, type.is_constant, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		trimLastAddedPath();
 	}
 
 	public void visit(VarDecAssignment v){
-		String name = v.i.accept(this);
+		String name = v.i.i;
 		TypeSym type = v.t.accept(this);
 		appendToPath(name);
-		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, v.protection, true, type, type.is_constant, table.getCurrentScope(), path.toString());
+		VarSym symbol = new VarSym(name, v.line, v.column, v.is_static, convertProtection(v.protection), true, type, type.is_constant, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		trimLastAddedPath();
 	}
@@ -168,28 +170,28 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	public void visit(Param p){
 		TypeSym type = p.t.accept(this);
-		String name = p.i.accept(this);
+		String name = p.i.i;
 		appendToPath(name);
-		VarSym symbol = new VarSym(name, p.line, p.column, false, Sym.ProtectionLevel.PRIVATE, type, false, table.getCurrentScope(), path.toString());
+		VarSym symbol = new VarSym(name, p.line, p.column, false, Sym.ProtectionLevel.PRIVATE, true, type, false, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		trimLastAddedPath();
 	}
 
 	public TypeSym visit(ArrayType t){
-		return new TypeSym(TypeSym.TypeEnum.ARRAY, t.t.accept(this));
+		return new TypeSym(TypeSym.TypeEnum.ARRAY, t.t.accept(this), t.constant);
 	}
 
 	public TypeSym visit(IdentifierType i){
-		String firstPart = i.i.accept(this);
+		String firstPart = i.i.i;
 		ArrayList<String> chain = i.chain.accept(this);
 		chain.add(0, firstPart);
-		return new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol(chain.toArray(), true));
+		return new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol((String[])chain.toArray(), true), i.constant);
 	}
 
 	public ArrayList<String> visit(IdChain i){
 		ArrayList<String> retVal = new ArrayList<String>();
 		for(Identifier id : i.chain){
-			retVal.add(id.accept(this));
+			retVal.add(id.i);
 		}
 		return retVal;
 	}
@@ -246,7 +248,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		i.s1.accep(this);
+		i.s1.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
@@ -322,7 +324,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
 		TypeSym type = f.t.accept(this);
-		String loopVar = f.i.accept(this);
+		String loopVar = f.i1.i;
 		appendToPath(loopVar);
 		VarSym symbol = new VarSym(loopVar, f.line, f.column, false, Sym.ProtectionLevel.PRIVATE, true, type, false, table.getCurrentScope(), path.toString());
 		trimLastAddedPath();
@@ -379,7 +381,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		t.s1.accept(this);
+		t.l.accept(this);
 		table.floatScope();
 		trimLastAddedPath();
 		counterStack.pop();
@@ -405,12 +407,12 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		table.addMethodScope(newScope);
 		counterStack.push(new PathCounterStruct());
 		table.sinkToInnerMethodScope(path.toString());
-		String firstPart = c.i.accept(this);
+		String firstPart = c.i.i;
 		ArrayList<String> chain = c.chain.accept(this);
 		chain.add(0, firstPart);
-		String exceptionName = c.i2.accept(this);
+		String exceptionName = c.i2.i;
 		VarSym symbol = new VarSym(exceptionName, c.line, c.column, false, Sym.ProtectionLevel.PRIVATE, true, 
-			new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol(chain.toArray(), true)), false, table.getCurrentScope(), path.toString());
+			new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol((String[])chain.toArray(), true), false), false, table.getCurrentScope(), path.toString());
 		table.addSymbol(symbol);
 		c.s.accept(this);
 		table.floatScope();
@@ -420,7 +422,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public TypeSym visit(MethodLiteral m){
 		String name = m.name;
 		TypeSym returnType = m.returnType.accept(this);
-		name = createMethodSignature(name, m.a);	//Creates the method signature
+		name = createMethodSignature(name, m.p);	//Creates the method signature
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
 		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, returnType, false, table.getCurrentScope(), path.toString());
@@ -484,7 +486,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public void visit(Decrement d){}
 
 	public TypeSym visit(And a){
-		a.e1.accpet(this);
+		a.e1.accept(this);
 		a.e2.accept(this);
 		return null;
 	}
@@ -640,8 +642,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return null;
 	}
 
-	public String visit(Identifier i){
-		return i.i;
+	public TypeSym visit(Identifier i){
+		return null;
 	}
 
 	public TypeSym visit(UnaryMinus u){
@@ -678,8 +680,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 
 	public void visit(CatchList c){
-		for(Catch catch : c.l){
-			catch.accept(this);
+		for(Catch cat : c.l){
+			cat.accept(this);
 		}
 	}
 
@@ -696,5 +698,15 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	private String[] getPathArray(){
 		return path.toString().split("/");
+	}
+
+	private Sym.ProtectionLevel convertProtection(int i){
+		switch(i){
+			case 0:	return Sym.ProtectionLevel.PRIVATE;
+			case 1:	return Sym.ProtectionLevel.NONE;
+			case 2:	return Sym.ProtectionLevel.PROTECTED;
+			case 3:	return Sym.ProtectionLevel.PUBLIC;
+			default: return null;
+		}
 	}
 }

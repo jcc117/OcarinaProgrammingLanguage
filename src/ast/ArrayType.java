@@ -15,8 +15,8 @@ public class ArrayType extends Type{
 	public void accept(VoidVisitor v){
 		v.visit(this);
 	}
-	/*
-	public Sym accept(Visitor v){
+	
+	public TypeSym accept(Visitor v){
 		return v.visit(this);
-	}*/
+	}
 }

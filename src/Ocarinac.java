@@ -28,6 +28,12 @@ public class Ocarinac{
     		for(int i = 0; i < fileCatalog.size(); i++){
     			pretty_printer.print(fileCatalog.get(i).getSage());
     		}
+
+    		for(int i = 0; i < fileCatalog.size(); i++){
+    			SymbolTable table = new SymbolTable();
+    			SymbolTableBuilderPass1 stBuilder = new SymbolTableBuilderPass1(table);
+    			stBuilder.build(fileCatalog.get(i).getSage());
+    		}
     	}
 	}
 

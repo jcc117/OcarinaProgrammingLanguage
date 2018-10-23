@@ -30,10 +30,10 @@ public class Sage extends Node{
 	public void accept(VoidVisitor v){
 		v.visit(this);
 	}
-	/*
-	public Sym accept(Visitor v){
-		return v.visit(this);
-	}*/
+	
+	public void accept(Visitor v){
+		v.visit(this);
+	}
 
 	public ArrayList<String> getUsings(){
 		//Poor naming conventions are coming back to haunt me :(
