@@ -23,6 +23,6 @@ public class ArgChain{
 	}
 	
 	public ArrayList<Param> accept(Visitor v){
-		v.visit(this);
+		return v.visit(this);
 	}
 }

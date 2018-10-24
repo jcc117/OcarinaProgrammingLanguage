@@ -73,10 +73,22 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = s.i.i;
 		appendToPath(name);
 		ClassSym symbol = new ClassSym(name, s.line, s.column, s.is_static, convertProtection(s.protection), table.getCurrentScope(), path.toString());
-		table.addSymbol(symbol);
-		table.sinkToClassScope(name); 
-		s.d.accept(this);
-		table.floatScope();
+		try{
+			table.addSymbol(symbol);
+			table.sinkToClassScope(name); 
+			s.d.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e){
+			System.out.println("An error occured when sinking to " + name);
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 	}
 
@@ -86,10 +98,22 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		ArrayList<String> chain = new ArrayList<String>();
 		chain.add(e.c.i);
 		ClassSym symbol = new ClassSym(name, e.line, e.column, e.is_static, convertProtection(e.protection), table.getCurrentScope(), path.toString(), (ClassSym)table.getSymbol((String[])chain.toArray(), true));
-		table.addSymbol(symbol);
-		table.sinkToClassScope(name);
-		e.d.accept(this);
-		table.floatScope();
+		try{
+			table.addSymbol(symbol);
+			table.sinkToClassScope(name);
+			e.d.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 	}
 
@@ -100,10 +124,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		TypeSym returnType = new TypeSym(TypeSym.TypeEnum.VOID, true);
 		appendToPath(name);
 		MethodSym constructor = new MethodSym(name, c.line, c.column, false, Sym.ProtectionLevel.PUBLIC, returnType , false, table.getCurrentScope(), path.toString());
-		table.sinkToMethodScope(name);
-		c.a.accept(this);
-		c.l.accept(this);
-		table.floatScope();
+		try{
+			table.addSymbol(constructor);
+			table.sinkToMethodScope(name);
+			c.a.accept(this);
+			c.l.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 	}
 
@@ -114,12 +151,24 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
 		MethodSym symbol = new MethodSym(name, m.line, m.column, m.is_static, convertProtection(m.protection), returnType, false, table.getCurrentScope(), path.toString());
-		table.addSymbol(symbol);
-		table.sinkToMethodScope(name);
-		m.a.accept(this);
-		m.s.accept(this);
-		counterStack.pop();
-		table.floatScope();
+		try{
+			table.addSymbol(symbol);
+			table.sinkToMethodScope(name);
+			m.a.accept(this);
+			m.s.accept(this);
+			counterStack.pop();
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 	}
 
@@ -232,11 +281,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().blockCounter++ + "block";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		b.l.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			b.l.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -245,11 +306,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().ifCounter++ + "if";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		i.s1.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			i.s1.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 		i.r.accept(this);
@@ -259,11 +332,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 			name = counterStack.peek().elseCounter++ + "else";
 			appendToPath(name);
 			newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-			table.addMethodScope(newScope);
-			counterStack.push(new PathCounterStruct());
-			table.sinkToInnerMethodScope(path.toString());
-			i.s2.accept(this);
-			table.floatScope();
+			try{
+				table.addMethodScope(newScope);
+				counterStack.push(new PathCounterStruct());
+				table.sinkToInnerMethodScope(path.toString());
+				i.s2.accept(this);
+				table.floatScope();
+			}
+			catch(IllegalScopeException e1){
+				System.out.println("An error occured when sinking to " + name);
+				e1.printStackTrace();
+				System.exit(-1);
+			}
+			catch(Exception e2){
+				System.out.println("An error occured when processing " + name);
+				e2.printStackTrace();
+				System.exit(-1);
+			}
 			trimLastAddedPath();
 			counterStack.pop();
 		}
@@ -279,11 +364,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().ratherCounter++ + "rather";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		r.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			r.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -292,11 +389,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().whileCounter++ + "while";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		w.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			w.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -305,13 +414,25 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().forCounter++ + "for";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		f.s1.accept(this);
-		f.s2.accept(this);
-		f.s3.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			f.s1.accept(this);
+			f.s2.accept(this);
+			f.s3.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -320,17 +441,29 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().foreachCounter++ + "foreach";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		TypeSym type = f.t.accept(this);
-		String loopVar = f.i1.i;
-		appendToPath(loopVar);
-		VarSym symbol = new VarSym(loopVar, f.line, f.column, false, Sym.ProtectionLevel.PRIVATE, true, type, false, table.getCurrentScope(), path.toString());
-		trimLastAddedPath();
-		table.addSymbol(symbol);
-		f.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			TypeSym type = f.t.accept(this);
+			String loopVar = f.i1.i;
+			appendToPath(loopVar);
+			VarSym symbol = new VarSym(loopVar, f.line, f.column, false, Sym.ProtectionLevel.PRIVATE, true, type, false, table.getCurrentScope(), path.toString());
+			trimLastAddedPath();
+			table.addSymbol(symbol);
+			f.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -339,11 +472,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().doWhileCounter++ + "doWhile";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		d.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			d.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -352,11 +497,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().untilCounter++ + "until";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		u.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			u.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -365,11 +522,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().unlessCounter++ + "unless";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		u.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			u.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -378,11 +547,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().tryCounter++ + "try";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		t.l.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			t.l.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 		t.c.accept(this);
@@ -391,11 +572,23 @@ public class SymbolTableBuilderPass1 implements Visitor{
 			name = counterStack.peek().finallyCounter++ + "finally";
 			appendToPath(name);
 			newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-			table.addMethodScope(newScope);
-			counterStack.push(new PathCounterStruct());
-			table.sinkToInnerMethodScope(path.toString());
-			t.f.accept(this);
-			table.floatScope();
+			try{
+				table.addMethodScope(newScope);
+				counterStack.push(new PathCounterStruct());
+				table.sinkToInnerMethodScope(path.toString());
+				t.f.accept(this);
+				table.floatScope();
+			}
+			catch(IllegalScopeException e1){
+				System.out.println("An error occured when sinking to " + name);
+				e1.printStackTrace();
+				System.exit(-1);
+			}
+			catch(Exception e2){
+				System.out.println("An error occured when processing " + name);
+				e2.printStackTrace();
+				System.exit(-1);
+			}
 			trimLastAddedPath();
 			counterStack.pop();
 		}
@@ -404,18 +597,30 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		String name = counterStack.peek().catchCounter++ + "catch";
 		appendToPath(name);
 		MethodScope newScope = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
-		table.addMethodScope(newScope);
-		counterStack.push(new PathCounterStruct());
-		table.sinkToInnerMethodScope(path.toString());
-		String firstPart = c.i.i;
-		ArrayList<String> chain = c.chain.accept(this);
-		chain.add(0, firstPart);
-		String exceptionName = c.i2.i;
-		VarSym symbol = new VarSym(exceptionName, c.line, c.column, false, Sym.ProtectionLevel.PRIVATE, true, 
-			new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol((String[])chain.toArray(), true), false), false, table.getCurrentScope(), path.toString());
-		table.addSymbol(symbol);
-		c.s.accept(this);
-		table.floatScope();
+		try{
+			table.addMethodScope(newScope);
+			counterStack.push(new PathCounterStruct());
+			table.sinkToInnerMethodScope(path.toString());
+			String firstPart = c.i.i;
+			ArrayList<String> chain = c.chain.accept(this);
+			chain.add(0, firstPart);
+			String exceptionName = c.i2.i;
+			VarSym symbol = new VarSym(exceptionName, c.line, c.column, false, Sym.ProtectionLevel.PRIVATE, true, 
+				new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol((String[])chain.toArray(), true), false), false, table.getCurrentScope(), path.toString());
+			table.addSymbol(symbol);
+			c.s.accept(this);
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		counterStack.pop();
 	}
@@ -426,12 +631,24 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
 		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, returnType, false, table.getCurrentScope(), path.toString());
-		table.addSymbol(symbol);
-		table.sinkToMethodScope(name);
-		m.p.accept(this);
-		m.s.accept(this);
-		counterStack.pop();
-		table.floatScope();
+		try{
+			table.addSymbol(symbol);
+			table.sinkToMethodScope(name);
+			m.p.accept(this);
+			m.s.accept(this);
+			counterStack.pop();
+			table.floatScope();
+		}
+		catch(IllegalScopeException e1){
+			System.out.println("An error occured when sinking to " + name);
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing " + name);
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		return null;
 	}
