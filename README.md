@@ -58,18 +58,13 @@ To be determined.
 # In Planning
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Planning of the Ocarina Standard Library
-	Planning of Symbol Table Builder
+	Symbol Table Builder Phase 2
+	Var-Type Resolver
+	Documentation/Comments
 
 # Recently Accomplished
-	Added static variables, functions, and classes
-	Development of file catalog and searcher to compile imported files with a variable degree of parallelism
-	Improved the way functions are called to be a bit more conventional
-	Added foreach loops
-	Cleaned up operator precedence
-	Compiler Architecture Design
-	Initial Design of Symbols for Symbol Table
-	Better handling of types for symbol table
-	Initial implementation of inner scopes within a method
+	Symbol Table - initial implementation
+	Symbol Table Builder Phase 1
 
 # Items Under Consideration For Later Release
 	*repl mode*
