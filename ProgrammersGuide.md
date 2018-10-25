@@ -33,9 +33,11 @@ the 'using' keyword.
 		# Class code goes here
 	end
 
+Here's a file that imports the one above.
+	
 	sage file2;
 	using file1;	# Note this denotes the location of the file
-	using folder.file3; # This file's path is relative to the current files
+	using folder.file3; # The file's path is relative to the current file's
 	start
 		# Various code
 	end
@@ -55,44 +57,145 @@ variable, a class, a function, then another variable in that order. However, the
 You are not required to follow this convention, but it is recommended that you do so to maintain orderly code.	
 
 # Variables and Types
-*Basic Types*
 
-	int
-	decimal
-	boolean
-	string
-	array
-	hashmap
-	function
+## Variable Naming Conventions
+All variable names, function names, and class names follow this structure
+*The first character must be a letter (lower or upper case) or '_'
+*All preceding characters may contain a letter, number, '_', or '?'
 
-*Class Initialization*
+The following are examples of valid names.
+*a
+*abcde
+*abc123
+*_ab4d
+*this_is_a_variable?
+*yes_?_no
 
-*var type*
+The following are examples of invalid names.
+*1
+*123abc
+*?names
+*^^%5
 
-*Protection Levels*
 
-# Conditionals and Loops
-*Evaluating Conditionals*
-*if statements*
-*unless statements*
-*while loops*
-*until loops*
-*do-while loops*
-*for loops*
-*foreach loops*
+Names are case sensitive. For example, 'variable_name' and 'VARIABLE_NAME' are considered completely different items.
+
+## Basic Types
+
+Ocarina is a strongly typed language, therefore stating the type of a variable is required when declaring them. Below are the basic variable types.
+
+*int
+*decimal
+*boolean
+*string
+*array
+*hashmap
+*function
+
+Variables do not have to be immediately assigned upon creation.
+
+### int
+An int can be used for any integer. There is no limit on how large or small this number is. Below is are examples of int delcarations and valid assignments.
+
+	int x = 5;
+	int y = 0123;	# This is an octal number
+	int z = 0xabc123;	# This is a hexadecimal number. 'x' or 'X' can be used.
+	int large_number = 123456789123456789123456789;
+	int negative_number = -5;
+
+### decimal
+A decimal can be used for any numbers that have floating point values. There is no size limit for these numbers. You may assign an 'int' to a variable
+of type decimal, but it will be treated as a decimal number. Declaring decimal numbers to ints results in the floating put digits being truncated
+
+	decimal num = 1.5;
+	decimal another = -1.5;
+	decimal big_number = 204823048208.20480482048208048320420423048204;
+	decimal whole_number = 5; # This evaluates to 5.0
+	int truncated_number = 5.666667; # This will not cause an error, but the number will be truncated to 5
+
+
+### boolean
+Booleans are true/false variables that can only be assigned true, false, or an expression that evaluates to true or false.
+	
+	boolean value? = true;
+	boolean another? = false;
+
+Note that the naming convention for boolean variables has them ending in '?'.
+
+### string
+Strings are strings of characters that denoted by "" or ''. They may be of any length. Strings are editable and when edited do not result in new strings
+being created.
+
+	string first = "I love programming!";
+	string second = "I" + " love " + "programming"; # This string is concatenated together
+
+### array
+Arrays types are denoted with a type followed by [];
+	
+	int[] numbers = create int[5]; # creates an array of length 5
+	string[][] twoDArray = create string[9][8];	# creates a 2-d array. Note that the length must be specified for all dimensions
+	boolean[] literal = create boolean[] { true, false, true, true, false};	# creates a boolean array of literals
+
+### hashmap
+Hashmaps work on a key-value basis. The following are uses of the hashmap variable.
+	
+	hashmap{int, string} map = hashmap{int, string}; # Declares a hashmap whose key is of type int and value is of type string.
+	hashmap{int[], boolean} different; # Key is an int array, value it returns is boolean
+	map{5} = "assignment"; # Assigns the string to the key 5
+	string value = map{5}; # Returns the value associated with the key 5, which is "assignment"
+
+### function
+In Ocarina, functions be declared and assigned to variables. The following is are examples of function variable declarations. Return types are specified
+within the brackets.
+
+	function{int} b;	# A function that returns an int
+	function{string[]} c;	# A function that returns an array of strings
+	function{function{decimal}} nested_function;	# A function that returns a function that returns a decimal
+
+More will be covered on how to assign these variables in the 'Anonymous Functions' section.
+
+## Class Initialization
+Classes can be initiated in the following way:
+	
+	Example ex = create Example(); # Creates an instance of the Example class
+
+More detail on classes will be covered in the 'Classes' section.
+
+## var type
+Var variables are shortcuts for assigning variables. Instead of stating the type of the variable, Ocarina will be able to determine it at compile time.
+However, you they must be assigned immediate after declaration, and they can only be used within the main function and other functions.
+	
+	var x = true; # x is a boolean variable
+	var y = 5.55; # y is a decimal
+	var arr = create string[100]; # arr is an array o strings
+	var illegal; # this is illegal and will cause an error
+
+Var declarations do not just have to be literals. They can be evaluated from expressions, which will be covered in the 'Expressions' section.
 
 # Expressions
+
+# Conditionals and Loops
+
+## if statements
+## unless statements
+## while loops
+## until loops
+## do-while loops
+## for loops
+## foreach loops
 
 # Functions
 
 # Anonymous Functions
 
 # Classes
-*Inheritance*
-*Static Classes*
-*Class Nesting*
+## Inheritance
+## Static Classes
+## Class Nesting
 
 # Exceptions
+
+# Protection Levels
 
 # Sages
 Sages are the equivalent of packages in Java and namespaces in C#. Why are they called sages? For the same reason this language is called Ocarina. Irreverancy. The main 
