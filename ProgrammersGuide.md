@@ -60,22 +60,22 @@ You are not required to follow this convention, but it is recommended that you d
 
 ## Variable Naming Conventions
 All variable names, function names, and class names follow this structure
-*The first character must be a letter (lower or upper case) or '_'
-*All preceding characters may contain a letter, number, '_', or '?'
+* The first character must be a letter (lower or upper case) or '_'
+* All preceding characters may contain a letter, number, '\_', or '?''
 
 The following are examples of valid names.
-*a
-*abcde
-*abc123
-*_ab4d
-*this_is_a_variable?
-*yes_?_no
+* a
+* abcde
+* abc123
+* \_ab4d
+* this_is_a_variable?
+* yes\_?\_no
 
 The following are examples of invalid names.
-*1
-*123abc
-*?names
-*^^%5
+* 1
+* 123abc
+* ?names
+* ^^%5
 
 
 Names are case sensitive. For example, 'variable_name' and 'VARIABLE_NAME' are considered completely different items.
@@ -84,13 +84,13 @@ Names are case sensitive. For example, 'variable_name' and 'VARIABLE_NAME' are c
 
 Ocarina is a strongly typed language, therefore stating the type of a variable is required when declaring them. Below are the basic variable types.
 
-*int
-*decimal
-*boolean
-*string
-*array
-*hashmap
-*function
+* int
+* decimal
+* boolean
+* string
+* array
+* hashmap
+* function
 
 Variables do not have to be immediately assigned upon creation.
 
@@ -169,6 +169,8 @@ However, you they must be assigned immediate after declaration, and they can onl
 	var y = 5.55; # y is a decimal
 	var arr = create string[100]; # arr is an array o strings
 	var illegal; # this is illegal and will cause an error
+	var another_illegal = nil;	# illegal - cannot distinguish type from nil
+	var third_illegal = null;	# nil an null are the same thing in Ocarina
 
 Var declarations do not just have to be literals. They can be evaluated from expressions, which will be covered in the 'Expressions' section.
 
