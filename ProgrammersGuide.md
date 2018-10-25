@@ -54,7 +54,7 @@ variable, a class, a function, then another variable in that order. However, the
 2.	Function Declarations
 3.	Class Declarations
 
-You are not required to follow this convention, but it is recommended that you do so to maintain orderly code.	
+You are not required to follow this convention, but it is recommended that you do so to maintain orderly code.
 
 # Variables and Types
 
@@ -79,6 +79,69 @@ The following are examples of invalid names.
 
 
 Names are case sensitive. For example, 'variable_name' and 'VARIABLE_NAME' are considered completely different items.
+
+## Keywords
+The following is a list of Ocarina keywords and may not be used as variable names:
+* start
+* end
+* class
+* extends
+* function
+* void
+* int
+* decimal
+* boolean
+* hashmap
+* string
+* begin
+* if
+* rather
+* else
+* while
+* return
+* and
+* or
+* nand
+* nor
+* true
+* false
+* equals
+* this
+* self
+* nil
+* null
+* assert
+* create
+* exit
+* length
+* print
+* debug
+* break
+* continue
+* sage
+* for
+* foreach
+* in
+* do 
+* using
+* public
+* private
+* protected
+* constructor
+* exec
+* super
+* until
+* unless
+* static
+* var
+* const
+* typeof
+* differs
+* try
+* catch
+* finally
+* throw
+* delegate
 
 ## Basic Types
 
@@ -197,7 +260,7 @@ Var declarations do not just have to be literals. They can be evaluated from exp
 
 # Exceptions
 
-# Protection Levels
+# Protection Levels and Scope
 
 # Sages
 Sages are the equivalent of packages in Java and namespaces in C#. Why are they called sages? For the same reason this language is called Ocarina. Irreverancy. The main 
