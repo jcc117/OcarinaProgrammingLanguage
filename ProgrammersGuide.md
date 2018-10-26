@@ -82,66 +82,67 @@ Names are case sensitive. For example, 'variable_name' and 'VARIABLE_NAME' are c
 
 ## Keywords
 The following is a list of Ocarina keywords and may not be used as variable names:
-* start
-* end
-* class
-* extends
-* function
-* void
-* int
-* decimal
-* boolean
-* hashmap
-* string
-* begin
-* if
-* rather
-* else
-* while
-* return
+
 * and
-* or
-* nand
-* nor
-* true
-* false
-* equals
-* this
-* self
-* nil
-* null
 * assert
-* create
-* exit
-* length
-* print
-* debug
+* begin
+* boolean
 * break
+* catch
+* class
+* const
+* constructor
 * continue
-* sage
+* create
+* debug
+* decimal
+* delegate
+* differs
+* do
+* else
+* end
+* equals
+* exec
+* exit
+* extends
+* false
+* finally
 * for
 * foreach
+* function
+* hashmap
+* if
 * in
-* do 
-* using
-* public
+* int
+* length
+* nand
+* nil
+* nor
+* null
+* or
+* print
 * private
 * protected
-* constructor
-* exec
-* super
-* until
-* unless
+* public
+* rather
+* return
+* sage
+* self
+* start
 * static
-* var
-* const
-* typeof
-* differs
-* try
-* catch
-* finally
+* string
+* super
+* this
 * throw
-* delegate
+* true
+* try
+* typeof
+* unless
+* until
+* using
+* var
+* void
+* while
 
 ## Basic Types
 
@@ -190,7 +191,7 @@ Strings are strings of characters that denoted by "" or ''. They may be of any l
 being created.
 
 	string first = "I love programming!";
-	string second = "I" + " love " + "programming"; # This string is concatenated together
+	string second = "I" + " love " + 'programming'; # This string is concatenated together
 
 ### array
 Arrays types are denoted with a type followed by [];
@@ -239,16 +240,141 @@ Var declarations do not just have to be literals. They can be evaluated from exp
 
 # Expressions
 
+## Mathematical Expressions
+
+Most general mathematical expressions are supported by Ocarina. The include addition(+), subtraction(-), multiplication(\*), division(\\), power(^), 
+and modulo(%). Support for mathematical comparisons are also supported(<, >, >=, <=). Below are some quick examples of each.
+
+	int x = 1 + 1;
+	int y = 44 / 22;
+	int z = 6 * 7;
+	decimal d = 7 / 4;
+	int m = 4 % 2;
+	boolean b1 = 4 < 5;
+	boolean b2 = 4 > 5;
+	boolean b3 = 4 <= 5;
+	boolean b4 = 4 >= 5;
+
+## Boolean Expressions
+
+Ocarina supports most of the common boolean expressions. However, in Ocarina english keywords can be used in substitute for conventional symbols used.
+They are identical in precedence and can be used in whatever combination the user chooses. Below is a list of boolean expressions supported by Ocarina 
+along with their equivalent keyword.
+
+	and* => &&
+	or* => ||
+	nand* => &!
+	nor* => |!
+	not** => !
+
+	*Can be used as a substitute keyword for the the conventional symbol.
+	**Not a supported substitute keyword.
+
+Examples of how they are used can be found in the next section
+
 # Conditionals and Loops
 
+Due to the nature of this guide, it is assumed that the basic concepts of control structures in programming languages is understood. With the exception 
+of a few uncommon ones supported by Ocarina, only the basic structure of these conditionals will be covered.
+
 ## if statements
+
+The basic structure of an if statement is as follows: 'if' followed by a boolean expression, followed by ':', followed by the code that is to be executed
+if the conditional is true, and ends with 'end' keyword. Below is an example of a basic if statement.
+
+	boolean x = false;
+	boolean y = true;
+	int z = 0;
+	if x and y:
+		z++;	#Increments z by 1
+	end
+
+If secondary conditions are desired, they are supported by the 'rather' keyword. If none of the conditions are true, then the code in the 'else' block is
+executed. Below is an example of an if-rather-else block.
+
+	boolean x = false;
+	boolean y = true;
+	decimal d1 = 5.5;
+	string assigned;
+
+	if x or y:
+		assigned = "Hello";
+	rather d1 > 4:
+		assigned = "World";
+	else:
+		assigned = "!";
+	end
+
+As many rather statements may be supported as the programmer wishes.
+
 ## unless statements
+
+Unless statements are similar to if statements, except that the code within the block is executed if the conditional statement is evaluated to false.
+
+	boolean x = true;
+	boolean y = true;
+
+	# The print statement will not execute in this case
+	unless x && y:
+		print("This conditional is false");
+	end
+
+	y = false;
+	# Since the conditional is now false, the message will be printed to the screen
+	unless x && y:
+		print("Now this will print to the screen");
+	end
+
 ## while loops
+
+The code within the while loop executes over and over again as long as the boolean expression is true. Below is an example of a while loop:
+
+	int num1 = 9;
+	int num2 = 19;
+
+	while num1 < num2:
+		num1 = num1 + 1;
+	end
+
 ## until loops
+
+Until loops are similar to while loops, except the code continually executes as long as the boolean condition is false.
+
+	decimal dec1 = 5.5;
+	decimal dec2 = 0.5;
+
+	until dec1 <= dec2:
+		dec1 = dec1 - 1.0;
+	end
+
 ## do-while loops
+
+Do-while loops are again similar to while loops except the boolean condition is evaluated after the code within the block is executed.
+
+	int x = 10;
+	do:
+		x = x - 2;
+	end while x > 0;
+
 ## for loops
+
+Below is an example of a standard for loop, similar to other languages:
+
+	for(int i = 0; i < 10; i++):
+		print("I'm still looping.");
+	end
+
 ## foreach loops
 
+Foreach loops loop over ever item in arrays and objects that inherit the standard library's 'Iterable' class.
+
+	int[] arr = create int[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	
+	#Prints all of the numbers in the arr array
+	foreach(int i in arr):
+		print(i);
+	end
+	
 # Functions
 
 # Anonymous Functions
