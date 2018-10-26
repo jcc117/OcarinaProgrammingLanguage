@@ -2,25 +2,11 @@
 ![Logo](https://github.com/jcc117/Ocarina/blob/master/Logo.png)
 
 # What is Ocarina?
-Ocarina is a programming language heavily influenced by Python, Java, C#, and Ruby. It includes single class inheritance and the ability to create nested
-inner classes. It is an interpretted language that runs on a Java based interpretter (which means we can use the JVM for portability!). The design of
-this language is meant to be simple in order to give first time language learners an easier time learning over something as wordy as Java.
-
-All integers of any size and floats can be referenced by the same keyword. The interpretter shall handle any size of integer or float that is thrown at
-it. It also incluces a built in hashmap variable type due to the commonality of use of the data structure. 
-
-This language is also unique in that it takes into account some programming aspects for software development. This language shall eventually include built in
-mocks and stubs in order to more easily facilitate program testing enviroments so third party libraries do not have to be developed.
-Ocarina also has a built-in debugger within its interpretter.
-
-Ocarina is compiled with a JFlex lexer and JavaCUP parser. Source code is compiled to an intermediate representation that is then run on the Ocarina 
-interpretter in a similar way to Java class files and the JVM.
-
-For examples, please navigate to the 'examples' folder.
-
-Note: It appears that I haven't been keeping up with this project. Commits have been sparse lately. That is not the case. I've been doing research into other languages to 
-gather ideas. Now is the time to make design changes before I move further with developing a symbol table. I wrote the code for the file catalog before this since it 
-doesn't really depend on the grammar itself.
+Ocarina is a strongly typed, general purpose programming language heavily influenced by Python, Java, JavaScript, C#, C, and Ruby.
+It is compiled to byte-code and run via an interpreter. It is designed to give the programmer the basic functionality of most programming languages but 
+without the restrictions that many of them enforce. It is much more free flowing than languages like Java and C++, but allows for some type control that 
+languages like Ruby, Python, and JavaScript don't provide. It is meant to be loose, yet elegant, compact, yet precise. Ocarina aims to take the best that 
+all other programming languages provide and combine them into an effective programming language.
 
 # What are the goals of Ocarina?
 1. A well-rounded, general-purpose programming language
@@ -28,6 +14,10 @@ doesn't really depend on the grammar itself.
 3. Easy to learn for experienced and non-experienced programmers alike
 4. Portable
 5. Provide some necessary built-in tools for modern software engineering practices
+
+# Where do I learn how to program in Ocarina?
+See ProgrammersGuide.md for a quick introduction on the basics of Ocarina. It is a very quick explination on the syntax of Ocarina. *It is not a guide 
+suited for those who have no programming experience.* 
 
 # How do I compile an Ocarina file?
 With the following command:
@@ -68,8 +58,11 @@ To be determined.
 	Symbol Table Builder Phase 1
 
 # Items Under Consideration For Later Release
-	*repl mode*
-	*casting*
-	*generics*
-	*unicode strings*
-	*lambda functions*
+The only reason many of these are not included in this version is so I can keep moving foward with what I have.
+* Repl mode
+* Casting
+* Generics
+* Unicode strings
+* Lambda functions
+* Strict mode - enforcing Java-like object oriented programming practices when compiling
+* Multi-threading
