@@ -56,6 +56,7 @@ To be determined.
 # Recently Accomplished
 	Symbol Table - initial implementation
 	Symbol Table Builder Phase 1
+	Complete overhaul of protection declarations
 
 # Items Under Consideration For Later Release
 The only reason many of these are not included in this version is so I can keep moving foward with what I have.

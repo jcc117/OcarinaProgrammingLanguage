@@ -8,6 +8,12 @@ public interface VoidVisitor{
 	public void visit(UsingList u);
 	public void visit(Program p);
 	public void visit(StatementList l);
+	public void visit(DefinitionList d);
+	public void visit(PublicList p);
+	public void visit(PrivateList p);
+	public void visit(ProtectedList p);
+	public void visit(DefWrapper d);
+	public void visit(Definition d);
 	public void visit(DefList d);
 	public void visit(SimpleClassDef s);
 	public void visit(ExtendsClassDef e);

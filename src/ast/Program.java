@@ -3,10 +3,10 @@ import symboltable.*;
 
 public class Program extends Node{
 	public StatementList s;
-	public DefList d;
+	public DefinitionList d;
 	public boolean debug;
 
-	public Program(StatementList s, DefList d, boolean debug, int line, int column){
+	public Program(StatementList s, DefinitionList d, boolean debug, int line, int column){
 		this.s = s;
 		this.d = d;
 		this.debug = debug;

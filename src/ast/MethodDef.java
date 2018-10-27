@@ -6,15 +6,13 @@ public class MethodDef extends Node implements Def{
 	public Identifier i;
 	public ArgList a;
 	public StatementList s;
-	public int protection;
 	public boolean is_static;
 
-	public MethodDef(Type r, Identifier i, ArgList a, StatementList s, int protection, boolean is_static,int line, int column){
+	public MethodDef(Type r, Identifier i, ArgList a, StatementList s, boolean is_static,int line, int column){
 		this.r = r;
 		this.i = i;
 		this.a = a;
 		this.s = s;
-		this.protection = protection;
 		this.line = line;
 		this.column = column;
 		this.is_static = is_static;

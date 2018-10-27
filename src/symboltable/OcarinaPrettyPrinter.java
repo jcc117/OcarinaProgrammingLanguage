@@ -59,10 +59,51 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		}
 	}
 
+	public void visit(DefinitionList d){
+		for(Definition def : d.defs){
+			def.accept(this);
+		}
+	}
+
+	public void visit(PublicList p){
+		printTabs();
+		System.out.println("public");
+		tabs++;
+		p.defList.accept(this);
+		tabs--;
+		printTabs();
+		System.out.println("end");
+	}
+
+	public void visit(PrivateList p){
+		printTabs();
+		System.out.println("private");
+		tabs++;
+		p.defList.accept(this);
+		tabs--;
+		printTabs();
+		System.out.println("end");
+	}
+	public void visit(ProtectedList p){
+		printTabs();
+		System.out.println("protected");
+		tabs++;
+		p.defList.accept(this);
+		tabs--;
+		printTabs();
+		System.out.println("end");
+	}
+
+	public void visit(DefWrapper d){
+		d.item.accept(this);
+	}
+
+	public void visit(Definition d){
+
+	}
+
 	public void visit(SimpleClassDef s){
 		printTabs();
-		String prot = get_protection_level(s.protection);
-		System.out.print(prot);
 		if(s.is_static)
 			System.out.print(" static");
 		System.out.print(" class ");
@@ -77,8 +118,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(ExtendsClassDef e){
 		printTabs();
-		String prot = get_protection_level(e.protection);
-		System.out.print(prot);
 		if(e.is_static)
 			System.out.print(" static");
 		System.out.print(" class ");
@@ -107,9 +146,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(MethodDef m){
 		printTabs();
-		String prot = get_protection_level(m.protection);
-		if(prot.length() != 0)
-			System.out.print(prot + " ");
 		if(m.is_static)
 			System.out.print("static ");
 		System.out.print("function ");
@@ -128,10 +164,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(VarDecl v){
 		printTabs();
-		String prot = get_protection_level(v.protection);
-		if(prot.length() != 0){
-			System.out.print(prot + " ");
-		}
 		if(v.is_static){
 			System.out.print("static ");
 		}
@@ -304,10 +336,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(VarDecAssignment v){
 		printTabs();
-		String prot = get_protection_level(v.protection);
-		if(prot.length() != 0){
-			System.out.print(prot + " ");
-		}
 		if(v.is_static){
 			System.out.print("static ");
 		}

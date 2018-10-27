@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 public class Sage extends Node{
 	public Identifier i;
-	public DefList d;
+	public DefinitionList d;
 	public Program p;
 	public UsingList u;
 
-	public Sage(Identifier i, DefList d, UsingList u, int line, int column){
+	public Sage(Identifier i, DefinitionList d, UsingList u, int line, int column){
 		this.i = i;
 		this.d = d;
 		this.p = null;

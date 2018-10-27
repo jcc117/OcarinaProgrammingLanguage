@@ -3,7 +3,7 @@ import symboltable.*;
 
 import java.util.*;
 
-public class DefList {
+public class DefList extends Definition{
 	public ArrayList<Def> l;
 
 	public DefList(){

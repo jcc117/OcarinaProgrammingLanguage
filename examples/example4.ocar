@@ -13,7 +13,7 @@ start
 		int z = i++ + u-- * ++l / --z;
 	end
 	
-	function{decimal} thing = delegate(int i, decimal j){
+	function{decimal} thing = delegate(int i, decimal j) => decimal {
 		return i * j;
 	};
 	exec thing(20, 20.1);
@@ -24,14 +24,19 @@ start
 	u = method() + 7;
 end
 
-public var x = 0;
-private int y;
+public
+	var x = 0;
+	int y;
+end
 
-protected static int z = 9;
-static const function{Class} func = delegate(boolean b){boolean b = b and b; return b;};
-private function{void} func2 = delegate(){print( x % -9);};
+private
+	static int z = 9;
+	const function{Class} func = delegate(boolean b) => Class {boolean b = b and b; return b;};
+	function{void} func2 = delegate() => void {print( x % -9);};
+	
+end
 
-public static class Class:
+static class Class:
 	constructor():
 	
 	end
