@@ -20,15 +20,16 @@ See ProgrammersGuide.md for a quick introduction on the basics of Ocarina. It is
 suited for those who have no programming experience.* 
 
 # How do I compile an Ocarina file?
-With the following command:
+Navigate to the source folder and run the following command:
 
-*ocarinac filename.ocar*
+*java -cp ".;java-cup-11a.jar" Ocarinac [path to file to be compiled]*
 
-This shall produce a file called filename.rina, which runs on the Ocarina interpretter.
+This is temporary while the project is still being built.
+
+Ocarina files use the .ocar extension.
 
 # How do I run an Ocarina file?
 With the following command:
-*ocarina filename.rina*
 
 # How do I install Ocarina?
 To be determined.
@@ -64,6 +65,5 @@ The only reason many of these are not included in this version is so I can keep 
 * Casting
 * Generics
 * Unicode strings
-* Lambda functions
 * Strict mode - enforcing Java-like object oriented programming practices when compiling
 * Multi-threading
