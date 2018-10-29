@@ -53,6 +53,7 @@ To be determined.
 	Symbol Table Builder Phase 2
 	Var-Type Resolver
 	Documentation/Comments
+	Fix function literal type definitions to take into account arg types
 
 # Recently Accomplished
 	Symbol Table - initial implementation

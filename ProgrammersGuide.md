@@ -266,6 +266,8 @@ along with their equivalent keyword.
 	nand* => &!
 	nor* => |!
 	not** => !
+	equals* => ==
+	differs* => !=
 
 	*Can be used as a substitute keyword for the the conventional symbol.
 	**Not a supported substitute keyword.
@@ -374,10 +376,70 @@ Foreach loops loop over ever item in arrays and objects that inherit the standar
 	foreach(int i in arr):
 		print(i);
 	end
-	
+
 # Functions
 
+All function defintions have the same overall structure:
+
+	function {return type} function_name(list of function paramters):
+		'''
+		Code for the function
+		'''
+	end
+
+Function names follow the same rules as variables names. In Ocarina, the convention is that all function names begin with a lowercase letter. 
+Below is an example of a function that adds two numbers together and returns the results.
+
+	function int add_two_numbers(int num1, int num2):
+		return num1 + num2;
+	end
+
+The following are the permitted return types for any given function:
+* int
+* decimal
+* boolean
+* string
+* array
+* hashmap
+* a defined class type
+* function{return type}
+* void (no return type)
+
+Note that var cannot be used as a return type. The following is an example of a program that calls the add_two_numbers function defined above and 
+assigns the result to a variable.
+
+	var number = add_two_numbers(4, 5);
+
+Not all function calls have to be treated as assigned expressions. However to do this the *exec* keyword must be used to invoke the function.
+
+	sage example;
+
+	start
+		exec print_message_to_screen("Hello!");
+	end
+
+	# Prints the message to the screen
+	function void print_message_to_screen(string message):
+		print(message);
+	end
+
 # Anonymous Functions
+
+Anonymous functions are functions without specified defintions. The can be declared within other functions, including the main function. They can be 
+passed as arguments to other functions and returned from functions. Defining an anonymous function to a variable can be done as follows:
+
+	var func_var = delegate(list of arguments) => return type { 
+		# code for the function goes here
+	 };
+
+Below is an example of defining the add_two_numbers function as an anonymous function:
+
+	function{int} add_nums_func = delegate(int num1, int num2) => int {
+		return num1 + num2;
+	};
+
+	# anonymous functions are called just like other functions
+	int added_nums = add_nums_func(6, 8);
 
 # Classes
 ## Inheritance
