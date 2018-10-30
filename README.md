@@ -31,8 +31,13 @@ Ocarina files use the .ocar extension.
 # How do I run an Ocarina file?
 With the following command:
 
+	ocarina filename.ocar
+
+where filename.ocar is the file which you would like to run.
+
 # How do I install Ocarina?
-To be determined.
+First, navigate to the bin folder and open ocarina.bat. Change JAVA_HOME to the directory where Java is set up on your machine and change OCARINA_HOME 
+to the location of the Ocarina folder. Then add the bin folder to your path.
 
 # Features for Ocarina
 	*Built-in Debugger within the Interpreter*
