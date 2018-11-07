@@ -428,13 +428,13 @@ Not all function calls have to be treated as assigned expressions. However to do
 Anonymous functions are functions without specified defintions. The can be declared within other functions, including the main function. They can be 
 passed as arguments to other functions and returned from functions. Defining an anonymous function to a variable can be done as follows:
 
-	var func_var = delegate(list of arguments) => return type { 
+	var func_var = delegate(list of arguments):return_type => { 
 		# code for the function goes here
 	 };
 
 Below is an example of defining the add_two_numbers function as an anonymous function:
 
-	function{int} add_nums_func = delegate(int num1, int num2) => int {
+	function{int} add_nums_func = delegate(int num1, int num2):int => {
 		return num1 + num2;
 	};
 
