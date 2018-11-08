@@ -189,7 +189,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 			table.addSymbol(symbol);
 			table.sinkToMethodScope(name);
 			m.a.accept(this);
-			m.s.accept(this);
+			if(!m.is_delegate) 
+				m.s.accept(this);
 			counterStack.pop();
 			table.floatScope();
 		}
@@ -297,10 +298,6 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	public TypeSym visit(HashmapType t){
 		return new TypeSym(TypeSym.TypeEnum.HASHMAP, t.t1.accept(this), t.t2.accept(this), t.constant);
-	}
-
-	public TypeSym visit(MethodType m){
-		return new TypeSym(TypeSym.TypeEnum.FUNCTION, m.t.accept(this), m.constant);
 	}
 
 	public TypeSym visit(VoidType t){
@@ -660,15 +657,14 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	}
 	public TypeSym visit(MethodLiteral m){
 		String name = m.name;
-		TypeSym returnType = m.returnType.accept(this);
-		name = createMethodSignature(name, m.p);	//Creates the method signature
+		name = m.name + "()";	//Creates a temporary method signature
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
-		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, returnType, false, table.getCurrentScope(), path.toString());
+		//Return type will be resolved during var-resolver pass
+		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, null, false, table.getCurrentScope(), path.toString());
 		try{
 			table.addSymbol(symbol);
 			table.sinkToMethodScope(name);
-			m.p.accept(this);
 			m.s.accept(this);
 			counterStack.pop();
 			table.floatScope();

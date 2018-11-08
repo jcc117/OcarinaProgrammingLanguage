@@ -108,7 +108,6 @@ The following is a list of Ocarina keywords and may not be used as variable name
 * finally
 * for
 * foreach
-* function
 * if
 * in
 * int
@@ -153,7 +152,6 @@ Ocarina is a strongly typed language, therefore stating the type of a variable i
 * string
 * array
 * dictionary
-* function
 
 Variables do not have to be immediately assigned upon creation.
 
@@ -206,16 +204,6 @@ Hashmaps work on a key-value basis. The following are uses of the dictionary var
 	{int[], boolean} different; # Key is an int array, value it returns is boolean
 	map{5} = "assignment"; # Assigns the string to the key 5
 	string value = map{5}; # Returns the value associated with the key 5, which is "assignment"
-
-### function
-In Ocarina, functions be declared and assigned to variables. The following is are examples of function variable declarations. Return types are specified
-within the brackets.
-
-	function{int} b;	# A function that returns an int
-	function{string[]} c;	# A function that returns an array of strings
-	function{function{decimal}} nested_function;	# A function that returns a function that returns a decimal
-
-More will be covered on how to assign these variables in the 'Anonymous Functions' section.
 
 ## Class Initialization
 Classes can be initiated in the following way:
@@ -380,7 +368,7 @@ Foreach loops loop over ever item in arrays and objects that inherit the standar
 
 All function defintions have the same overall structure:
 
-	function {return type} function_name(list of function paramters):
+	{return type} function_name(list of function paramters):
 		'''
 		Code for the function
 		'''
@@ -389,7 +377,7 @@ All function defintions have the same overall structure:
 Function names follow the same rules as variables names. In Ocarina, the convention is that all function names begin with a lowercase letter. 
 Below is an example of a function that adds two numbers together and returns the results.
 
-	function int add_two_numbers(int num1, int num2):
+	int add_two_numbers(int num1, int num2):
 		return num1 + num2;
 	end
 
@@ -400,8 +388,7 @@ The following are the permitted return types for any given function:
 * string
 * array
 * dictionary
-* a defined class type
-* function{return type}
+* a defined class type or delegate type
 * void (no return type)
 
 Note that var cannot be used as a return type. The following is an example of a program that calls the add_two_numbers function defined above and 
@@ -418,22 +405,24 @@ Not all function calls have to be treated as assigned expressions. However to do
 	end
 
 	# Prints the message to the screen
-	function void print_message_to_screen(string message):
+	void print_message_to_screen(string message):
 		print(message);
 	end
 
-# Anonymous Functions
+# Delegated Functions
 
-Anonymous functions are functions without specified defintions. The can be declared within other functions, including the main function. They can be 
-passed as arguments to other functions and returned from functions. Defining an anonymous function to a variable can be done as follows:
+Delegated functions are functions without specified defintions. The can be declared within other functions, including the main function. They can be 
+passed as arguments to other functions and returned from functions. Defining a delegated function to a variable can be done as follows:
 
-	var func_var = delegate(list of arguments):return_type => { 
-		# code for the function goes here
-	 };
+	delegate {return_type} delegate_name(list of function parameters);
 
-Below is an example of defining the add_two_numbers function as an anonymous function:
+Below is an example of declaring a delegated function:
+	
+	delegate int Adder(int num1, int num2);
 
-	function{int} add_nums_func = delegate(int num1, int num2):int => {
+Below is an example of defining the add_two_numbers function as a delegated function:
+
+	Adder add_nums_func = delegate() => {
 		return num1 + num2;
 	};
 

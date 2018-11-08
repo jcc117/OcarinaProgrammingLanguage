@@ -46,7 +46,6 @@ String = \"[^\"]*\" | \'[^\']*\'
 "end"	{return symbol(END);}
 "class"	{return symbol(CLASS);}
 "extends"	{return symbol(EXTENDS);}
-"function"	{return symbol(SUBROUTINE);}
 //"mock"	{return symbol(MOCK);}
 //"stub"	{return symbol(STUB);}
 "void"	{return symbol(VOID);}
@@ -100,6 +99,7 @@ String = \"[^\"]*\" | \'[^\']*\'
 "catch"	{return symbol(CATCH); }
 "finally"	{return symbol(FINALLY); }
 "throw"	{return symbol(THROW); }
+"delegate"	{return symbol(DELEGATE); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

@@ -99,7 +99,6 @@ public interface Visitor{
 	public void visit(Unless u);
 	public TypeSym visit(Typeof t);
 	public TypeSym visit(Differs d);
-	public TypeSym visit(MethodType m);
 	public TypeSym visit(MethodLiteral m);
 	public ArrayList<Param> visit(ArgChain a);
 	public void visit(ExprChain e);

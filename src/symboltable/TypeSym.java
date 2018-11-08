@@ -2,12 +2,11 @@ package symboltable;
 
 public class TypeSym{
 	public enum TypeEnum{
-		INT, DECIMAL, BOOLEAN, ID, STRING, FUNCTION, ARRAY, HASHMAP, VOID, VAR
+		INT, DECIMAL, BOOLEAN, ID, STRING, ARRAY, HASHMAP, VOID, VAR
 	}
 
 	public TypeEnum type;
 	public TypeSym arrayType;
-	public TypeSym returnType;
 	public TypeSym keyType;
 	public TypeSym valueType;
 	public Sym idSym;
@@ -16,7 +15,6 @@ public class TypeSym{
 	public TypeSym(TypeEnum type, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
-		this.returnType = null;
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = null;
@@ -26,7 +24,6 @@ public class TypeSym{
 	public TypeSym(TypeEnum type, Sym idSym, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
-		this.returnType = null;
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = idSym;
@@ -35,15 +32,7 @@ public class TypeSym{
 
 	public TypeSym(TypeEnum type, TypeSym t, boolean is_constant){
 		this.type = type;
-		if(type == TypeEnum.FUNCTION){
-			this.returnType = t;
-			this.arrayType = null;
-		}
-		else{
-			this.arrayType = t;
-			this.returnType = null;
-		}
-
+		this.arrayType = t;
 		this.keyType = null;
 		this.valueType = null;
 		this.idSym = null;
@@ -53,7 +42,6 @@ public class TypeSym{
 	public TypeSym(TypeEnum type, TypeSym keyType, TypeSym valueType, boolean is_constant){
 		this.type = type;
 		this.arrayType = null;
-		this.returnType = null;
 		this.keyType = keyType;
 		this.valueType = valueType;
 		this.idSym = null;
@@ -67,9 +55,8 @@ public class TypeSym{
 			case BOOLEAN:	return "boolean";
 			case ID:	return idSym.name;
 			case STRING:	return "string";
-			case FUNCTION:	return "function{" + returnType.toString() + "}";
 			case ARRAY:	return arrayType.toString() + "[]";
-			case HASHMAP:	return "hashmap{" + keyType.toString() + "," + valueType.toString() + "}";
+			case HASHMAP:	return "{" + keyType.toString() + "," + valueType.toString() + "}";
 			case VOID:	return "void";
 			case VAR:	return "var";
 			default: return "";

@@ -17,10 +17,10 @@ parser code {: @Override
 
 terminal START, END, SAGE, USING, PUBLIC, PRIVATE, PROTECTED;
 terminal CLASS, EXTENDS, CONSTRUCTOR, SUPER, STATIC;
-terminal SUBROUTINE;
 /* terminal MOCK; */
 /* terminal STUB; */
 terminal VOID, INT, FLOAT, BOOLEAN, STRING, VAR, CONST;
+terminal DELEGATE;
 terminal IF, ELSE, BEGIN, RATHER, UNLESS;
 terminal WHILE, FOR, DO, UNTIL, FOREACH, IN;
 terminal RETURN;
@@ -53,7 +53,7 @@ non terminal Program program;
 non terminal StatementList statementlist;
 non terminal DefList deflist;
 non terminal ClassDef classdef;
-non terminal MethodDef methoddef;
+non terminal MethodDef methoddef, delegate;
 /* non terminal MOCKDEF; */
 /* non terminal STUBDEF; */
 non terminal Statement vardec, classvardec;
@@ -141,6 +141,9 @@ deflist ::= deflist:d classdef:c
 		deflist:d classvardec:c
 		{: d.add((Def)c); RESULT = d; :}
 		|
+		deflist:d delegate:d1
+		{: d.add(d1); RESULT = d; :}
+		|
 		{: RESULT = new DefList(); :}
 		;
 
@@ -155,6 +158,9 @@ def ::= classdef:c
 		|
 		constructor:c
 		{: RESULT = new DefWrapper(c); :}
+		|
+		delegate:d
+		{: RESULT = new DefWrapper(d); :}
 		;
 
 definitions ::= definitions:d1 def:d2
@@ -171,7 +177,14 @@ definitions ::= definitions:d1 def:d2
 		|
 		{: RESULT = new DefinitionList(); :}
 		;
-		
+
+delegate ::= DELEGATE:d type:t identifier:i arglist:c SEMICOLON
+		{: RESULT = new MethodDef(t, i, c, null, false, true, dleft, dright); :}
+		|
+		STATIC:s DELEGATE type:t identifier:i arglist:c SEMICOLON
+		{: RESULT = new MethodDef(t, i, c, null, true, true, sleft, sright); :}
+		;
+
 publist ::= PUBLIC:P deflist:d END
 		{: RESULT = new PublicList(d); :}
 		;
@@ -202,10 +215,10 @@ constructor ::= CONSTRUCTOR:c arglist:a COLON statementlist:s END
 		;
 
 methoddef ::= type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, false, rleft, rright); :}
+		{: RESULT = new MethodDef(r, i, a, l, false, false, rleft, rright); :}
 		|
 		STATIC type:r identifier:i arglist:a COLON statementlist:l END
-		{: RESULT = new MethodDef(r, i, a, l, true, rleft, rright); :}
+		{: RESULT = new MethodDef(r, i, a, l, true, false, rleft, rright); :}
 		;
 
 classvardec ::= type:t identifier:i SEMICOLON
@@ -263,9 +276,6 @@ type ::= type:t LBRACKET RBRACKET
 		identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, false, i.line, i.column); :}
 		|
-		SUBROUTINE:c LBRACE type:t RBRACE
-		{: RESULT = new MethodType(t, false, cleft, cright); :}
-		|
 		VOID:v
 		{: RESULT = new VoidType(vleft, vright); :}
 		|
@@ -289,9 +299,6 @@ type ::= type:t LBRACKET RBRACKET
 		|
 		CONST:c1 identifier:i idchain:c
 		{: RESULT = new IdentifierType(i, c, true, c1left, c1right); :}
-		|
-		CONST:c SUBROUTINE LBRACE type:t RBRACE
-		{: RESULT = new MethodType(t, true, cleft, cright); :}
 		;
 
 typeof ::= identifier:i idchain:c TYPEOF type:t
@@ -562,8 +569,8 @@ literal ::= INTLITERAL:i
 		NEW:c identifier:i idchain:d paramlist:l
 		{: RESULT = new ObjectCreate(i, d, l, cleft, cright); :}
 		|
-		SUBROUTINE:d arglist:p COLON type:t POINTER COLON statementlist:l END
-		{: RESULT = new MethodLiteral(p, l, FileCatalogBuilder.generateLiteralId(), t, dleft, dright); :}
+		DELEGATE:d LPAREN RPAREN POINTER COLON statementlist:l END
+		{: RESULT = new MethodLiteral(l, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}
 		|
 		MINUS:m expression:e
 		{: RESULT = new UnaryMinus(e, mleft, mright); :}

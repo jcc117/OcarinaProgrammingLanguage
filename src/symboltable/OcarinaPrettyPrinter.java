@@ -148,18 +148,29 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		printTabs();
 		if(m.is_static)
 			System.out.print("static ");
-		System.out.print("function ");
-		m.r.accept(this);
-		System.out.print(" ");
-		m.i.accept(this);
-		System.out.print("(");
-		m.a.accept(this);
-		System.out.println("):");
-		tabs++;
-		m.s.accept(this);
-		tabs--;
-		printTabs();
-		System.out.println("end");
+		if(m.is_delegate){
+			System.out.print("delegate ");
+			m.r.accept(this);
+			System.out.print(" ");
+			m.i.accept(this);
+			System.out.print("(");
+			m.a.accept(this);
+			System.out.println(");");
+		}
+		else
+		{
+			m.r.accept(this);
+			System.out.print(" ");
+			m.i.accept(this);
+			System.out.print("(");
+			m.a.accept(this);
+			System.out.println("):");
+			tabs++;
+			m.s.accept(this);
+			tabs--;
+			printTabs();
+			System.out.println("end");
+		}
 	}
 
 	public void visit(VarDecl v){
@@ -224,14 +235,6 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		t.t1.accept(this);
 		System.out.print(", ");
 		t.t2.accept(this);
-		System.out.print("}");
-	}
-
-	public void visit(MethodType m){
-		if(m.constant)
-			System.out.print("const ");
-		System.out.print("function{");
-		m.t.accept(this);
 		System.out.print("}");
 	}
 
@@ -729,16 +732,13 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodLiteral m){
-		System.out.print("delegate(");
-		m.p.accept(this);
-		System.out.print("):");
-		m.returnType.accept(this);
-		System.out.println(" => {");
+		System.out.print("delegate()");
+		System.out.println(" => :");
 		tabs++;
 		m.s.accept(this);
 		tabs--;
 		printTabs();
-		System.out.print("}");
+		System.out.print("end");
 	}
 
 	public void visit(ArgChain a){
