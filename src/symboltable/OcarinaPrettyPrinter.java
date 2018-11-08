@@ -220,7 +220,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	public void visit(HashmapType t){
 		if(t.constant)
 			System.out.print("const ");
-		System.out.print("hashmap{");
+		System.out.print("{");
 		t.t1.accept(this);
 		System.out.print(", ");
 		t.t2.accept(this);
@@ -389,6 +389,10 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 		printTabs();
 		System.out.print("assert ");
 		a.e.accept(this);
+		if(a.print_expression != null){
+			System.out.print(" : ");
+			a.print_expression.accept(this);
+		}
 		System.out.println(";");
 	}
 
@@ -607,7 +611,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ObjectCreate o){
-		System.out.print("create ");
+		System.out.print("new ");
 		o.i.accept(this);
 		o.chain.accept(this);
 		System.out.print("(");
@@ -620,7 +624,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayCreate a){
-		System.out.print("create ");
+		System.out.print("new ");
 		a.t.accept(this);
 		System.out.print("[");
 		a.e.accept(this);
@@ -628,7 +632,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(ArrayLiteral a){
-		System.out.print("create ");
+		System.out.print("new ");
 		a.t.accept(this);
 		System.out.print("[]{");
 		a.l.accept(this);
@@ -636,7 +640,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(HashmapCreate h){
-		System.out.print("hashmap {");
+		System.out.print("{");
 		h.t1.accept(this);
 		System.out.print(", ");
 		h.t2.accept(this);

@@ -93,7 +93,6 @@ The following is a list of Ocarina keywords and may not be used as variable name
 * const
 * constructor
 * continue
-* create
 * debug
 * decimal
 * delegate
@@ -110,12 +109,12 @@ The following is a list of Ocarina keywords and may not be used as variable name
 * for
 * foreach
 * function
-* hashmap
 * if
 * in
 * int
 * length
 * nand
+* new
 * nil
 * nor
 * null
@@ -153,7 +152,7 @@ Ocarina is a strongly typed language, therefore stating the type of a variable i
 * boolean
 * string
 * array
-* hashmap
+* dictionary
 * function
 
 Variables do not have to be immediately assigned upon creation.
@@ -200,11 +199,11 @@ Arrays types are denoted with a type followed by [];
 	string[][] twoDArray = create string[9][8];	# creates a 2-d array. Note that the length must be specified for all dimensions
 	boolean[] literal = create boolean[] { true, false, true, true, false};	# creates a boolean array of literals
 
-### hashmap
-Hashmaps work on a key-value basis. The following are uses of the hashmap variable.
+### dictionary
+Hashmaps work on a key-value basis. The following are uses of the dictionary variable.
 	
-	hashmap{int, string} map = hashmap{int, string}; # Declares a hashmap whose key is of type int and value is of type string.
-	hashmap{int[], boolean} different; # Key is an int array, value it returns is boolean
+	{int, string} map = {int, string}; # Declares a dictionary whose key is of type int and value is of type string.
+	{int[], boolean} different; # Key is an int array, value it returns is boolean
 	map{5} = "assignment"; # Assigns the string to the key 5
 	string value = map{5}; # Returns the value associated with the key 5, which is "assignment"
 
@@ -400,7 +399,7 @@ The following are the permitted return types for any given function:
 * boolean
 * string
 * array
-* hashmap
+* dictionary
 * a defined class type
 * function{return type}
 * void (no return type)

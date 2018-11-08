@@ -725,6 +725,9 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	public void visit(Assert a){
 		a.e.accept(this);
+		if(a.print_expression != null){
+			a.print_expression.accept(this);
+		}
 	}
 
 	public void visit(Exit e){

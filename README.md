@@ -58,12 +58,14 @@ to the location of the Ocarina folder. Then add the bin folder to your path.
 	Symbol Table Builder Phase 2
 	Var-Type Resolver
 	Documentation/Comments
-	Fix function literal type definitions to take into account arg types
 
 # Recently Accomplished
 	Symbol Table - initial implementation
 	Symbol Table Builder Phase 1
 	Complete overhaul of protection declarations
+	Cleaned up grammar to be more consistent
+	Re-tooled function literals to be delegates
+
 
 # Items Under Consideration For Later Release
 The only reason many of these are not included in this version is so I can keep moving foward with what I have.

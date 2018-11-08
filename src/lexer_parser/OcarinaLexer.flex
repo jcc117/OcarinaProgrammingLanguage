@@ -53,7 +53,6 @@ String = \"[^\"]*\" | \'[^\']*\'
 "int"	{return symbol(INT);}
 "decimal"	{return symbol(FLOAT);}
 "boolean"	{return symbol(BOOLEAN);}
-"hashmap"	{return symbol(HASHMAP);}
 "string"	{return symbol(STRING);}
 "begin"	{return symbol(BEGIN);}
 "if"	{return symbol(IF);}
@@ -69,11 +68,9 @@ String = \"[^\"]*\" | \'[^\']*\'
 "false"	{return symbol(FALSE);}
 "equals"	{return symbol(EQUALS);}
 "this"	{return symbol(THIS);}
-"self"	{return symbol(THIS);}
 "nil"	{return symbol(NIL);}
-"null"	{return symbol(NIL);}
 "assert"	{return symbol(ASSERT);}
-"create"	{return symbol(CREATE);}
+"new"	{return symbol(NEW);}
 "exit"		{return symbol(EXIT);}
 "length"	{return symbol(LENGTH);}
 "print" 	{return symbol(PRINT);}
@@ -103,7 +100,6 @@ String = \"[^\"]*\" | \'[^\']*\'
 "catch"	{return symbol(CATCH); }
 "finally"	{return symbol(FINALLY); }
 "throw"	{return symbol(THROW); }
-"delegate"	{return symbol(DELEGATE); }
 
 /*Identifiers and numbers*/
 {String}	{return symbol(STRINGLITERAL, yytext());}

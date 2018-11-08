@@ -1,7 +1,0 @@
-sage water;
-debug
-start
-	int x = 0x5 ;
-	int y = 7 ;
-	print(x + y);
-end
