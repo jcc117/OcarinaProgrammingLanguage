@@ -3,6 +3,7 @@ import ast.*;
 import java.util.Hashtable;
 import java.util.ArrayList;
 
+//Symbol that represents a class
 public class ClassSym extends Sym{
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, Hashtable<String, MethodSym>> methodTable;	//Stored as a table of tables to allow for method overloading: outer key is method name, inner key is method signature
@@ -10,6 +11,7 @@ public class ClassSym extends Sym{
 	public Hashtable<String, MethodSym> constructorTable;
 	public ClassSym extension;
 
+	//Builds a class that has no extension
 	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, String path){
 		this.is_initialized = true;
 		this.name = name;
@@ -25,6 +27,7 @@ public class ClassSym extends Sym{
 		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
+	//Builds a class that has an extension
 	public ClassSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, Sym parent, String path, ClassSym extension){
 		this.is_initialized = true;
 		this.name = name;
@@ -41,10 +44,12 @@ public class ClassSym extends Sym{
 		this.constructorTable = new Hashtable<String, MethodSym>();
 	}
 
+	//Add a variable to the class
 	public void addVar(String name, VarSym symbol){
 		varTable.put(name, symbol);
 	}
 
+	//Add a method to the class
 	public void addMethod(String signature, MethodSym symbol){
 		int sigIndex = signature.indexOf("(");
 		assert sigIndex != -1 : "Did not pass in proper method signature";
@@ -57,18 +62,22 @@ public class ClassSym extends Sym{
 		table.put(signature, symbol);
 	}
 
+	//Add an inner class to the class
 	public void addClass(String name, ClassSym symbol){
 		classTable.put(name, symbol);
 	}
 
-	public void addConstructor(String name, MethodSym symbol){
-		constructorTable.put(name, symbol);
+	//Add a constructor to the class
+	public void addConstructor(String signature, MethodSym symbol){
+		constructorTable.put(signature, symbol);
 	}
 
+	//Get a variable by name
 	public VarSym getVar(String name){
 		return varTable.get(name);
 	}
 
+	//Get a variable by signature
 	public MethodSym getMethod(String signature){
 		int sigIndex = signature.indexOf("(");
 		if(sigIndex == -1){
@@ -91,11 +100,13 @@ public class ClassSym extends Sym{
 		return (ArrayList<MethodSym>)table.values();
 	}
 
+	//Get an inner class by name
 	public ClassSym getClass(String name){
 		return classTable.get(name);
 	}
 
-	public MethodSym getConstructor(String name){
-		return constructorTable.get(name);
+	//Get a constructor by signature
+	public MethodSym getConstructor(String signature){
+		return constructorTable.get(signature);
 	}
 }

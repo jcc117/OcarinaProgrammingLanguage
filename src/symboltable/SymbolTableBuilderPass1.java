@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SymbolTableBuilderPass1 implements Visitor{
 	//This builder will perform the initial pass of the ast to build the symbol table.
 	//It will add all symbols to the table to build a table that is imcomplete.
-	//A second pass will fill in gaps where symbols of the same scope are not yet seen, leaving null
+	//A second pass will fill in gaps where symbols of the same scope are not yet seen or imported, leaving null
 	//refrences throughout some areas.
 	//A third pass will be needed to resolve all var-type variables.
 
@@ -15,6 +15,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	private Stack<PathCounterStruct> counterStack;
 	private Stack<Sym.ProtectionLevel> protectionStack;
 
+	//Create an instance of a pass 1 symbol table builder
 	public SymbolTableBuilderPass1(SymbolTable table){
 		this.table = table;
 		this.path = new StringBuilder();
@@ -27,6 +28,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		sage.accept(this);
 	}
 
+	//Process a sage
 	public void visit(Sage s){
 		String name = s.i.i;
 		boolean hasMainMethod = false;
@@ -54,6 +56,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		//Do nothing for now
 	}
 
+	//Process the variables within the main method and all definitions after it
 	public void visit(Program p){
 		counterStack.push(new PathCounterStruct());
 		p.s.accept(this);
@@ -61,34 +64,42 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		p.d.accept(this);
 	}
 
+	//Loop throuth the statements in the list
 	public void visit(StatementList l){
 		for(Statement s : l.l){
 			s.accept(this);
 		}
 	}
 
+	//Loop through the definitions in a list
 	public void visit(DefinitionList d){
 		for(Definition def : d.defs){
 			def.accept(this);
 		}
 	}
+
+	//Define everything within the public block as public
 	public void visit(PublicList p){
 		protectionStack.push(Sym.ProtectionLevel.PUBLIC);
 		p.defList.accept(this);
 		protectionStack.pop();
 	}
+
+	//Define everthing within the private block as private
 	public void visit(PrivateList p){
 		protectionStack.push(Sym.ProtectionLevel.PRIVATE);
 		p.defList.accept(this);
 		protectionStack.pop();
 	}
 
+	//Define everything within the protected list as protected
 	public void visit(ProtectedList p){
 		protectionStack.push(Sym.ProtectionLevel.PROTECTED);
 		p.defList.accept(this);
 		protectionStack.pop();
 	}
 
+	//Process the definition within the definition wrapper
 	public void visit(DefWrapper d){
 		protectionStack.push(Sym.ProtectionLevel.NONE);
 		d.item.accept(this);
@@ -97,12 +108,14 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	public void visit(Definition d){}
 
+	//Process the list of definitions
 	public void visit(DefList d){
 		for(Def def : d.l){
 			def.accept(this);
 		}
 	}
 
+	//Process a class that has no extension
 	public void visit(SimpleClassDef s){
 		String name = s.i.i;
 		appendToPath(name);
@@ -126,6 +139,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Process a class that has an extension
 	public void visit(ExtendsClassDef e){
 		String name = e.i.i;
 		appendToPath(name);
@@ -151,6 +165,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Process a constructor
 	public void visit(Constructor c){
 		//Treated like a method
 		String name = "constructor";
@@ -178,6 +193,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Process a method definition
 	public void visit(MethodDef m){
 		String name = m.i.i;
 		TypeSym returnType = m.r.accept(this);
@@ -207,6 +223,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Helper method to create a method signature for a given method name and a list of parameters
 	private String createMethodSignature(String name, ArgList args){
 		StringBuilder signature = new StringBuilder(name);
 		signature.append("(");
@@ -222,6 +239,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return signature.toString();
 	}
 
+	//Process a variable declaration
 	public void visit(VarDecl v){
 		String name = v.i.i;
 		TypeSym type = v.t.accept(this);
@@ -231,6 +249,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Process a variable declaration that is also assigned
 	public void visit(VarDecAssignment v){
 		String name = v.i.i;
 		TypeSym type = v.t.accept(this);
@@ -240,6 +259,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 	
+	//Process a list of parameters
 	public void visit(ArgList a){
 		a.p.accept(this);
 		ArrayList<Param> list = a.chain.accept(this);
@@ -252,6 +272,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return a.l;
 	}
 
+	//Process a parameter in a method definition
 	public void visit(Param p){
 		TypeSym type = p.t.accept(this);
 		String name = p.i.i;
@@ -261,10 +282,12 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 	}
 
+	//Process an array type
 	public TypeSym visit(ArrayType t){
 		return new TypeSym(TypeSym.TypeEnum.ARRAY, t.t.accept(this), t.constant);
 	}
 
+	//Process an identifier type
 	public TypeSym visit(IdentifierType i){
 		String firstPart = i.i.i;
 		ArrayList<String> chain = i.chain.accept(this);
@@ -272,6 +295,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return new TypeSym(TypeSym.TypeEnum.ID, table.getSymbol((String[])chain.toArray(), true), i.constant);
 	}
 
+	//Return the rest of identifiers in a chain as a list of strings
 	public ArrayList<String> visit(IdChain i){
 		ArrayList<String> retVal = new ArrayList<String>();
 		for(Identifier id : i.chain){
@@ -280,34 +304,42 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		return retVal;
 	}
 
+	//Process an int type
 	public TypeSym visit(IntType t){
 		return new TypeSym(TypeSym.TypeEnum.INT, t.constant);
 	}
 
+	//Process a float type(decimal)
 	public TypeSym visit(FloatType t){
 		return new TypeSym(TypeSym.TypeEnum.DECIMAL, t.constant);
 	}
 
+	//Process a boolean type
 	public TypeSym visit(BooleanType t){
 		return new TypeSym(TypeSym.TypeEnum.BOOLEAN, t.constant);
 	}
 
+	//Process a string type
 	public TypeSym visit(StringType t){
 		return new TypeSym(TypeSym.TypeEnum.STRING, t.constant);
 	}
 
+	//Process a hashmap type(dictionary)
 	public TypeSym visit(HashmapType t){
 		return new TypeSym(TypeSym.TypeEnum.HASHMAP, t.t1.accept(this), t.t2.accept(this), t.constant);
 	}
 
+	//Process a void type
 	public TypeSym visit(VoidType t){
 		return new TypeSym(TypeSym.TypeEnum.VOID, t.constant);
 	}
 
+	//Process a var type- will be resolved in a later pass
 	public TypeSym visit(VarType v){
 	 	return new TypeSym(TypeSym.TypeEnum.VAR, v.constant);
 	}
 
+	//Create an inner scope for a block and process its variables
 	public void visit(Block b){
 		String name = counterStack.peek().blockCounter++ + "block";
 		appendToPath(name);
@@ -333,6 +365,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for an if statement and process its variables
 	public void visit(If i){
 		String name = counterStack.peek().ifCounter++ + "if";
 		appendToPath(name);
@@ -385,12 +418,14 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		}
 	}
 
+	//Process a list of rather blocks
 	public void visit(RatherList l){
 		for(Rather r : l.l){
 			r.accept(this);
 		}
 	}
 
+	//Create an inner scope for a rather block and process its variables
 	public void visit(Rather r){
 		String name = counterStack.peek().ratherCounter++ + "rather";
 		appendToPath(name);
@@ -416,6 +451,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for a while loop and process its variables
 	public void visit(While w){
 		String name = counterStack.peek().whileCounter++ + "while";
 		appendToPath(name);
@@ -441,6 +477,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	////Create an inner scope for a for loop and process its variables
 	public void visit(For f){
 		String name = counterStack.peek().forCounter++ + "for";
 		appendToPath(name);
@@ -468,6 +505,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for a foreach loop and process its variables
 	public void visit(Foreach f){
 		String name = counterStack.peek().foreachCounter++ + "foreach";
 		appendToPath(name);
@@ -499,6 +537,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for a do-while loop and process its variables
 	public void visit(DoWhile d){
 		String name = counterStack.peek().doWhileCounter++ + "doWhile";
 		appendToPath(name);
@@ -524,6 +563,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for an until loop and process its variables
 	public void visit(Until u){
 		String name = counterStack.peek().untilCounter++ + "until";
 		appendToPath(name);
@@ -549,6 +589,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for an unless statement and process its variables
 	public void visit(Unless u){
 		String name = counterStack.peek().unlessCounter++ + "unless";
 		appendToPath(name);
@@ -574,6 +615,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		counterStack.pop();
 	}
 
+	//Create an inner scope for a try-catch-finally block and process its variables
 	public void visit(TryCatch t){
 		String name = counterStack.peek().tryCounter++ + "try";
 		appendToPath(name);
@@ -624,6 +666,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 			counterStack.pop();
 		}
 	}
+
+	//Create an inner scope for a catch block and process its variables
 	public void visit(Catch c){
 		String name = counterStack.peek().catchCounter++ + "catch";
 		appendToPath(name);
@@ -655,6 +699,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 		counterStack.pop();
 	}
+
+	//Process a method literal's variables declarations
 	public TypeSym visit(MethodLiteral m){
 		String name = m.name;
 		name = m.name + "()";	//Creates a temporary method signature
@@ -682,8 +728,8 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		trimLastAddedPath();
 		return null;
 	}
-
-	//Scan through the rest of the tree to search for method literals
+	/********************************************************************************************************/
+	//Scan through the rest of the statements to search for method literals
 	public void visit(MethodCallStatement m){
 		m.method.accept(this);
 
@@ -734,7 +780,10 @@ public class SymbolTableBuilderPass1 implements Visitor{
 	public void visit(Continue c){}
 	public void visit(Increment i){}
 	public void visit(Decrement d){}
-
+	/*******************************************************************************************************************/
+	/*Proces all expressions to look for method literals: the return null for this pass but in later passes they will
+		evaluate the expressions to resolve var-type declarations*/
+	/********************************************************************************************************************/
 	public TypeSym visit(And a){
 		a.e1.accept(this);
 		a.e2.accept(this);
@@ -929,12 +978,14 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		}
 	}
 
+	//Process a list of catch blocks
 	public void visit(CatchList c){
 		for(Catch cat : c.l){
 			cat.accept(this);
 		}
 	}
 
+	//Remove the last added scope from the current path
 	private void trimLastAddedPath(){
 		int slash = path.lastIndexOf("/");
 		if(slash != 1){
@@ -942,10 +993,12 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		}
 	}
 
+	//Add a scope to the current path
 	private void appendToPath(String name){
 		path.append("/" + name);
 	}
 
+	//Turn the path string into an array of strings separated by a forward slash
 	private String[] getPathArray(){
 		return path.toString().split("/");
 	}

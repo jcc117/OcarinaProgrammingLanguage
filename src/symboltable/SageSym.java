@@ -3,6 +3,7 @@ import ast.*;
 import java.util.Hashtable;
 import java.util.ArrayList;
 
+//Represents a sage symbol
 public class SageSym extends Sym{
 	public Hashtable<String, SymbolTable> usingTable;
 	public Hashtable<String, VarSym> varTable;
@@ -12,6 +13,7 @@ public class SageSym extends Sym{
 	public boolean hasMainMethod;
 	public Hashtable<String, VarSym> mainMethodVarTable;
 
+	//Build a sage symbol
 	public SageSym(String name, boolean hasMainMethod, Sym parent, String path){
 		this.name = name;
 		this.line = 0;
@@ -34,14 +36,17 @@ public class SageSym extends Sym{
 		this.parent = parent;
 	}
 
+	//Add s symbol table to this sage: represents an imported sage
 	public void addTable(String name, SymbolTable table){
 		usingTable.put(name, table);
 	}
 
+	//Add a variable to the sage
 	public void addVar(String name, VarSym symbol){
 		varTable.put(name, symbol);
 	}
 
+	//Add a method to the sage
 	public void addMethod(String signature, MethodSym symbol){
 		int sigIndex = signature.indexOf("(");
 		assert sigIndex != -1 : "Did not pass in proper method signature";
@@ -54,27 +59,33 @@ public class SageSym extends Sym{
 		table.put(signature, symbol);
 	}
 
+	//Add a method to the sage: will need reworked
 	public void addMethodLiteral(String name, MethodSym symbol){
 		methodLiteralTable.put(name, symbol);
 	}
 
+	//Add a class to the sage
 	public void addClass(String name, ClassSym symbol){
 		classTable.put(name, symbol);
 	}
 
+	//Add a variable to the main method of a sage
 	public void addMainMethodVar(String name, VarSym var){
 		if(mainMethodVarTable != null)
 			mainMethodVarTable.put(name, var);
 	}
 
+	//Get the symbol table corresponding to an imported sage
 	public SymbolTable getTable(String name){
 		return usingTable.get(name);
 	}
 
+	//Get a variable by name
 	public VarSym getVar(String name){
 		return varTable.get(name);
 	}
 
+	//Get a method by signature
 	public MethodSym getMethod(String signature){
 		int sigIndex = signature.indexOf("(");
 		if(sigIndex == -1){
@@ -97,14 +108,17 @@ public class SageSym extends Sym{
 		return (ArrayList<MethodSym>)table.values();
 	}
 
+	//Get a method literal by signature: will need reworked
 	public MethodSym getMethodLiteral(String name){
 		return methodLiteralTable.get(name);
 	}
 
+	//Get a class by name
 	public ClassSym getClass(String name){
 		return classTable.get(name);
 	}
 
+	//Get a variable from the main method by name
 	public VarSym getMainMethodVar(String name){
 		if(mainMethodVarTable == null)
 			return null;

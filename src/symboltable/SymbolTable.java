@@ -7,12 +7,14 @@ public class SymbolTable{
 	private MethodScope currentMethodScope;
 	private String currentPath;
 
+	//Creates an empty symbol table
 	public SymbolTable(){
 		root = null;
 		currentScope = null;
 		currentPath = "";
 	}
 
+	//Set the root of a symbol table to the given sage
 	public void setRoot(SageSym root){
 		this.root = root;
 		currentScope = root;
@@ -50,6 +52,7 @@ public class SymbolTable{
 					else if(thisScope instanceof ClassSym){
 						ClassSym result = ((ClassSym)thisScope).getClass(path[0]);
 						if(result == null){
+							//Float up in scope
 							thisScope = thisScope.parent;
 							scopePath = thisScope.path;
 						}
@@ -58,6 +61,7 @@ public class SymbolTable{
 							return null;
 						}
 						else{
+							//Found the symbol
 							found = true;
 							thisScope = result;
 							scopePath = thisScope.path;
@@ -69,6 +73,7 @@ public class SymbolTable{
 							return null;	//Return null for now - will fill in looking in other tables later
 						}
 						else{
+							//Found the symbol
 							found = true;
 							thisScope = result;
 							scopePath = thisScope.path;
@@ -123,7 +128,7 @@ public class SymbolTable{
 			}
 			//Build phases 1 and 2 should only be using type searches
 			else{
-				//This is being treated as a variable refrence, static class reference, or method references
+				//This is being treated as a variable reference, static class reference, or method references
 				MethodScope thisMethodScope = currentMethodScope;
 				int index = 0;
 				//Float up in scope until its found
@@ -147,6 +152,7 @@ public class SymbolTable{
 							found = true;
 						}
 						else if(thisScope instanceof MethodSym){
+							//Float up in scope
 							thisScope = thisScope.parent;
 							scopePath = thisScope.path;
 						}

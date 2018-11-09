@@ -2,6 +2,7 @@ package symboltable;
 import ast.*;
 import java.util.Hashtable;
 
+//Represents a method
 public class MethodSym extends Sym{
 
 	public Hashtable<String, VarSym> varTable;
@@ -12,6 +13,7 @@ public class MethodSym extends Sym{
 	//names for methods will be their signature
 	//formatted as "name(type1, type2,...)"
 
+	//Build a method symbol
 	public MethodSym(String name, int line, int column, boolean is_static, ProtectionLevel protection, TypeSym returnType, boolean is_literal, Sym parent, String path){
 		this.name = name;
 		this.line = line;
@@ -27,18 +29,22 @@ public class MethodSym extends Sym{
 		this.parent = parent;
 	}
 
+	//Add a variable to the method
 	public void addVar(String name, VarSym symbol){
 		varTable.put(name, symbol);
 	}
 
+	//Get a variable by name
 	public VarSym getVar(String name){
 		return varTable.get(name);
 	}
 
+	//Add a method literal to the method: will need reworked later
 	public void addMethodLiteral(String name, MethodSym symbol){
 		methodLiteralTable.put(name, symbol);
 	}
 
+	//Get a method literal by signature: will need reworked later
 	public MethodSym getMethodLiteral(String name){
 		return methodLiteralTable.get(name);
 	}
