@@ -5,7 +5,7 @@ public class MethodLiteral extends Expression{
 	public StatementList s;
 	public String name;
 
-	public MethodLiteral(StatementList s, String name, Type returnType, int line, int column){
+	public MethodLiteral(StatementList s, String name, int line, int column){
 		this.s = s;
 		this.line = line;
 		this.column = column;

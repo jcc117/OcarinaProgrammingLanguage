@@ -1,12 +1,13 @@
 package symboltable;
 import ast.*;
 import java.util.Hashtable;
+import java.util.ArrayList;
 
 public class SageSym extends Sym{
 	public Hashtable<String, SymbolTable> usingTable;
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, ClassSym> classTable;
-	public Hashtable<String, MethodSym> methodTable;
+	public Hashtable<String, Hashtable<String, MethodSym>> methodTable;	//Stored as a table of tables to allow for method overloading: outer key is method name, inner key is method signature
 	public Hashtable<String, MethodSym> methodLiteralTable;
 	public boolean hasMainMethod;
 	public Hashtable<String, VarSym> mainMethodVarTable;
@@ -23,7 +24,7 @@ public class SageSym extends Sym{
 		this.usingTable = new Hashtable<String, SymbolTable>();
 		this.varTable = new Hashtable<String, VarSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
-		this.methodTable = new Hashtable<String, MethodSym>();
+		this.methodTable = new Hashtable<String, Hashtable<String, MethodSym>>();
 		if(this.hasMainMethod){
 			this.mainMethodVarTable = new Hashtable<String, VarSym>();
 		}
@@ -41,8 +42,16 @@ public class SageSym extends Sym{
 		varTable.put(name, symbol);
 	}
 
-	public void addMethod(String name, MethodSym symbol){
-		methodTable.put(name, symbol);
+	public void addMethod(String signature, MethodSym symbol){
+		int sigIndex = signature.indexOf("(");
+		assert sigIndex != -1 : "Did not pass in proper method signature";
+		String methodName = signature.substring(0, sigIndex);
+		Hashtable<String, MethodSym> table = methodTable.get(methodName);
+		if(table == null){
+			methodTable.put(methodName, new Hashtable<String, MethodSym>());
+			table = methodTable.get(methodName);
+		}
+		table.put(signature, symbol);
 	}
 
 	public void addMethodLiteral(String name, MethodSym symbol){
@@ -66,8 +75,26 @@ public class SageSym extends Sym{
 		return varTable.get(name);
 	}
 
-	public MethodSym getMethod(String name){
-		return methodTable.get(name);
+	public MethodSym getMethod(String signature){
+		int sigIndex = signature.indexOf("(");
+		if(sigIndex == -1){
+			return null;	//Indicates a proper method signature was not passed in
+		}
+		String methodName = signature.substring(0, sigIndex);
+		Hashtable<String, MethodSym> table = methodTable.get(methodName);
+		if(table == null){
+			return null;
+		}
+		return table.get(signature);
+	}
+
+	//Returns a table of methods whose signatures share the same method name
+	public ArrayList<MethodSym> getMethodListByName(String name){
+		Hashtable<String, MethodSym> table = methodTable.get(name);
+		if(table == null){
+			return null;
+		}
+		return (ArrayList<MethodSym>)table.values();
 	}
 
 	public MethodSym getMethodLiteral(String name){
