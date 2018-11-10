@@ -75,3 +75,4 @@ The only reason many of these are not included in this version is so I can keep 
 * Unicode strings
 * Strict mode - enforcing Java-like object oriented programming practices when compiling
 * Multi-threading
+* Interfaces

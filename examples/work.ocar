@@ -1,6 +1,6 @@
 sage work;
 using example4;
 
-start
+start:
 	print(1 + 1);
 end

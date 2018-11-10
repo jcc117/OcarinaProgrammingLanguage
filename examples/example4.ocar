@@ -3,7 +3,7 @@ using work;
 #using work.overkill.why;
 #using because;
 
-start
+start:
 	for(int i = 0; i < j; i++):
 		i++;
 		j++;
@@ -13,27 +13,24 @@ start
 		int z = i++ + u-- * ++l / --z;
 	end
 	
-	function{decimal} thing = delegate(int i, decimal j) => decimal {
+	Del thing = delegate(int i, int j) => :
 		return i * j;
-	};
+	end;
 	exec thing(20, 20.1);
 	
-	int[][] doubleArray = create int[30][20];
+	int[][] doubleArray = new int[30][20];
 	x.y.z = false;
 	x.y.z.w = nil;
 	u = method() + 7;
 end
 
-public
+public:
 	var x = 0;
 	int y;
 end
 
-private
+private:
 	static int z = 9;
-	const function{Class} func = delegate(boolean b) => Class {boolean b = b and b; return b;};
-	function{void} func2 = delegate() => void {print( x % -9);};
-	
 end
 
 static class Class:
@@ -42,6 +39,8 @@ static class Class:
 	end
 	
 end
+
+delegate int Del(int i, int j);
 
 '''
 Comments

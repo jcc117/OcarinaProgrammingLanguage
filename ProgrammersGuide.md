@@ -13,7 +13,7 @@ Multi-line comments are denoted with '''. All statements must end with ';'.
 	sage filename;
 	# Any file imports go here
 	# Execution begins here
-	start
+	start:
 		'''
 		Code goes here
 		'''
@@ -38,7 +38,7 @@ Here's a file that imports the one above.
 	sage file2;
 	using file1;	# Note this denotes the location of the file
 	using folder.file3; # The file's path is relative to the current file's
-	start
+	start:
 		# Various code
 	end
 
@@ -400,7 +400,7 @@ Not all function calls have to be treated as assigned expressions. However to do
 
 	sage example;
 
-	start
+	start:
 		exec print_message_to_screen("Hello!");
 	end
 
@@ -422,7 +422,7 @@ Below is an example of declaring a delegated function:
 
 Below is an example of defining the add_two_numbers function as a delegated function:
 
-	Adder add_nums_func = delegate() => {
+	Adder add_nums_func = delegate(int num1, int num2) => {
 		return num1 + num2;
 	};
 
@@ -447,7 +447,7 @@ multiple files. Only one main subroutine may be declared in any sage, and you ma
 	sage fire;
 	using rupee;
 	using hookshot;
-	start
+	start:
 		...
 	end
 	...
