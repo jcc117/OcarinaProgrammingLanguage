@@ -732,8 +732,9 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(MethodLiteral m){
-		System.out.print("delegate()");
-		System.out.println(" => :");
+		System.out.print("delegate(");
+		m.parameters.accept(this);
+		System.out.println(") => :");
 		tabs++;
 		m.s.accept(this);
 		tabs--;

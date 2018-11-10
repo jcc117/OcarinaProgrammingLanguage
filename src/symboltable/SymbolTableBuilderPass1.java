@@ -711,6 +711,7 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		try{
 			table.addSymbol(symbol);
 			table.sinkToMethodScope(name);
+			m.parameters.accept(this);
 			m.s.accept(this);
 			counterStack.pop();
 			table.floatScope();

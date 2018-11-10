@@ -116,10 +116,10 @@ usinglist ::= usinglist:u USING identifier:i idchain:c SEMICOLON
 		|
 		{: RESULT = new UsingList(); :}
 		;
-program ::=	START:s1 statementlist:s END definitions:d
+program ::=	START:s1 COLON statementlist:s END definitions:d
 		{: RESULT = new Program(s, d, false, s1left, s1right); :}
 		|
-		DEBUG START:s1 statementlist:s END definitions:d
+		DEBUG START:s1 COLON statementlist:s END definitions:d
 		{: RESULT = new Program(s, d, true, s1left, s1right); :}
 		;
 
@@ -185,15 +185,15 @@ delegate ::= DELEGATE:d type:t identifier:i arglist:c SEMICOLON
 		{: RESULT = new MethodDef(t, i, c, null, true, true, sleft, sright); :}
 		;
 
-publist ::= PUBLIC:P deflist:d END
+publist ::= PUBLIC:P COLON deflist:d END
 		{: RESULT = new PublicList(d); :}
 		;
 
-prilist ::= PRIVATE:p deflist:d END
+prilist ::= PRIVATE:p COLON deflist:d END
 		{: RESULT = new PrivateList(d); :}
 		;
 
-prolist ::= PROTECTED:p deflist:d END
+prolist ::= PROTECTED:p COLON deflist:d END
 		{: RESULT = new ProtectedList(d); :}
 		;
 
@@ -322,7 +322,7 @@ statement ::= simple_statement:s
 		{: s.breakPoint = true; RESULT = s;:}
 		;
 
-simple_statement ::= BEGIN:b statementlist:l END
+simple_statement ::= BEGIN:b COLON statementlist:l END
 		{: RESULT = new Block(l, bleft, bright); :}
 		|
 		IF expression:e COLON statementlist:s1 ratherlist:l else:s2 END
@@ -569,8 +569,8 @@ literal ::= INTLITERAL:i
 		NEW:c identifier:i idchain:d paramlist:l
 		{: RESULT = new ObjectCreate(i, d, l, cleft, cright); :}
 		|
-		DELEGATE:d LPAREN RPAREN POINTER COLON statementlist:l END
-		{: RESULT = new MethodLiteral(l, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}
+		DELEGATE:d arglist:p POINTER COLON statementlist:l END
+		{: RESULT = new MethodLiteral(l, p, FileCatalogBuilder.generateLiteralId(), dleft, dright); :}
 		|
 		MINUS:m expression:e
 		{: RESULT = new UnaryMinus(e, mleft, mright); :}
