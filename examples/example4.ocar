@@ -13,6 +13,8 @@ start:
 		int z = i++ + u-- * ++l / --z;
 	end
 	
+	x = new Item()();
+	
 	Del thing = delegate(int i, int j) => :
 		return i * j;
 	end;

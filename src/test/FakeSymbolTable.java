@@ -38,6 +38,12 @@ public class FakeSymbolTable{
 		ClassSym publicDoubleInnerT1_3 = new ClassSym("PublicDoubleInnerClass3", 0, 0, false, Sym.ProtectionLevel.PUBLIC, innerT1, "test/TestClass1/InnerClass/PublicDoubleInnerClass3");
 		innerT1.addClass(publicDoubleInnerT1_3.name, publicDoubleInnerT1_3);
 
+		//Add a delegate to the public class
+		MethodSym publicDelegate = new MethodSym("publicDelegate(int)", 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.INT, false), true, t1, "test/TestClass1/publicDelegate(int)");
+		MethodSym privateDelegate = new MethodSym("privateDelegate(boolean,boolean)", 0, 0, false, Sym.ProtectionLevel.PRIVATE, new TypeSym(TypeSym.TypeEnum.BOOLEAN, false), true, t1, "test/TestClass1/privateDelegate(boolean,boolean)");
+		
+		t1.addMethod(publicDelegate.name, publicDelegate);
+		t1.addMethod(privateDelegate.name, privateDelegate);
 		t1.addClass(innerT1.name, innerT1);
 		t1.addClass(privateInnerT1.name, privateInnerT1);
 		t1.addClass(publicInnerT1.name, publicInnerT1);
@@ -48,10 +54,30 @@ public class FakeSymbolTable{
 
 		ClassSym t2 = new ClassSym("TestClass2", 0, 0, true, Sym.ProtectionLevel.PUBLIC, root, "test/TestClass2");
 
+		ClassSym staticInnert2 = new ClassSym("StaticInnerClass", 0, 0, true, Sym.ProtectionLevel.PUBLIC, t2, "test/TestClass2/StaticInnerClass");
+		ClassSym privateStaticInnert2 = new ClassSym("PrivateStaticInnerClass", 0, 0, true, Sym.ProtectionLevel.PRIVATE, t2, "test/TestClass2/PrivateStaticInnerClass");
+		ClassSym innerNonStatict2 = new ClassSym("NonStaticPublicClass", 0, 0, false, Sym.ProtectionLevel.PUBLIC, t2, "test/TestClass2/NonStaticPublicClass");
+
+		t2.addClass(staticInnert2.name, staticInnert2);
+		t2.addClass(privateStaticInnert2.name, privateStaticInnert2);
+		t2.addClass(innerNonStatict2.name, innerNonStatict2);
+
 		/*********************************************************************************************************/
 		//The third class to be added is not static but contains static and non static features
 		/*********************************************************************************************************/
 		ClassSym t3 = new ClassSym("TestClass3", 0, 0, false, Sym.ProtectionLevel.NONE, root, "test/TestClass3");
+		MethodSym publicDelegatet3 = new MethodSym("publicDelegatet3()", 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.VOID, false), true, t3, "test/TestClass3/publicDelegatet3()");
+		MethodSym privateStaticDelegate = new MethodSym("privateStaticDelegate(publicDelegatet3,int[])", 0, 0, true, Sym.ProtectionLevel.PRIVATE, new TypeSym(TypeSym.TypeEnum.DECIMAL, false), true, t3, "test/TestClass3/privateStaticDelegate(publicDelegatet3,int[])");
+
+		t3.addMethod(publicDelegatet3.name, publicDelegatet3);
+		t3.addMethod(privateStaticDelegate.name, privateStaticDelegate);
+
+		//Add sage level delegates
+		MethodSym staticDelegate = new MethodSym("staticDelegate()", 0, 0, true, Sym.ProtectionLevel.NONE, new TypeSym(TypeSym.TypeEnum.VOID, false), true, root, "test/staticDelegate()");
+		MethodSym publicSageDelegate = new MethodSym("publicDelegate(int)", 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.INT, false), true, root, "test/publicDelegate(int)");
+
+		root.addMethod(staticDelegate.name, staticDelegate);
+		root.addMethod(publicSageDelegate.name, publicSageDelegate);
 		root.addClass(t1.name, t1);
 		root.addClass(t2.name, t2);
 		root.addClass(t3.name, t3);
