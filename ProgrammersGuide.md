@@ -111,7 +111,6 @@ The following is a list of Ocarina keywords and may not be used as variable name
 * if
 * in
 * int
-* length
 * nand
 * new
 * nil

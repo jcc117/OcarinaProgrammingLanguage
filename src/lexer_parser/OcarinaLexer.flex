@@ -71,7 +71,6 @@ String = \"[^\"]*\" | \'[^\']*\'
 "assert"	{return symbol(ASSERT);}
 "new"	{return symbol(NEW);}
 "exit"		{return symbol(EXIT);}
-"length"	{return symbol(LENGTH);}
 "print" 	{return symbol(PRINT);}
 "debug" 	{return symbol(DEBUG);}
 "break"		{return symbol(BREAK);}

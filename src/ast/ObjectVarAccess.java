@@ -3,13 +3,13 @@ import symboltable.*;
 
 public class ObjectVarAccess extends Expression{
 	public Expression e;
-	public IdChain i;
+	public Identifier i;
 
-	public ObjectVarAccess(Expression e, IdChain i, int line, int column){
+	public ObjectVarAccess(Expression e, Identifier i, int line, int column){
 		this.e = e;
-		this.i = i;
 		this.line = line;
 		this.column = column;
+		this.i = i;
 	}
 
 	public void accept(VoidVisitor v){

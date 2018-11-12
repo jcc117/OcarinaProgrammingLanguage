@@ -3,13 +3,11 @@ package ast;
 import symboltable.*;
 
 public class Typeof extends Expression{
-	public Identifier i;
-	public IdChain chain;
+	public Expression e;
 	public Type t;
 
-	public Typeof(Identifier i, IdChain chain, Type t, int line, int column){
-		this.i = i;
-		this.chain = chain;
+	public Typeof(Expression e, Type t, int line, int column){
+		this.e = e;
 		this.t = t;
 		this.line = line;
 		this.column = column;

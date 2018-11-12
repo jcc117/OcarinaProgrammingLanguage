@@ -564,6 +564,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 
 	public void visit(ObjectVarAccess o){
 		o.e.accept(this);
+		System.out.print(".");
 		o.i.accept(this);
 	}
 
@@ -725,8 +726,7 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(Typeof t){
-		t.i.accept(this);
-		t.chain.accept(this);
+		t.e.accept(this);
 		System.out.print(" typeof ");
 		t.t.accept(this);
 	}
@@ -800,39 +800,23 @@ public class OcarinaPrettyPrinter implements VoidVisitor{
 	}
 
 	public void visit(PostIncrement p){
-		if(p.i != null)
-			p.i.accept(this);
-		else
-			p.t.accept(this);
-		p.chain.accept(this);
+		p.e.accept(this);
 		System.out.print("++");
 	}
 
 	public void visit(PreIncrement p){
 		System.out.print("++");
-		if(p.i != null)
-			p.i.accept(this);
-		else
-			p.t.accept(this);
-		p.chain.accept(this);
+		p.e.accept(this);
 	}
 
 	public void visit(PostDecrement p){
-		if(p.i != null)
-			p.i.accept(this);
-		else
-			p.t.accept(this);
-		p.chain.accept(this);
+		p.e.accept(this);
 		System.out.print("--");
 	}
 
 	public void visit(PreDecrement p){
 		System.out.print("--");
-		if(p.i != null)
-			p.i.accept(this);
-		else
-			p.t.accept(this);
-		p.chain.accept(this);
+		p.e.accept(this);
 	}
 
 	public void visit(Statement s){

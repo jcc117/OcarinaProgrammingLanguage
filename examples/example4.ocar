@@ -13,7 +13,7 @@ start:
 		int z = i++ + u-- * ++l / --z;
 	end
 	
-	x = new Item()();
+	x = new Item().times().hooray().item;
 	
 	Del thing = delegate(int i, int j) => :
 		return i * j;

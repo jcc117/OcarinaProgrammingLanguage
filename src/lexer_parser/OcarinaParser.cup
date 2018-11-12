@@ -28,7 +28,7 @@ terminal AND, OR, NAND, NOR, EQUALS, DIFFERS;
 terminal TRUE, FALSE;
 terminal THIS, NIL;
 terminal ASSERT, NEW, EXIT;
-terminal LENGTH, PRINT;
+terminal PRINT;
 terminal DEBUG, BREAK, CONTINUE;
 terminal EXEC;
 terminal TYPEOF;
@@ -301,8 +301,8 @@ type ::= type:t LBRACKET RBRACKET
 		{: RESULT = new IdentifierType(i, c, true, c1left, c1right); :}
 		;
 
-typeof ::= identifier:i idchain:c TYPEOF type:t
-		{: RESULT = new Typeof(i, c, t, i.line, i.column); :}
+typeof ::= expression:e TYPEOF type:t
+		{: RESULT = new Typeof(e, t, e.line, e.column); :}
 		;
 
 methodcall ::= expression:e paramlist:l
@@ -502,14 +502,11 @@ expression ::= expression:e1 AND expression:e2
 		expression:e1 LBRACKET expression:e2 RBRACKET
 		{: RESULT = new ArrayExpr(e1, e2, e1.line, e1.column); :}
 		|
-		identifier:i idchain:i2
-		{: RESULT = new ObjectVarAccess(i, i2, i.line, i.column); :}
+		expression:e DOT identifier:i
+		{: RESULT = new ObjectVarAccess(e, i, e.line, e.column); :}
 		|
 		methodcall:m
 		{: RESULT = m; :}
-		|
-		expression:e DOT LENGTH
-		{: RESULT = new ArrayLength(e, e.line, e.column); :}
 		|
 		LPAREN expression:e RPAREN
 		{: RESULT = new ParentExpr(e, e.line, e.column); :}
@@ -523,29 +520,20 @@ expression ::= expression:e1 AND expression:e2
 		typeof:t
 		{: RESULT = t; :}
 		|
-		identifier:i idchain:c INCREMENT
-		{: RESULT = new PostIncrement(i, c, i.line, i.column); :}
+		expression:e INCREMENT
+		{: RESULT = new PostIncrement(e, e.line, e.column); :}
 		|
-		THIS:t idchain:c INCREMENT
-		{: RESULT = new PostIncrement(new This(tleft, tright), c, tleft, tright); :}
+		INCREMENT expression:e
+		{: RESULT = new PreIncrement(e, e.line, e.column); :}
 		|
-		INCREMENT identifier:i idchain:c
-		{: RESULT = new PreIncrement(i, c, i.line, i.column); :}
+		expression:e DECREMENT
+		{: RESULT = new PostDecrement(e, e.line, e.column); :}
 		|
-		INCREMENT THIS:t idchain:c
-		{: RESULT = new PreIncrement(new This(tleft, tright), c, tleft, tright); :}
+		DECREMENT expression:e
+		{: RESULT = new PreDecrement(e, e.line, e.column); :}
 		|
-		identifier:i idchain:c DECREMENT
-		{: RESULT = new PostDecrement(i, c, i.line, i.column); :}
-		|
-		THIS:t idchain:c DECREMENT
-		{: RESULT = new PostDecrement(new This(tleft, tright), c, tleft, tright); :}
-		|
-		DECREMENT identifier:i idchain:c
-		{: RESULT = new PreDecrement(i, c, i.line, i.column); :}
-		|
-		DECREMENT THIS:t idchain:c
-		{: RESULT = new PreDecrement(new This(tleft, tright), c, tleft, tright); :}
+		identifier:i
+		{:RESULT = i; :}
 		|
 		literal:l
 		{: RESULT = l; :}
