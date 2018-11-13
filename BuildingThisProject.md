@@ -4,6 +4,7 @@ The following are required to build this project and must be set up in your loca
 
 	JFlex - http://jflex.de/download.html
 	Java CUP - http://www2.cs.tum.edu/projects/cup/
+	JUnit 4.10 - https://junit.org/junit4/
 	
 To build this project, navigate to src and run 
 
