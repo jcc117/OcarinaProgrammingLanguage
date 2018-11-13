@@ -82,7 +82,26 @@ public class FakeSymbolTable{
 		root.addClass(t2.name, t2);
 		root.addClass(t3.name, t3);
 
-		//TO DO: Create a few other SymbolTables to use for import testing
+		//Create a few other SymbolTables to use for import testing
+		SageSym import1 = new SageSym("import1", false, null, "import1");
+		ClassSym importClass = new ClassSym("ImportClass", 0, 0, false, Sym.ProtectionLevel.PUBLIC, import1, "import1/ImportClass");
+		ClassSym hiddenClass = new ClassSym("HiddenClass", 0, 0, false, Sym.ProtectionLevel.NONE, import1, "import1/HiddenClass");
+		import1.addClass(importClass.name, importClass);
+		import1.addClass(hiddenClass.name, hiddenClass);
+
+		SageSym import2 = new SageSym("import2", false, null, "import2");
+		ClassSym importClass2 = new ClassSym("ImportClass", 0, 0, false, Sym.ProtectionLevel.PUBLIC, import2, "import2/ImportClass");
+		ClassSym staticImport = new ClassSym("StaticImportClass", 0, 0, true, Sym.ProtectionLevel.PUBLIC, import2, "import2/StaticImportClass");
+		import2.addClass(importClass2.name, importClass2);
+		import2.addClass(staticImport.name, staticImport);
+
+		SymbolTable importTable1 = new SymbolTable();
+		importTable1.setRoot(import1);
+		SymbolTable importTable2 = new SymbolTable();
+		importTable2.setRoot(import2);
+
+		root.addTable(import1.name, importTable1);
+		root.addTable(import2.name, importTable2);
 
 		return root;
 	}
