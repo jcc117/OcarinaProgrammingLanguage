@@ -40,7 +40,6 @@ First, navigate to the bin folder and open ocarina.bat. Change JAVA_HOME to the 
 to the location of the Ocarina folder. Then add the bin folder to your path.
 
 # Features for Ocarina
-	*Built-in Debugger within the Interpreter*
 	*Handling of Integers and Floats of Any Size*
 	*Heavy use of keywords to promote readability with the option to use traditional operators*
 	*Strictly Typed, but also supports var types (similar to C#)*
@@ -53,6 +52,8 @@ to the location of the Ocarina folder. Then add the bin folder to your path.
 	*"Double quoted strings" and 'Single quoted strings', similar to JavaScript*
 
 # In Planning
+	Symbol Table Unit Tests
+	Symbol Table Pass 1 Unit Tests
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Planning of the Ocarina Standard Library
 	Symbol Table Builder Phase 2
@@ -60,11 +61,11 @@ to the location of the Ocarina folder. Then add the bin folder to your path.
 	Documentation/Comments
 
 # Recently Accomplished
-	Symbol Table - initial implementation
-	Symbol Table Builder Phase 1
-	Complete overhaul of protection declarations
-	Cleaned up grammar to be more consistent
-	Re-tooled function literals to be delegates
+	Mock Symbol Table
+
+# Under Consideration
+	Import specification files as an option to manage file imports
+	Enums
 
 
 # Items Under Consideration For Later Release

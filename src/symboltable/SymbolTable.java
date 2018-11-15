@@ -14,6 +14,12 @@ public class SymbolTable{
 		currentPath = "";
 	}
 
+	public SymbolTable(SageSym root){
+		this.root = root;
+		currentScope = root;
+		currentPath = root.path;
+	}
+
 	//Set the root of a symbol table to the given sage
 	public void setRoot(SageSym root){
 		this.root = root;
@@ -414,7 +420,7 @@ public class SymbolTable{
 	//Navigate up to the parent scope from the current one.
 	public void floatScope() throws IllegalScopeException{
 		if(currentMethodScope == null){
-			if(currentScope.parent != null){
+			if(currentScope != null && currentScope.parent != null){
 				currentScope = currentScope.parent;
 				currentPath = currentScope.path;
 			}
@@ -431,13 +437,22 @@ public class SymbolTable{
 
 	//Navigate down to the child scope which is a class
 	public void sinkToClassScope(String scopeName) throws IllegalScopeException{
-		if((currentScope instanceof SageSym) || (currentScope instanceof ClassSym)){
+		if(currentScope instanceof SageSym){
 			currentScope = ((SageSym)currentScope).getClass(scopeName);
-			currentPath = currentScope.path;
+		}
+		else if(currentScope instanceof ClassSym){
+			currentScope = ((ClassSym)currentScope).getClass(scopeName);
 		}
 		else{
 			//Throw exception - illegal navigation to a class scope
 			throw new IllegalScopeException("Illegal transition to a class scope");
+		}
+		//Check if the scope is null
+		if(currentScope != null){
+			currentPath = currentScope.path;
+		}
+		else{
+			throw new IllegalScopeException("Illegal transition to a class scope that does not exist");
 		}
 	}
 
@@ -445,7 +460,6 @@ public class SymbolTable{
 	public void sinkToMethodScope(String scopeName) throws IllegalScopeException{
 		if(currentScope instanceof SageSym){
 			currentScope = ((SageSym)currentScope).getMethod(scopeName);
-			currentPath = currentScope.path;
 		}
 		else if(currentScope instanceof ClassSym){
 			currentScope = ((ClassSym)currentScope).getMethod(scopeName);
@@ -453,11 +467,18 @@ public class SymbolTable{
 		}
 		else if(currentScope instanceof MethodSym){
 			currentScope = ((MethodSym)currentScope).getMethodLiteral(scopeName);
-			currentPath = currentScope.path;
 		}
 		else{
 			//Throw exception - illegal navigation to a method scope
 			throw new IllegalScopeException("Illegal transition to a function scope");
+		}
+
+		//Check if the scope is null
+		if(currentScope != null){
+			currentPath = currentScope.path;
+		}
+		else{
+			throw new IllegalScopeException("Illegal transition to a method scope that does not exist");
 		}
 	}
 
@@ -466,7 +487,6 @@ public class SymbolTable{
 		if(currentMethodScope == null){
 			if(currentScope instanceof MethodSym){
 				currentMethodScope = ((MethodSym)currentScope).getScope(scopeName);
-				currentPath = currentMethodScope.path;
 			}
 			else{
 				//Throw exception - illegal navigation to inner method scope
@@ -475,7 +495,14 @@ public class SymbolTable{
 		}
 		else{
 			currentMethodScope = currentMethodScope.getScope(scopeName);
+		}
+
+		//Check if the scope is null
+		if(currentScope != null){
 			currentPath = currentMethodScope.path;
+		}
+		else{
+			throw new IllegalScopeException("Illegal transition to an inner method scope that does not exist");
 		}
 	}
 
@@ -561,6 +588,10 @@ public class SymbolTable{
 
 	public MethodScope getCurrentMethodScope(){
 		return currentMethodScope;
+	}
+
+	public String getPath(){
+		return currentPath;
 	}
 
 	//Checks if the path makes up part of the currentPath
