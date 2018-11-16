@@ -58,9 +58,12 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	//Process the variables within the main method and all definitions after it
 	public void visit(Program p){
+		appendToPath("$main()");
+		MethodSym mainMethod = new MethodSym("$main()", p.line, p.column, true, Sym.ProtectionLevel.NONE, new TypeSym(TypeSym.TypeEnum.VOID, false), false, table.getCurrentScope(), path.toString());
 		counterStack.push(new PathCounterStruct());
 		p.s.accept(this);
 		counterStack.pop();
+		trimLastAddedPath();
 		p.d.accept(this);
 	}
 

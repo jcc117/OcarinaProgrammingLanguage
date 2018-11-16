@@ -10,8 +10,7 @@ public class SageSym extends Sym{
 	public Hashtable<String, ClassSym> classTable;
 	public Hashtable<String, Hashtable<String, MethodSym>> methodTable;	//Stored as a table of tables to allow for method overloading: outer key is method name, inner key is method signature
 	public Hashtable<String, MethodSym> methodLiteralTable;
-	public boolean hasMainMethod;
-	public Hashtable<String, VarSym> mainMethodVarTable;
+	public boolean hasMainMethod;;
 
 	//Build a sage symbol
 	public SageSym(String name, boolean hasMainMethod, Sym parent, String path){
@@ -27,12 +26,6 @@ public class SageSym extends Sym{
 		this.varTable = new Hashtable<String, VarSym>();
 		this.classTable = new Hashtable<String, ClassSym>();
 		this.methodTable = new Hashtable<String, Hashtable<String, MethodSym>>();
-		if(this.hasMainMethod){
-			this.mainMethodVarTable = new Hashtable<String, VarSym>();
-		}
-		else{
-			this.mainMethodVarTable = null;
-		}
 		this.parent = parent;
 	}
 
@@ -67,12 +60,6 @@ public class SageSym extends Sym{
 	//Add a class to the sage
 	public void addClass(String name, ClassSym symbol){
 		classTable.put(name, symbol);
-	}
-
-	//Add a variable to the main method of a sage
-	public void addMainMethodVar(String name, VarSym var){
-		if(mainMethodVarTable != null)
-			mainMethodVarTable.put(name, var);
 	}
 
 	//Get the symbol table corresponding to an imported sage
@@ -116,12 +103,5 @@ public class SageSym extends Sym{
 	//Get a class by name
 	public ClassSym getClass(String name){
 		return classTable.get(name);
-	}
-
-	//Get a variable from the main method by name
-	public VarSym getMainMethodVar(String name){
-		if(mainMethodVarTable == null)
-			return null;
-		return mainMethodVarTable.get(name);
 	}
 }

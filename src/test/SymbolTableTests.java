@@ -274,7 +274,6 @@ public class SymbolTableTests{
 		assertEquals("test/" + varName, current.getVar(varName).path);
 		assertNull(current.getMethod(varName));
 		assertNull(current.getClass(varName));
-		assertNull(current.getMainMethodVar(varName));
 		assertNull(current.getTable(varName));
 	}
 
@@ -292,7 +291,6 @@ public class SymbolTableTests{
 		assertEquals("test/" + methodName, current.getMethod(methodName).path);
 		assertNull(current.getVar(methodName));
 		assertNull(current.getClass(methodName));
-		assertNull(current.getMainMethodVar(methodName));
 		assertNull(current.getTable(methodName));
 	}
 
@@ -310,7 +308,6 @@ public class SymbolTableTests{
 		assertEquals("test/" + className, current.getClass(className).path);
 		assertNull(current.getVar(className));
 		assertNull(current.getMethod(className));
-		assertNull(current.getMainMethodVar(className));
 		assertNull(current.getTable(className));
 	}
 
@@ -327,7 +324,6 @@ public class SymbolTableTests{
 		assertNull(current.getVar(sageName));
 		assertNull(current.getMethod(sageName));
 		assertNull(current.getClass(sageName));
-		assertNull(current.getMainMethodVar(sageName));
 		assertNull(current.getTable(sageName));
 	}
 
