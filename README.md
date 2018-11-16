@@ -53,6 +53,7 @@ to the location of the Ocarina folder. Then add the bin folder to your path.
 
 # In Planning
 	Symbol Table Unit Tests
+	Getting rid of Method Literal Symbol Table Items
 	Symbol Table Pass 1 Unit Tests
 	Syntactical rule development(what's considered an error other than grammar violations)
 	Planning of the Ocarina Standard Library

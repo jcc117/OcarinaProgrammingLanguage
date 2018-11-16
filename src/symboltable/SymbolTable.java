@@ -535,7 +535,7 @@ public class SymbolTable{
 				((ClassSym)currentScope).addMethod(symbol.name, (MethodSym)symbol);
 			}
 			else if(currentScope instanceof MethodSym){
-				((MethodSym)currentScope).addMethodLiteral(symbol.name, (MethodSym)symbol);
+				//((MethodSym)currentScope).addMethodLiteral(symbol.name, (MethodSym)symbol);
 			}
 			else{
 				//Print error message here

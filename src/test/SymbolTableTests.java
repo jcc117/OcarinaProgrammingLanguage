@@ -258,81 +258,201 @@ public class SymbolTableTests{
 	/******************************************************************/
 	//Tests for addSymbol()
 	/******************************************************************/
+	//Note that adding a sage symbol is never a normal use case
+
 	//Add a var to a sage
 	@Test
 	public void addSymbolVarToSage_Test(){
-
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		SageSym current = (SageSym)testTable.getCurrentScope();
+		String varName = "testVar";
+		VarSym testVar = new VarSym(varName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, true, new TypeSym(TypeSym.TypeEnum.INT, false), false, (Sym)current,"test/" + varName);
+		testTable.addSymbol(testVar);
+		assertNotNull(current.getVar(varName));
+		assertEquals(varName, current.getVar(varName).name);
+		assertEquals("test/" + varName, current.getVar(varName).path);
+		assertNull(current.getMethod(varName));
+		assertNull(current.getClass(varName));
+		assertNull(current.getMainMethodVar(varName));
+		assertNull(current.getTable(varName));
 	}
 
 	//Add a method to a sage
 	@Test
 	public void addSymbolMethodToSage_Test(){
-
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		SageSym current = (SageSym)testTable.getCurrentScope();
+		String methodName = "testMethod()";
+		MethodSym testMethod = new MethodSym(methodName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.VOID, false), false, current, "test/" + methodName);
+		testTable.addSymbol(testMethod);
+		assertNotNull(current.getMethod(methodName));
+		assertEquals(methodName, current.getMethod(methodName).name);
+		assertEquals("test/" + methodName, current.getMethod(methodName).path);
+		assertNull(current.getVar(methodName));
+		assertNull(current.getClass(methodName));
+		assertNull(current.getMainMethodVar(methodName));
+		assertNull(current.getTable(methodName));
 	}
 
 	//Add a class to a sage
 	@Test
 	public void addSymbolClassToSage_Test(){
-
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		SageSym current = (SageSym)testTable.getCurrentScope();
+		String className = "ClassToAdd";
+		ClassSym testClass = new ClassSym(className, 0, 0, false, Sym.ProtectionLevel.PUBLIC, (Sym)current, "test/" + className);
+		testTable.addSymbol(testClass);
+		assertNotNull(current.getClass(className));
+		assertEquals(className, current.getClass(className).name);
+		assertEquals("test/" + className, current.getClass(className).path);
+		assertNull(current.getVar(className));
+		assertNull(current.getMethod(className));
+		assertNull(current.getMainMethodVar(className));
+		assertNull(current.getTable(className));
 	}
 
 	//Add a sage to a sage
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
 	public void addSymbolSageToSage_Test(){
-
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		SageSym current = (SageSym)testTable.getCurrentScope();
+		String sageName = "SageToAdd";
+		SageSym sage = new SageSym(sageName, false, null, "test/" + sageName);
+		testTable.addSymbol(sage);
+		assertNull(current.getVar(sageName));
+		assertNull(current.getMethod(sageName));
+		assertNull(current.getClass(sageName));
+		assertNull(current.getMainMethodVar(sageName));
+		assertNull(current.getTable(sageName));
 	}
 
 	//Add a var to a class
 	@Test
-	public void addSymbolVarToClass_Test(){
-
+	public void addSymbolVarToClass_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToClassScope("TestClass1");
+		ClassSym current = (ClassSym)testTable.getCurrentScope();
+		String varName = "testVar";
+		VarSym testVar = new VarSym(varName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, true, new TypeSym(TypeSym.TypeEnum.INT, false), false, (Sym)current,"test/TestClass1/" + varName);
+		testTable.addSymbol(testVar);
+		assertNotNull(current.getVar(varName));
+		assertEquals(varName, current.getVar(varName).name);
+		assertEquals("test/TestClass1/" + varName, current.getVar(varName).path);
+		assertNull(current.getMethod(varName));
+		assertNull(current.getClass(varName));
 	}
 
 	//Add a method to a class
 	@Test
-	public void addSymbolMethodToClass_Test(){
-
+	public void addSymbolMethodToClass_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToClassScope("TestClass1");
+		ClassSym current = (ClassSym)testTable.getCurrentScope();
+		String methodName = "testMethod()";
+		MethodSym testMethod = new MethodSym(methodName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.VOID, false), false, current, "test/TestClass1/" + methodName);
+		testTable.addSymbol(testMethod);
+		assertNotNull(current.getMethod(methodName));
+		assertEquals(methodName, current.getMethod(methodName).name);
+		assertEquals("test/TestClass1/" + methodName, current.getMethod(methodName).path);
+		assertNull(current.getVar(methodName));
+		assertNull(current.getClass(methodName));
 	}
 
 	//Add a class to a class
 	@Test
-	public void addSymbolClassToClass_Test(){
-
+	public void addSymbolClassToClass_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToClassScope("TestClass1");
+		ClassSym current = (ClassSym)testTable.getCurrentScope();
+		String className = "ClassToAdd";
+		ClassSym testClass = new ClassSym(className, 0, 0, false, Sym.ProtectionLevel.PUBLIC, (Sym)current, "test/TestClass1/" + className);
+		testTable.addSymbol(testClass);
+		assertNotNull(current.getClass(className));
+		assertEquals(className, current.getClass(className).name);
+		assertEquals("test/TestClass1/" + className, current.getClass(className).path);
+		assertNull(current.getVar(className));
+		assertNull(current.getMethod(className));
 	}
 
 	//Add a sage to a class
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
-	public void addSymbolSageToClass_Test(){
-
+	public void addSymbolSageToClass_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToClassScope("TestClass1");
+		ClassSym current = (ClassSym)testTable.getCurrentScope();
+		String sageName = "SageToAdd";
+		SageSym sage = new SageSym(sageName, false, null, "test/" + sageName);
+		testTable.addSymbol(sage);
+		assertNull(current.getVar(sageName));
+		assertNull(current.getMethod(sageName));
+		assertNull(current.getClass(sageName));
 	}
 
 	//Add a var to a method
 	@Test
-	public void addSymbolVarToMethod_Test(){
-
+	public void addSymbolVarToMethod_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToMethodScope("staticDelegate()");
+		MethodSym current = (MethodSym)testTable.getCurrentScope();
+		String varName = "testVar";
+		VarSym testVar = new VarSym(varName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, true, new TypeSym(TypeSym.TypeEnum.INT, false), false, (Sym)current,"test/staticDelegate()/" + varName);
+		testTable.addSymbol(testVar);
+		assertNotNull(current.getVar(varName));
+		assertEquals(varName, current.getVar(varName).name);
+		assertEquals("test/staticDelegate()/" + varName, current.getVar(varName).path);
 	}
 
 	//Add a method to a method
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
-	public void addSymbolMethodToMethod_Test(){
-
+	public void addSymbolMethodToMethod_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToMethodScope("staticDelegate()");
+		MethodSym current = (MethodSym)testTable.getCurrentScope();
+		String methodName = "testMethod()";
+		MethodSym testMethod = new MethodSym(methodName, 0, 0, false, Sym.ProtectionLevel.PUBLIC, new TypeSym(TypeSym.TypeEnum.VOID, false), false, current, "test/staticDelegate()/" + methodName);
+		testTable.addSymbol(testMethod);
+		assertNull(current.getVar(methodName));
 	}
 
 	//Add a class to a method
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
-	public void addSymbolClassToMethod_Test(){
-
+	public void addSymbolClassToMethod_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToMethodScope("staticDelegate()");
+		MethodSym current = (MethodSym)testTable.getCurrentScope();
+		String className = "ClassToAdd";
+		ClassSym testClass = new ClassSym(className, 0, 0, false, Sym.ProtectionLevel.PUBLIC, (Sym)current, "test/staticDelegate()/" + className);
+		testTable.addSymbol(testClass);
+		assertNull(current.getVar(className));
 	}
 
 	//Add a sage to a method
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
-	public void addSymbolSageToMethod_Test(){
-
+	public void addSymbolSageToMethod_Test() throws IllegalScopeException{
+		testTable = new SymbolTable();
+		testTable.setRoot(FakeSymbolTable.buildFakeSymbolTree());
+		testTable.sinkToMethodScope("staticDelegate()");
+		MethodSym current = (MethodSym)testTable.getCurrentScope();
+		String sageName = "SageToAdd";
+		SageSym sage = new SageSym(sageName, false, null, "test/" + sageName);
+		testTable.addSymbol(sage);
+		assertNull(current.getVar(sageName));
 	}
 
 	//Add a var to an inner method scope
@@ -342,28 +462,28 @@ public class SymbolTableTests{
 	}	
 
 	//Add a method to an inner method scope
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
 	public void addSymbolMethodToInnerMethodScope_Test(){
 
 	}
 
 	//Add a class to an inner method scope
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
 	public void addSymbolClassToInnerMethodScope_Test(){
 
 	}
 
 	//Add a sage to an inner method scope
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
 	public void addSymbolSageToInnerMethodScope_Test(){
 
 	}
 
 	//Add a null symbol
-	//Should result in error being thrown
+	//Nothing should happen
 	@Test
 	public void addSymbolNullSymbol_Test(){
 
@@ -381,7 +501,10 @@ public class SymbolTableTests{
 	/******************************************************************/
 
 	/******************************************************************/
-	//Tests for getSymbol()
+	//Tests for getSymbol() - Type Searches
 	/******************************************************************/
 
+	/******************************************************************/
+	//Tests for getSymbol() - Non-Type Searches
+	/******************************************************************/
 }
