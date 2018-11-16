@@ -14,6 +14,7 @@ public class PathCounterStruct{
 	public int catchCounter;
 	public int finallyCounter;
 	public int elseCounter;
+	public int funcCounter;
 
 	public PathCounterStruct(){
 		ifCounter = 0;
@@ -29,5 +30,6 @@ public class PathCounterStruct{
 		catchCounter = 0;
 		finallyCounter = 0;
 		elseCounter = 0;
+		funcCounter = 0;
 	}
 }

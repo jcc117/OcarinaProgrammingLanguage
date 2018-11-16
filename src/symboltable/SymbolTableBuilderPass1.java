@@ -61,8 +61,22 @@ public class SymbolTableBuilderPass1 implements Visitor{
 		appendToPath("$main()");
 		MethodSym mainMethod = new MethodSym("$main()", p.line, p.column, true, Sym.ProtectionLevel.NONE, new TypeSym(TypeSym.TypeEnum.VOID, false), false, table.getCurrentScope(), path.toString());
 		counterStack.push(new PathCounterStruct());
-		p.s.accept(this);
-		counterStack.pop();
+		try{
+			table.sinkToMethodScope("$main()");
+			p.s.accept(this);
+			counterStack.pop();
+			table.floatScope();
+		}
+		catch(IllegalScopeException e){
+			System.out.println("An error occured when sinking to $main()");
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		catch(Exception e2){
+			System.out.println("An error occured when processing $main()");
+			e2.printStackTrace();
+			System.exit(-1);
+		}
 		trimLastAddedPath();
 		p.d.accept(this);
 	}
@@ -705,15 +719,14 @@ public class SymbolTableBuilderPass1 implements Visitor{
 
 	//Process a method literal's variables declarations
 	public TypeSym visit(MethodLiteral m){
-		String name = m.name;
-		name = m.name + "()";	//Creates a temporary method signature
+		String name = counterStack.peek().funcCounter++ + "function()";
 		counterStack.push(new PathCounterStruct());
 		appendToPath(name);
 		//Return type will be resolved during var-resolver pass
-		MethodSym symbol = new MethodSym(name, m.line, m.column, false, Sym.ProtectionLevel.PRIVATE, null, false, table.getCurrentScope(), path.toString());
+		MethodScope symbol = new MethodScope(path.toString(), table.getCurrentMethodScope(), name);
 		try{
-			table.addSymbol(symbol);
-			table.sinkToMethodScope(name);
+			table.addMethodScope(symbol);
+			table.sinkToInnerMethodScope(path.toString());
 			m.parameters.accept(this);
 			m.s.accept(this);
 			counterStack.pop();

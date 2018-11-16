@@ -7,7 +7,6 @@ public class MethodSym extends Sym{
 
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, MethodScope> innerScopeTable;
-	public Hashtable<String, MethodSym> methodLiteralTable;
 	public TypeSym returnType;
 	public boolean is_literal;
 	//names for methods will be their signature
@@ -24,7 +23,6 @@ public class MethodSym extends Sym{
 		this.path = path;
 		this.varTable = new Hashtable<String, VarSym>();
 		this.innerScopeTable = new Hashtable<String, MethodScope>();
-		this.methodLiteralTable = new Hashtable<String, MethodSym>();
 		this.is_literal = is_literal;
 		this.parent = parent;
 	}
@@ -37,16 +35,6 @@ public class MethodSym extends Sym{
 	//Get a variable by name
 	public VarSym getVar(String name){
 		return varTable.get(name);
-	}
-
-	//Add a method literal to the method: will need reworked later
-	public void addMethodLiteral(String name, MethodSym symbol){
-		methodLiteralTable.put(name, symbol);
-	}
-
-	//Get a method literal by signature: will need reworked later
-	public MethodSym getMethodLiteral(String name){
-		return methodLiteralTable.get(name);
 	}
 
 	/*

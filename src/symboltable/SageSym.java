@@ -9,7 +9,6 @@ public class SageSym extends Sym{
 	public Hashtable<String, VarSym> varTable;
 	public Hashtable<String, ClassSym> classTable;
 	public Hashtable<String, Hashtable<String, MethodSym>> methodTable;	//Stored as a table of tables to allow for method overloading: outer key is method name, inner key is method signature
-	public Hashtable<String, MethodSym> methodLiteralTable;
 	public boolean hasMainMethod;;
 
 	//Build a sage symbol
@@ -52,11 +51,6 @@ public class SageSym extends Sym{
 		table.put(signature, symbol);
 	}
 
-	//Add a method to the sage: will need reworked
-	public void addMethodLiteral(String name, MethodSym symbol){
-		methodLiteralTable.put(name, symbol);
-	}
-
 	//Add a class to the sage
 	public void addClass(String name, ClassSym symbol){
 		classTable.put(name, symbol);
@@ -93,11 +87,6 @@ public class SageSym extends Sym{
 			return null;
 		}
 		return (ArrayList<MethodSym>)table.values();
-	}
-
-	//Get a method literal by signature: will need reworked
-	public MethodSym getMethodLiteral(String name){
-		return methodLiteralTable.get(name);
 	}
 
 	//Get a class by name

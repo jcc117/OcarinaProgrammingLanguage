@@ -466,7 +466,7 @@ public class SymbolTable{
 			currentPath = currentScope.path;
 		}
 		else if(currentScope instanceof MethodSym){
-			currentScope = ((MethodSym)currentScope).getMethodLiteral(scopeName);
+			throw new IllegalScopeException("Illegal transition to a function scope from a function scope");
 		}
 		else{
 			//Throw exception - illegal navigation to a method scope
