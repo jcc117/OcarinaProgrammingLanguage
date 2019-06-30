@@ -1,4 +1,5 @@
 # Ocarina - A General Purpose Programming Language
+## This project has been abandoned. Poor architecture and design choices have led this project to be discontinued. A successor project is in initial design phases. A link to the new project will be posted when available.
 ![Logo](https://github.com/jcc117/Ocarina/blob/master/Logo.png)
 
 # What is Ocarina?
